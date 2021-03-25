@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './Constants/constants.dart';
 import './Pages/StartUpPage/startupPage.dart';
+import './Pages/SignInPage/signinPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,6 +19,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: StartupPage(),
+      routes: {
+        // '/': (context) => StartupPage(),
+        '/signin': (context) => SigninPage(),
+      },
     );
   }
 }
