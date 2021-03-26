@@ -11,6 +11,7 @@ class SigninPage extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
     print('Sign in Page');
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         color: const Color(backgroundPrimaryColor),
         width: screenWidth,
@@ -28,7 +29,6 @@ class SigninPage extends StatelessWidget {
               ),
             ),
             SignInForm(),
-
             SizedBox(
               height: 50,
             ),
