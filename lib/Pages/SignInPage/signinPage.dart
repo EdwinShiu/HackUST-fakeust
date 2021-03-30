@@ -80,7 +80,7 @@ class _SignInForm extends State<SignInForm> {
     try {
       if (await _currentUser.signinUser(email, pw)) {
         print("Logged In!");
-        Navigator.pop(context);
+        Navigator.popAndPushNamed(context, '/landing');
       } else {
         print("Incorrect email or password!");
       }
