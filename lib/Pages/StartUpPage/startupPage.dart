@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hackust_fakeust/states/currentUser.dart';
+import 'package:provider/provider.dart';
 
 import '../../Constants/constants.dart';
 
 class StartupPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
+    var uid = Provider.of<CurrentUser>(context).getUid;
+
     print('Height: ' + screenHeight.toString());
 
     return SafeArea(
@@ -19,10 +22,13 @@ class StartupPage extends StatelessWidget {
             padding: EdgeInsets.only(top: screenHeight * 0.6),
             child: Column(
               children: [
+                Text("Signed in user ID: $uid"),
                 TextButton(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(const Color(colorWhite)),
-                    minimumSize: MaterialStateProperty.all<Size>(Size(screenWidth * 0.65, 50)),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        const Color(colorWhite)),
+                    minimumSize: MaterialStateProperty.all<Size>(
+                        Size(screenWidth * 0.65, 50)),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -31,6 +37,7 @@ class StartupPage extends StatelessWidget {
                   ),
                   onPressed: () {
                     print("Login");
+                    Navigator.pushNamed(context, '/signin');
                   },
                   child: Text(
                     "Sign In",
@@ -42,8 +49,10 @@ class StartupPage extends StatelessWidget {
                 SizedBox(height: 30),
                 TextButton(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(const Color(colorWhite)),
-                    minimumSize: MaterialStateProperty.all<Size>(Size(screenWidth * 0.65, 50)),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        const Color(colorWhite)),
+                    minimumSize: MaterialStateProperty.all<Size>(
+                        Size(screenWidth * 0.65, 50)),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
