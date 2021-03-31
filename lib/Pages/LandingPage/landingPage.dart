@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../Cards/logCard.dart';
+import '../../Cards/travellogCard.dart';
 
 class LandingPage extends StatefulWidget {
   @override
