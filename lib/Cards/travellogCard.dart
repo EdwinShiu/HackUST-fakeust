@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
 class LogCard extends StatelessWidget {
+  final String caption;
+  final String title;
+
+  LogCard({
+    this.title = 'DEFAULT TITLE',
+    this.caption = 'Default caption aaaaaa aaaaaaaaa aaa aaaaaaa aaaaaaaa',
+  });
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -16,38 +24,36 @@ class LogCard extends StatelessWidget {
           children: [
             // travel log image
             Expanded(
-                flex: 2,
-                child: Container(
-                  // color: Colors.lightBlue,
-                  // height: screenHeight * 0.2,
-                  // // width: screenWidth * 0.85 * 0.4,
-                  // child: Image.asset('assets/images/hike.jpg')),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/logCard.jpeg"),
-                      fit: BoxFit.cover,
-                    ),
+              flex: 2,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/logCard.jpeg"),
+                    fit: BoxFit.cover,
                   ),
-                )),
+                ),
+              ),
+            ),
+            // travel log text
             Expanded(
               flex: 3,
               child: Container(
                 color: Colors.amber,
                 child: Column(
                   children: [
+                    // title
                     Padding(
                       padding: EdgeInsets.only(top: 15, right: 50),
-                      // padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Text(
-                        'TITLE',
+                        this.title,
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
+                    // caption
                     Padding(
                       padding: EdgeInsets.only(top: 15, left: 15),
-                      // padding: EdgeInsets.symmetric(horizontal: 15),
                       child: Text(
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam posuere, metus eu ',
+                        this.caption,
                         style: TextStyle(fontSize: 15),
                       ),
                     ),

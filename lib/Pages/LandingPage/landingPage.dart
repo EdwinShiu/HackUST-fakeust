@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../../Cards/travellogCard.dart';
 
 class LandingPage extends StatefulWidget {
+  final String titlefromDb = 'TITLE from Db';
+  final String captionfromDb =
+      'Caption from database aaaaaaaa aa aaaaaaaaaaaa aaaa aaaaa aa aaaaaaaa aaaaa';
   @override
   _LandingPageState createState() => _LandingPageState();
 }
@@ -80,7 +83,10 @@ class _LandingPageState extends State<LandingPage> {
                 child: Text('Page3'),
               ),
               Center(
-                child: LogCard(),
+                child: LogCard(
+                  title: widget.titlefromDb,
+                  caption: widget.captionfromDb,
+                ),
               ),
             ],
           ),
