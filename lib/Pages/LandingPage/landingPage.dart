@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../Cards/logCard.dart';
+
 class LandingPage extends StatefulWidget {
   @override
   _LandingPageState createState() => _LandingPageState();
@@ -78,7 +80,7 @@ class _LandingPageState extends State<LandingPage> {
                 child: Text('Page3'),
               ),
               Center(
-                child: Text('Page4'),
+                child: LogCard(),
               ),
             ],
           ),
