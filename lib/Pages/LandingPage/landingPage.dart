@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hackust_fakeust/Components/mapWidget.dart';
 
 import '../../Cards/travellogCard.dart';
 
@@ -68,13 +69,10 @@ class _LandingPageState extends State<LandingPage> {
         body: Container(
           child: PageView(
             controller: _pageController,
+            physics: const NeverScrollableScrollPhysics(),
             children: [
-              Stack(
-                children: [
-                  Center(
-                    child: Text('Page1'),
-                  ),
-                ],
+              Container(
+                child: MapWidget(),
               ),
               Center(
                 child: Text('Page2'),

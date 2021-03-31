@@ -56,7 +56,7 @@ class MapWidgetState extends State<MapWidget> {
   AreaList data;
 
   Future loadJsonData() async {
-    String jsonString = await rootBundle.loadString('assets/latlng.json');
+    String jsonString = await rootBundle.loadString('assets/data/latlng.json');
     final jsonResponse = json.decode(jsonString);
 
     setState(() {
