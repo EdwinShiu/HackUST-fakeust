@@ -21,12 +21,6 @@ class MapWidgetState extends State<MapWidget> {
     zoom: 10,
   );
 
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(22.427809207836, 114.23982863256221),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
-
   Set<Polygon> _polygons = HashSet<Polygon>();
 
   void _setPolygons() {
