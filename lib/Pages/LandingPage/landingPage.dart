@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hackust_fakeust/Components/mapWidget.dart';
 
 import '../../Cards/travellogCard.dart';
+import "package:like_button/like_button.dart";
 
 class LandingPage extends StatefulWidget {
   final String titlefromDb = 'TITLE from Db';
@@ -75,7 +76,7 @@ class _LandingPageState extends State<LandingPage> {
                 child: MapWidget(),
               ),
               Center(
-                child: Text('Page2'),
+                child: Text('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
               ),
               Center(
                 child: Text('Page3'),
@@ -86,6 +87,7 @@ class _LandingPageState extends State<LandingPage> {
                   caption: widget.captionfromDb,
                 ),
               ),
+              LikeButton(size:40, likeCount: 0,),
             ],
           ),
         ),

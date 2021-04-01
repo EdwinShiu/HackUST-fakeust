@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:like_button/like_button.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LogCard extends StatelessWidget {
   final String caption;
@@ -61,9 +63,32 @@ class LogCard extends StatelessWidget {
                 ),
               ),
             ),
-          ],
+            Expanded(
+              child: LikeButton(
+                size:25, likeCount: 998,
+                // likeBuilder: (bool like){
+                //   return Icon(FontAwesomeIcons.solidThumbsUp,
+                //   color:like?Colors.black:Colors.grey,);
+                // },
+              ),
+            ),
+          ], // padding
         ),
       ),
     );
   }
+}
+
+class Like extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+     return Scaffold(
+      body: Container(
+        padding: EdgeInsets.all(40),
+        color: Colors.grey[400],
+        child: Text('hello'),
+      )
+    );
+  }
+
 }
