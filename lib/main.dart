@@ -6,6 +6,7 @@ import './Constants/constants.dart';
 import './Pages/StartUpPage/startupPage.dart';
 import './Pages/LandingPage/landingPage.dart';
 import './Pages/SignInPage/signinPage.dart';
+import './Pages/SignUpPage/signupPage.dart';
 import './states/currentUser.dart';
 
 void main() async {
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         home: StartupPage(),
         routes: {
           '/signin': (context) => SigninPage(),
+          '/signup': (context) => SignupPage(),
           '/landing': (context) => LandingPage(),
         },
       ),
