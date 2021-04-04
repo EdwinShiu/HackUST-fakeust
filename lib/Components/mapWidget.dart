@@ -15,7 +15,7 @@ class MapWidget extends StatefulWidget {
 }
 
 class MapWidgetState extends State<MapWidget> {
-  bool loaded = false;
+  bool loading = true;
   Completer<GoogleMapController> _controller = Completer();
   List<Marker> markers = [];
   static final CameraPosition _kGooglePlex = CameraPosition(
@@ -56,9 +56,11 @@ class MapWidgetState extends State<MapWidget> {
           ),
         );
       }
-
       print("Complete " + i.toString());
     }
+    setState(() {
+      loading = false;
+    });
   }
 
   AreaList data;
@@ -69,17 +71,12 @@ class MapWidgetState extends State<MapWidget> {
 
     setState(() {
       data = new AreaList.fromJson(jsonResponse);
-      // loaded = true;
     });
   }
 
   void asyncMethod() async {
     await loadJsonData();
     _setPolygons();
-
-    setState(() {
-      loaded = true;
-    });
   }
 
   _handleTap(LatLng tappedPoint) {
@@ -100,19 +97,29 @@ class MapWidgetState extends State<MapWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return loaded
-        ? GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition: _kGooglePlex,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-            markers: Set.from(markers),
-            polygons: _polygons,
-            // onTap: _handleTap,
-          )
-        : LoadingRotating.square(
-            duration: Duration(milliseconds: 500),
-          );
+    return Stack(
+      children: [
+        GoogleMap(
+          mapType: MapType.normal,
+          initialCameraPosition: _kGooglePlex,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+          markers: Set.from(markers),
+          polygons: _polygons,
+          // onTap: _handleTap,
+        ),
+        loading
+            ? Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                color: Colors.white,
+                child: LoadingRotating.square(
+                  duration: Duration(milliseconds: 500),
+                ),
+              )
+            : Container()
+      ],
+    );
   }
 }
