@@ -27,6 +27,8 @@ class MapWidgetState extends State<MapWidget> {
     bool traveled = true;
     for (var i = 0; i < data.areas.length; i++) {
       print("Start " + i.toString());
+      Color color =
+          Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(0.5);
       for (var j = 0; j < data.areas[i].latlng.length; j++) {
         List<LatLng> polygonLatLngs = List<LatLng>();
         for (var k = 0; k < data.areas[i].latlng[j].length; k++) {
@@ -41,11 +43,14 @@ class MapWidgetState extends State<MapWidget> {
             polygonId: PolygonId(data.areas[i].location + "-" + j.toString()),
             points: polygonLatLngs,
             strokeWidth: 1,
-            fillColor: traveled
-                ? Color((Random().nextDouble() * 0xFFFFFF).toInt())
-                    .withOpacity(0.5)
-                : Colors.grey.withOpacity(0.5),
-            onTap: () => print("TAP"),
+            fillColor: traveled ? color : Colors.grey.withOpacity(0.5),
+            consumeTapEvents: true,
+            onTap: () {
+              print(data.areas[i].location + "-" + j.toString());
+              print(data.areas[i].latlng[j][0][0].toString() +
+                  " " +
+                  data.areas[i].latlng[j][0][1].toString());
+            },
           ),
         );
       }
