@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hackust_fakeust/models/area_model.dart';
+import 'package:loading_animations/loading_animations.dart';
 
 class MapWidget extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class MapWidgetState extends State<MapWidget> {
 
   Set<Polygon> _polygons = HashSet<Polygon>();
 
-  void _setPolygons() {
+  void _setPolygons() async {
     bool traveled = true;
     for (var i = 0; i < data.areas.length; i++) {
       print("Start " + i.toString());
@@ -63,13 +64,17 @@ class MapWidgetState extends State<MapWidget> {
 
     setState(() {
       data = new AreaList.fromJson(jsonResponse);
-      loaded = true;
+      // loaded = true;
     });
   }
 
   void asyncMethod() async {
     await loadJsonData();
     _setPolygons();
+
+    setState(() {
+      loaded = true;
+    });
   }
 
   _handleTap(LatLng tappedPoint) {
@@ -101,6 +106,8 @@ class MapWidgetState extends State<MapWidget> {
             polygons: _polygons,
             // onTap: _handleTap,
           )
-        : Container(child: Text("loading"));
+        : LoadingRotating.square(
+            duration: Duration(milliseconds: 500),
+          );
   }
 }
