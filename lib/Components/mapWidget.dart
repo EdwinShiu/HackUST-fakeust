@@ -14,6 +14,7 @@ class MapWidget extends StatefulWidget {
 }
 
 class MapWidgetState extends State<MapWidget> {
+  bool loaded = false;
   Completer<GoogleMapController> _controller = Completer();
   List<Marker> markers = [];
   static final CameraPosition _kGooglePlex = CameraPosition(
@@ -49,6 +50,7 @@ class MapWidgetState extends State<MapWidget> {
           ),
         );
       }
+
       print("Complete " + i.toString());
     }
   }
@@ -61,6 +63,7 @@ class MapWidgetState extends State<MapWidget> {
 
     setState(() {
       data = new AreaList.fromJson(jsonResponse);
+      loaded = true;
     });
   }
 
@@ -87,15 +90,17 @@ class MapWidgetState extends State<MapWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      mapType: MapType.normal,
-      initialCameraPosition: _kGooglePlex,
-      onMapCreated: (GoogleMapController controller) {
-        _controller.complete(controller);
-      },
-      markers: Set.from(markers),
-      polygons: _polygons,
-      // onTap: _handleTap,
-    );
+    return loaded
+        ? GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+            markers: Set.from(markers),
+            polygons: _polygons,
+            // onTap: _handleTap,
+          )
+        : Container(child: Text("loading"));
   }
 }
