@@ -36,6 +36,7 @@ dev_dependencies:
   firebase_auth:
   provider:
   google_maps_flutter: ^2.0.2
+  cloud_firestore: "^1.0.3"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
