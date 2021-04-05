@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hackust_fakeust/models/area_model.dart';
+import 'package:loading_animations/loading_animations.dart';
 
 class MapWidget extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class MapWidget extends StatefulWidget {
 }
 
 class MapWidgetState extends State<MapWidget> {
+  bool loading = true;
   Completer<GoogleMapController> _controller = Completer();
   List<Marker> markers = [];
   static final CameraPosition _kGooglePlex = CameraPosition(
@@ -23,10 +25,12 @@ class MapWidgetState extends State<MapWidget> {
 
   Set<Polygon> _polygons = HashSet<Polygon>();
 
-  void _setPolygons() {
+  void _setPolygons() async {
     bool traveled = true;
     for (var i = 0; i < data.areas.length; i++) {
       print("Start " + i.toString());
+      Color color =
+          Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(0.5);
       for (var j = 0; j < data.areas[i].latlng.length; j++) {
         List<LatLng> polygonLatLngs = List<LatLng>();
         for (var k = 0; k < data.areas[i].latlng[j].length; k++) {
@@ -41,16 +45,22 @@ class MapWidgetState extends State<MapWidget> {
             polygonId: PolygonId(data.areas[i].location + "-" + j.toString()),
             points: polygonLatLngs,
             strokeWidth: 1,
-            fillColor: traveled
-                ? Color((Random().nextDouble() * 0xFFFFFF).toInt())
-                    .withOpacity(0.5)
-                : Colors.grey.withOpacity(0.5),
-            onTap: () => print("TAP"),
+            fillColor: traveled ? color : Colors.grey.withOpacity(0.5),
+            consumeTapEvents: true,
+            onTap: () {
+              print(data.areas[i].location + "-" + j.toString());
+              print(data.areas[i].latlng[j][0][0].toString() +
+                  " " +
+                  data.areas[i].latlng[j][0][1].toString());
+            },
           ),
         );
       }
       print("Complete " + i.toString());
     }
+    setState(() {
+      loading = false;
+    });
   }
 
   AreaList data;
@@ -89,15 +99,29 @@ class MapWidgetState extends State<MapWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      mapType: MapType.normal,
-      initialCameraPosition: _kGooglePlex,
-      onMapCreated: (GoogleMapController controller) {
-        _controller.complete(controller);
-      },
-      markers: Set.from(markers),
-      polygons: _polygons,
-      onTap: _handleTap,
+    return Stack(
+      children: [
+        GoogleMap(
+          mapType: MapType.normal,
+          initialCameraPosition: _kGooglePlex,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+          markers: Set.from(markers),
+          polygons: _polygons,
+          // onTap: _handleTap,
+        ),
+        loading
+            ? Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                color: Colors.white,
+                child: LoadingRotating.square(
+                  duration: Duration(milliseconds: 500),
+                ),
+              )
+            : Container()
+      ],
     );
   }
 }
