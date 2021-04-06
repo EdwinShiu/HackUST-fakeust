@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hackust_fakeust/Components/mapWidget.dart';
 import 'package:hackust_fakeust/Pages/SocialMediaPage/SocialMediaPage.dart';
+import 'package:hackust_fakeust/Pages/TravelLogPage/travellogpage.dart';
 
 import '../../Cards/travellogCard.dart';
 
@@ -90,10 +91,11 @@ class _LandingPageState extends State<LandingPage> {
                   child: Text('Page3'),
                 ),
                 Center(
-                  child: LogCard(
-                    title: widget.titlefromDb,
-                    caption: widget.captionfromDb,
-                  ),
+                  // child: LogCard(
+                  //   title: widget.titlefromDb,
+                  //   caption: widget.captionfromDb,
+                  // ),
+                  child: TravelLogPage(),
                 ),
               ],
             ),
