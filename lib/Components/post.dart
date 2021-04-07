@@ -1,91 +1,54 @@
 // import '../Constants/constants.dart';
 import 'package:flutter/material.dart';
 import "package:like_button/like_button.dart";
+import "../Constants/constants.dart";
 
-class Post extends StatelessWidget {
-  String caption;
-  double postArea;
-  double imageArea;
-  double locationrowArea;
-  double usernameArea;
-  // Post( {
-  //   postArea = 0.52;
-  //   imageArea = postArea * 0.88;
-  // })
-  Post() {
-    postArea = 0.52;
-    imageArea = postArea * 0.88;
-    locationrowArea = postArea * 0.12;
-    usernameArea = postArea * 0.09;
-    caption =
-        "Lorem ipsum dolor sit amet, consectetu tincidunt risus, aliquet mollis arcu magna ut eros. ";
+class Post extends StatefulWidget {
+  final String caption;
+  final String username;
+  final int likeCount;
+  final String image;
+
+  const Post(
+      {Key key,
+      this.username = "loading",
+      this.image = "",
+      this.likeCount = 0,
+      this.caption = "loading"})
+      : super(key: key);
+
+  @override
+  _Post createState() => _Post();
+}
+
+class _Post extends State<Post> {
+  @override
+  void initState() {
+    super.initState();
   }
-  // final double usernameRowArea = 0.1;
+
+  // update like count to database
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    /// send your request here
+    // final bool success= await sendRequest();
+
+    /// if failed, you can do nothing
+    // return success? !isLiked:isLiked;
+
+    return !isLiked;
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-
+    print('built');
     return Container(
       height: screenHeight * postArea,
       width: screenWidth,
       margin: const EdgeInsets.only(bottom: 0),
-      // color: Colors.amber,
       child: Column(
         children: [
-          // Username and tag container
-          // Container(
-          //   height: screenHeight * postArea * 0.1,
-          //   // color: Colors.white,
-          //   child: Stack(
-          //     children: [
-          //       Align(
-          //         alignment: Alignment.centerLeft,
-          //         child: Padding(
-          //           padding: EdgeInsets.only(left: 10),
-          //           child: Text('USERNAME'),
-          //         ),
-          //       ),
-          //       // tag
-          //       Align(
-          //         alignment: Alignment.centerRight,
-          //         child: Padding(
-          //           padding: EdgeInsets.only(right: 10),
-          //           child: Container(
-          //             height: screenHeight * postArea * 0.03,
-          //             width: 20,
-          //             color: Colors.red,
-          //           ),
-          //         ),
-          //       ),
-          //       // tag
-          //       Align(
-          //         alignment: Alignment.centerRight,
-          //         child: Padding(
-          //           padding: EdgeInsets.only(right: 40),
-          //           child: Container(
-          //             height: screenHeight * postArea * 0.03,
-          //             width: 20,
-          //             color: Colors.blue,
-          //           ),
-          //         ),
-          //       ),
-          //       // tag
-          //       Align(
-          //         alignment: Alignment.centerRight,
-          //         child: Padding(
-          //           padding: EdgeInsets.only(right: 70),
-          //           child: Container(
-          //             height: screenHeight * postArea * 0.03,
-          //             width: 20,
-          //             color: Colors.green,
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-
           // Image
           Container(
             height: screenHeight * imageArea,
@@ -93,6 +56,11 @@ class Post extends StatelessWidget {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/images/logCard2.jpeg"),
+                //         image:
+                // NetworkToFileImage(
+                //   url: "https://example.com/someFile.png",
+                //   file: myFile);
+
                 // fit makes the image occupies the whole allocated space
                 fit: BoxFit.cover,
               ),
@@ -123,9 +91,9 @@ class Post extends StatelessWidget {
                           ),
                         ),
                         Align(
-                          alignment: Alignment.centerRight,
+                          alignment: Alignment.center,
                           child: Text(
-                            "USERNAME",
+                            widget.username,
                             style: TextStyle(fontSize: 20, color: Colors.white),
                           ),
                         ),
@@ -152,7 +120,7 @@ class Post extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.only(left: 15),
                     child: Text(
-                      'TITLE',
+                      widget.caption,
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
@@ -163,7 +131,8 @@ class Post extends StatelessWidget {
                     padding: EdgeInsets.only(left: 230, top: 10),
                     child: LikeButton(
                       size: 20,
-                      likeCount: 0,
+                      likeCount: widget.likeCount,
+                      // onTap: onLikeButtonTapped,
                     ),
                   ),
                 ),
