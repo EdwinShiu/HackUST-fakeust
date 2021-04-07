@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hackust_fakeust/Pages/SitePage/sitePage.dart';
 import 'package:hackust_fakeust/models/area_model.dart';
 import 'package:loading_animations/loading_animations.dart';
 
@@ -52,6 +53,15 @@ class MapWidgetState extends State<MapWidget> {
               print(data.areas[i].latlng[j][0][0].toString() +
                   " " +
                   data.areas[i].latlng[j][0][1].toString());
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SitePage(
+                            country: "Hong Kong",
+                            site: data.areas[i].location,
+                            description:
+                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse lacinia tortor ut erat interdum, vitae efficitur mi molestie. Phasellus viverra nibh sit amet dui facilisis, pellentesque varius eros lacinia. In nec rhoncus tortor. Nullam id est quis ex interdum maximus. Cras semper porta sollicitudin. Nam a tincidunt dolor, non lobortis velit. Nulla malesuada elit ac mauris efficitur viverra. Duis quam libero, pulvinar sit amet vulputate nec, aliquam vitae dui. Mauris porta ante a nisl feugiat rutrum. Donec commodo tincidunt accumsan.",
+                          )));
             },
           ),
         );
