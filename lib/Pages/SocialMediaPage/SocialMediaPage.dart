@@ -55,7 +55,7 @@ class _SocialMediaPage extends State<SocialMediaPage> {
                         if (data != null)
                           return Post(
                             username: data['username'],
-                            image: post['image'],
+                            imageURL: post['image_URL'],
                             likeCount: post['like_count'],
                             caption: post['description'],
                           );

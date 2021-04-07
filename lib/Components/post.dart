@@ -1,18 +1,20 @@
 // import '../Constants/constants.dart';
 import 'package:flutter/material.dart';
 import "package:like_button/like_button.dart";
+// import 'package:path_provider/path_provider.dart';
+import 'package:network_to_file_image/network_to_file_image.dart';
 import "../Constants/constants.dart";
 
 class Post extends StatefulWidget {
   final String caption;
   final String username;
   final int likeCount;
-  final String image;
+  final String imageURL;
 
   const Post(
       {Key key,
       this.username = "loading",
-      this.image = "",
+      this.imageURL = "",
       this.likeCount = 0,
       this.caption = "loading"})
       : super(key: key);
@@ -55,12 +57,8 @@ class _Post extends State<Post> {
             // image background
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/logCard2.jpeg"),
-                //         image:
-                // NetworkToFileImage(
-                //   url: "https://example.com/someFile.png",
-                //   file: myFile);
-
+                // image: AssetImage("assets/images/logCard2.jpeg"),
+                image: NetworkToFileImage(url: widget.imageURL),
                 // fit makes the image occupies the whole allocated space
                 fit: BoxFit.cover,
               ),
