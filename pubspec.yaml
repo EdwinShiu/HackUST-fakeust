@@ -36,6 +36,7 @@ dev_dependencies:
   firebase_auth:
   cloud_firestore: ^1.0.3
   provider:
+  network_to_file_image: ^3.0.0
   google_maps_flutter: ^2.0.2
   loading_animations: "^2.1.0"
   font_awesome_flutter: 
