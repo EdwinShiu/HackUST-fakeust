@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hackust_fakeust/Components/LeaderBoard.dart';
 import 'package:hackust_fakeust/Components/mapWidget.dart';
 import 'package:hackust_fakeust/Pages/SocialMediaPage/SocialMediaPage.dart';
 import 'package:hackust_fakeust/Pages/TravelLogPage/travellogpage.dart';
 
 import '../../Cards/travellogCard.dart';
+import '../LeaderboardPage/LeaderboardPage.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -16,7 +16,7 @@ class _LandingPage extends State<LandingPage> {
   final List<Widget> stay_alive_screens = [
     MapWidget(),
     SocialMediaPage(),
-    LeaderBoard(),
+    LeaderBoardPage(),
     TravelLogPage()
   ];
 
