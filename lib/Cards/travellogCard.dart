@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
-class LogCard extends StatelessWidget {
+import '../Components/LeaderBoard.dart';
+
+class TravelLogCard extends StatelessWidget {
   final String caption;
   final String title;
+  static const IconData bookmark =
+      IconData(0xe5f8, fontFamily: 'MaterialIcons');
 
-  LogCard({
+  TravelLogCard({
     this.title = 'DEFAULT TITLE',
     this.caption = 'Default caption aaaaaa aaaaaaaaa aaa aaaaaaa aaaaaaaa',
   });
@@ -61,9 +65,85 @@ class LogCard extends StatelessWidget {
                 ),
               ),
             ),
-          ],
+          ], // padding
         ),
       ),
     );
   }
+}
+
+class TimeLine extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 2,
+                  height: 80,
+                  color: Colors.black,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Icon(
+                    Icons.circle,
+                    color: Colors.white,
+                  ),
+                ),
+                Container(
+                  width: 2,
+                  height: 80,
+                  color: Colors.black,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Widget _buildName({String imageAsset, String name, double score}) {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(horizontal: 20.0),
+  //     child: Column(
+  //       children: <Widget>[
+  //         SizedBox(height: 12),
+  //         Row(
+  //           children: <Widget>[
+  //             // ClipRRect(
+  //             //   borderRadius: BorderRadius.circular(20.0),
+  //             //   child: Container(
+  //             //     height: 150.0,
+  //             //     width: 150.0,
+  //             //     child: Image(image: AssetImage(imageAsset))
+  //             //   )
+  //             // ),
+  //             CircleAvatar(
+  //               backgroundImage: AssetImage(imageAsset),
+  //               radius: 50,
+  //             ),
+  //             SizedBox(width: 12),
+  //             Text(name),
+  //             Spacer(),
+  //             Container(
+  //               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+  //               child: Text("$score"),
+  //               decoration: BoxDecoration(
+  //                 color: Colors.yellow[900],
+  //                 borderRadius: BorderRadius.circular(20),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
