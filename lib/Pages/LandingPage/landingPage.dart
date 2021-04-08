@@ -7,19 +7,18 @@ import 'package:hackust_fakeust/Pages/TravelLogPage/travellogpage.dart';
 import '../../Cards/travellogCard.dart';
 
 class LandingPage extends StatefulWidget {
+  @override
+  _LandingPage createState() => _LandingPage();
+}
+
+class _LandingPage extends State<LandingPage> {
+  int _currentIndex = 1;
   final List<Widget> stay_alive_screens = [
     MapWidget(),
     SocialMediaPage(),
     LeaderBoard(),
     TravelLogPage()
   ];
-
-  @override
-  _LandingPage createState() => _LandingPage();
-}
-
-class _LandingPage extends State<LandingPage> {
-  int _currentIndex = 0;
 
   void onTabTapped(int index) {
     print("GO TO page $index");
@@ -36,7 +35,7 @@ class _LandingPage extends State<LandingPage> {
         child: Scaffold(
           body: IndexedStack(
             index: _currentIndex,
-            children: widget.stay_alive_screens,
+            children: stay_alive_screens,
           ),
           bottomNavigationBar: BottomNavigationBar(
             elevation: 0,
