@@ -35,6 +35,9 @@ dev_dependencies:
   firebase_core: ^1.0.2
   firebase_auth:
   cloud_firestore: ^1.0.3
+  firebase_storage: ^8.0.2
+  image_picker:
+  permission_handler: ^6.1.1  
   provider:
   network_to_file_image: ^3.0.0
   google_maps_flutter: ^2.0.2
