@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class NewPost extends ChangeNotifier {
   List<bool> tagsSelected = [];
   List<String> tags = [];
+  var location;
   String description;
   var imagePath;
   var imageUrl;
@@ -22,7 +23,6 @@ class NewPost extends ChangeNotifier {
         .get()
         .then((querySnapshot) async {
       length = querySnapshot.docs.length;
-      print("length $length");
     });
 
     for (int i = 0; i < length; i++) {
@@ -42,14 +42,6 @@ class NewPost extends ChangeNotifier {
       }
     }
   }
-
-  // initSelected() {
-  //   tagsSelected = [];
-  //   for (int i = 0; i < tags.length; i++) {
-  //     tagsSelected.add(false);
-  //   }
-  //   print("fffffff ${tagsSelected.length}");
-  // }
 
   onTagSelect(int i) {
     print("Tag $i selected");

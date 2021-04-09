@@ -8,9 +8,8 @@ import 'package:provider/provider.dart';
 import '../../states/currentUser.dart';
 import '../../models/new_post.dart';
 import "../../Constants/constants.dart";
-import "../../Components/categoryButton.dart";
 import '../../Components/post.dart';
-import 'package:provider/provider.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UploadPost extends StatefulWidget {
@@ -20,10 +19,54 @@ class UploadPost extends StatefulWidget {
 
 class _UploadPost extends State<UploadPost> {
   var imagePath;
-  // bool inputCaption = false;
+  var location;
+
   TextEditingController _description = TextEditingController();
 
-  // List<UploadJob> _profilePictures = [];
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      location = getLocation();
+    });
+  }
+
+  Future<Position> getLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever) {
+        // Permissions are denied forever, handle appropriately.
+        return Future.error(
+            'Location permissions are permanently denied, we cannot request permissions.');
+      }
+
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    // bool temp = (permission == LocationPermission.whileInUse);
+    // print("PERMISSION: $temp");
+    //permission granted
+    Position pos = await Geolocator.getCurrentPosition();
+    print("GOT LOCATION ${pos.toString()}");
+    return pos;
+  }
 
   selectImage() async {
     final _picker = ImagePicker();
@@ -59,10 +102,8 @@ class _UploadPost extends State<UploadPost> {
     NewPost _newPost = Provider.of<NewPost>(context, listen: false);
     List<bool> tagsSelected = _newPost.getTagsSelected();
 
-    print("UPLOAD PAGER BUILT");
-    // FocusScope.of(context).unfocus();
-
     print("upload post page built");
+    print("CURRENT LOCATION: ${this.location.toString()}");
     return Container(
       color: Colors.teal[50],
       child: SafeArea(
@@ -322,7 +363,7 @@ class _PreviewPost extends State<PreviewPost> {
     var tagsSelected =
         context.select<NewPost, List<bool>>((post) => (post.getTagsSelected()));
 
-    uploadImage() async {
+    sendPost() async {
       // Upload to Firebase
       var firebaseStorageRef = FirebaseStorage.instance
           .ref()
@@ -333,6 +374,41 @@ class _PreviewPost extends State<PreviewPost> {
       if (downloadUrl != null) {
         print("Image uploaded to cloud");
         _newPost.setImageUrl(downloadUrl);
+        // upload to Firestore
+        var tagsSelected = _newPost.getTagsSelected();
+        List<String> tagsIds = [];
+        for (int i = 0; i < tagsSelected.length; i++) {
+          if (tagsSelected[i]) {
+            tagsIds.add(i.toString());
+          }
+        }
+        // print(tagsIds);
+
+        int numPosts;
+        await FirebaseFirestore.instance
+            .collection("posts")
+            .get()
+            .then((query) => numPosts = query.docs.length);
+        print("$numPosts");
+        String timestamp = DateTime.now().toString();
+        FirebaseFirestore.instance.collection("posts").doc("$numPosts").set({
+          "create_date": timestamp,
+          "description": _newPost.getDescription(),
+          "district_id": 0,
+          "location_id": 0,
+          "country_id": 0,
+          "image_URL": _newPost.getimageUrl(),
+          "is_public": true,
+          "is_travel_log": true,
+          "like_count": 0,
+          "liked_uid": 0,
+          "tags": tagsIds,
+          "uid": uid,
+        }).then((_) {
+          print("success!");
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              '/landing', (Route<dynamic> route) => false);
+        });
       } else {
         print("Cannot upload to cloud");
       }
@@ -361,7 +437,7 @@ class _PreviewPost extends State<PreviewPost> {
                       child: Padding(
                         padding: const EdgeInsets.only(right: 10.0),
                         child: TextButton(
-                          onPressed: () => uploadImage(),
+                          onPressed: () => sendPost(),
                           child: Text(
                             "Post",
                             style: TextStyle(fontSize: 20, color: Colors.teal),
