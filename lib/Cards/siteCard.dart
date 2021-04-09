@@ -18,7 +18,7 @@ class SiteCard extends StatefulWidget {
 class _SiteCardState extends State<SiteCard> {
   var likes = 0;
   var dislikes = 0;
-  var liked = 0;
+  bool liked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -74,36 +74,19 @@ class _SiteCardState extends State<SiteCard> {
                             constraints: BoxConstraints(),
                             icon: Icon(Icons.thumb_up),
                             onPressed: () {
-                              if (liked <= 0)
-                                setState(() {
-                                  likes += 1;
-                                  if (liked != 0) dislikes -= 1;
-                                });
-                              liked = 1;
+                              if (!liked) {
+                                setState(() => likes += 1);
+                                liked = true;
+                              } else {
+                                setState(() => likes -= 1);
+                                liked = false;
+                              }
                             },
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 10, right: 40),
                             child: Text(
                               likes.toString(),
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ),
-                          IconButton(
-                            constraints: BoxConstraints(),
-                            icon: Icon(Icons.thumb_down),
-                            onPressed: () {
-                              if (liked >= 0) {
-                                setState(() => dislikes += 1);
-                                liked = -1;
-                                if (liked != 0) likes -= 1;
-                              }
-                            },
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text(
-                              dislikes.toString(),
                               style: TextStyle(fontSize: 12),
                             ),
                           ),

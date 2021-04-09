@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hackust_fakeust/Pages/SitePage/sitePage.dart';
 import 'package:hackust_fakeust/models/area_model.dart';
@@ -16,15 +17,21 @@ class MapWidget extends StatefulWidget {
 }
 
 class MapWidgetState extends State<MapWidget> {
+  AreaList data;
+  bool _serviceEnabled;
+  PermissionStatus _permissionGranted;
+  LocationData currentLocation;
+  Location location;
+  bool cleared = false;
   bool loading = true;
   Completer<GoogleMapController> _controller = Completer();
+  Set<Polygon> _polygons = HashSet<Polygon>();
   List<Marker> markers = [];
-  static final CameraPosition _kGooglePlex = CameraPosition(
+
+  static final CameraPosition initPosition = CameraPosition(
     target: LatLng(22.349051751000047, 114.17942283900004),
     zoom: 10,
   );
-
-  Set<Polygon> _polygons = HashSet<Polygon>();
 
   void _setPolygons() async {
     bool traveled = true;
@@ -73,8 +80,6 @@ class MapWidgetState extends State<MapWidget> {
     });
   }
 
-  AreaList data;
-
   Future loadJsonData() async {
     String jsonString = await rootBundle.loadString('assets/data/latlng.json');
     final jsonResponse = json.decode(jsonString);
@@ -87,6 +92,22 @@ class MapWidgetState extends State<MapWidget> {
   void asyncMethod() async {
     await loadJsonData();
     _setPolygons();
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
   }
 
   _handleTap(LatLng tappedPoint) {
@@ -95,9 +116,7 @@ class MapWidgetState extends State<MapWidget> {
       markers.add(Marker(
           markerId: MarkerId(tappedPoint.toString()),
           position: tappedPoint,
-          onTap: () {
-            print("tomlam");
-          }));
+          onTap: () {}));
     });
   }
 
@@ -113,12 +132,28 @@ class MapWidgetState extends State<MapWidget> {
       children: [
         GoogleMap(
           mapType: MapType.normal,
-          initialCameraPosition: _kGooglePlex,
+          initialCameraPosition: initPosition,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
           },
           markers: Set.from(markers),
           polygons: _polygons,
+          buildingsEnabled: false,
+          myLocationEnabled: true,
+          myLocationButtonEnabled: true,
+          onCameraMove: (CameraPosition cameraPosition) {
+            // print(cameraPosition.zoom);
+            if (cameraPosition.zoom > 13 && !cleared)
+              setState(() {
+                _polygons.clear();
+                cleared = true;
+              });
+            else if (cameraPosition.zoom <= 13 && cleared)
+              setState(() {
+                _setPolygons();
+                cleared = false;
+              });
+          },
           // onTap: _handleTap,
         ),
         loading
@@ -130,7 +165,7 @@ class MapWidgetState extends State<MapWidget> {
                   duration: Duration(milliseconds: 500),
                 ),
               )
-            : Container()
+            : Container(),
       ],
     );
   }

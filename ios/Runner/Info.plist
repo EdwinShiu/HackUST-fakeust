@@ -43,5 +43,6 @@
 	<false/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Permission to access photo gallery</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
 </dict>
 </plist>
