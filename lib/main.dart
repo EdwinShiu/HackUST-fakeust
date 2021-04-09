@@ -27,6 +27,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          textTheme: TextTheme(
+            headline1: header1TextTheme,
+            headline2: header2TextTheme,
+          ),
         ),
         home: LandingPage(),
         routes: {
