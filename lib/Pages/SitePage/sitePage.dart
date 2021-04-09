@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:hackust_fakeust/Cards/siteCard.dart';
 import 'package:hackust_fakeust/Components/categoryButton.dart';
 import 'package:hackust_fakeust/Components/expandableText.dart';
+import 'package:hackust_fakeust/Components/sitePageHeader.dart';
 
 class SitePage extends StatelessWidget {
   final String country;
@@ -16,79 +18,39 @@ class SitePage extends StatelessWidget {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-    print(country);
-    return Material(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: screenHeight * 0.3,
-              width: screenWidth,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/logCard2.jpeg"),
-                  fit: BoxFit.cover,
-                ),
-              ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: CustomScrollView(slivers: [
+          SliverPersistentHeader(
+            pinned: true,
+            floating: false,
+            delegate: SitePageHeader(
+              minExtent: screenHeight * 0.21,
+              maxExtent: screenHeight * 0.4,
+              country: country,
+              site: site,
+              description: description,
             ),
-            Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: List.generate(3, (int index) => CategoryButton()),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(top: 20),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SiteCard(),
+                );
+              },
+              childCount: 10,
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              child: Column(children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    country ?? "Country",
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        fontSize: 20,
-                        color: Colors.black),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10.0),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    site ?? "Site",
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        fontSize: 40,
-                        color: Colors.black),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: ExpandableText(
-                    text: description ?? "description",
-                    maxLines: 20,
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        fontSize: 15,
-                        color: Colors.black),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.0),
-                ),
-                Container(
-                    height: screenHeight * 0.6,
-                    child: ListView(
-                        padding: const EdgeInsets.all(8),
-                        children: List.generate(
-                            10,
-                            (index) => Container(
-                                height: 100,
-                                color: Color((Random().nextDouble() * 0xFFFFFF)
-                                        .toInt())
-                                    .withOpacity(0.5)))))
-              ]),
-            ),
-          ],
-        ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.only(top: 50),
+          ),
+        ]),
       ),
     );
   }

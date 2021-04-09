@@ -3,6 +3,7 @@ import 'package:hackust_fakeust/Components/LeaderBoard.dart';
 import 'package:hackust_fakeust/Components/mapWidget.dart';
 import 'package:hackust_fakeust/Pages/SocialMediaPage/SocialMediaPage.dart';
 import 'package:hackust_fakeust/Pages/TravelLogPage/travellogpage.dart';
+import 'package:hackust_fakeust/Pages/mapPage/mapPage.dart';
 
 import '../../Cards/travellogCard.dart';
 
@@ -14,7 +15,7 @@ class LandingPage extends StatefulWidget {
 class _LandingPage extends State<LandingPage> {
   int _currentIndex = 1;
   final List<Widget> stay_alive_screens = [
-    MapWidget(),
+    MapPage(),
     SocialMediaPage(),
     LeaderBoard(),
     TravelLogPage()
