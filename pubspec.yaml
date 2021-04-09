@@ -46,6 +46,7 @@ dev_dependencies:
   google_fonts: ^2.0.0
   carousel_slider: ^3.0.0
   font_awesome_flutter: 
+  geolocator: ^7.0.1
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
