@@ -93,9 +93,11 @@ class MapWidgetState extends State<MapWidget> {
     setState(() {
       markers = [];
       markers.add(Marker(
-        markerId: MarkerId(tappedPoint.toString()),
-        position: tappedPoint,
-      ));
+          markerId: MarkerId(tappedPoint.toString()),
+          position: tappedPoint,
+          onTap: () {
+            print("tomlam");
+          }));
     });
   }
 
