@@ -1,3 +1,5 @@
+import 'dart:io';
+
 // import '../Constants/constants.dart';
 import 'package:flutter/material.dart';
 import "package:like_button/like_button.dart";
@@ -5,17 +7,20 @@ import "package:like_button/like_button.dart";
 import 'package:network_to_file_image/network_to_file_image.dart';
 import 'package:loading_animations/loading_animations.dart';
 import "../Constants/constants.dart";
+import 'package:hackust_fakeust/Components/expandableText.dart';
 
 class Post extends StatefulWidget {
   final String caption;
   final String username;
   final int likeCount;
   final String imageURL;
+  final imagePATH;
 
   const Post(
       {Key key,
       this.username = "loading",
       this.imageURL = "",
+      this.imagePATH = "",
       this.likeCount = 0,
       this.caption = "loading"})
       : super(key: key);
@@ -53,7 +58,8 @@ class _Post extends State<Post> {
       child: Column(
         children: [
           // Image
-          (widget.imageURL == "")
+
+          (widget.imageURL == "" && widget.imagePATH == "")
               ? Container(
                   height: screenHeight * imageArea,
                   child: Center(
@@ -68,9 +74,9 @@ class _Post extends State<Post> {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       // image: AssetImage("assets/images/logCard2.jpeg"),
-                      image: (widget.imageURL == "")
-                          ? AssetImage("assets/images/logCard.jpeg")
-                          : NetworkToFileImage(url: widget.imageURL),
+                      image: (widget.imagePATH == "")
+                          ? NetworkToFileImage(url: widget.imageURL)
+                          : FileImage(widget.imagePATH),
                       // fit makes the image occupies the whole allocated space
                       fit: BoxFit.cover,
                     ),

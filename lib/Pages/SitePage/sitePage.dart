@@ -18,39 +18,42 @@ class SitePage extends StatelessWidget {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: CustomScrollView(slivers: [
-          SliverPersistentHeader(
-            pinned: true,
-            floating: false,
-            delegate: SitePageHeader(
-              minExtent: screenHeight * 0.21,
-              maxExtent: screenHeight * 0.4,
-              country: country,
-              site: site,
-              description: description,
+    return Container(
+      color: Colors.white,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: CustomScrollView(slivers: [
+            SliverPersistentHeader(
+              pinned: true,
+              floating: false,
+              delegate: SitePageHeader(
+                minExtent: screenHeight * 0.21,
+                maxExtent: screenHeight * 0.4,
+                country: country,
+                site: site,
+                description: description,
+              ),
             ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.only(top: 20),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SiteCard(),
-                );
-              },
-              childCount: 10,
+            SliverPadding(
+              padding: EdgeInsets.only(top: 20),
             ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.only(top: 50),
-          ),
-        ]),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SiteCard(),
+                  );
+                },
+                childCount: 10,
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.only(top: 50),
+            ),
+          ]),
+        ),
       ),
     );
   }

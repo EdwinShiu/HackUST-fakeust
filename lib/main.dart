@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hackust_fakeust/models/new_post.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => CurrentUser()),
+        ChangeNotifierProvider(create: (context) => NewPost()),
       ],
       child: MaterialApp(
         title: appTitle,

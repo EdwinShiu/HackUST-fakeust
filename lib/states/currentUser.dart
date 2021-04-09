@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CurrentUser extends ChangeNotifier {
-  String _uid = 'Null';
-  String _email = 'Null';
+  String _uid = 'Nulluid';
+  String _username = 'Nullusername';
+  String _email = 'Nullemail';
 
   String get getUid => _uid;
 
   String get getEmail => _email;
+
+  String get getUsername => _username;
 
   FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -38,6 +42,16 @@ class CurrentUser extends ChangeNotifier {
         _uid = _authResult.user.uid;
         _email = _authResult.user.email;
         returnVal = true;
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_uid)
+            .get()
+            .then((querySnapshot) {
+          _username = querySnapshot.data()['username'];
+          print("$_username logged in");
+        });
+
         notifyListeners();
       }
     } catch (e) {
