@@ -39,7 +39,7 @@ class _SocialMediaPage extends State<SocialMediaPage> {
     // var screenHeight = MediaQuery.of(context).size.height;
     // var screenWidth = MediaQuery.of(context).size.width;
     String uid = Provider.of<CurrentUser>(context).getUid;
-    var post;
+
     return Stack(
       children: [
         StreamBuilder(
@@ -53,8 +53,8 @@ class _SocialMediaPage extends State<SocialMediaPage> {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                      print("NUM of POSTS ${snapshot.data.docs.length}");
-                      post =
+                      // print("NUM of POSTS ${snapshot.data.docs.length}");
+                      var post =
                           snapshot.data.docs[index % snapshot.data.docs.length];
                       // may need to sort posts
                       //get username by uid
@@ -72,13 +72,16 @@ class _SocialMediaPage extends State<SocialMediaPage> {
                           if (snapshot.connectionState ==
                               ConnectionState.done) {
                             Map<String, dynamic> data = snapshot.data.data();
-                            if (data != null)
+                            if (data != null) {
                               return Post(
                                 username: data['username'],
                                 imageURL: post['image_URL'],
                                 likeCount: post['like_count'],
                                 caption: post['description'],
+                                postId: post['post_id'],
+                                currentUid: uid,
                               );
+                            }
                           }
                           return Post();
                         },

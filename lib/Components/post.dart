@@ -8,6 +8,7 @@ import 'package:network_to_file_image/network_to_file_image.dart';
 import 'package:loading_animations/loading_animations.dart';
 import "../Constants/constants.dart";
 import 'package:hackust_fakeust/Components/expandableText.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Post extends StatefulWidget {
   final String caption;
@@ -15,15 +16,19 @@ class Post extends StatefulWidget {
   final int likeCount;
   final String imageURL;
   final imagePATH;
+  final String postId;
+  final String currentUid;
 
-  const Post(
-      {Key key,
-      this.username = "loading",
-      this.imageURL = "",
-      this.imagePATH = "",
-      this.likeCount = 0,
-      this.caption = "loading"})
-      : super(key: key);
+  const Post({
+    Key key,
+    this.username = "loading",
+    this.imageURL = "",
+    this.imagePATH = "",
+    this.likeCount = 0,
+    this.caption = "loading",
+    this.postId = "",
+    this.currentUid = "",
+  }) : super(key: key);
 
   @override
   _Post createState() => _Post();
@@ -36,15 +41,31 @@ class _Post extends State<Post> {
   }
 
   // update like count to database
-  Future<bool> onLikeButtonTapped(bool isLiked) async {
-    /// send your request here
-    // final bool success= await sendRequest();
+  // Future<bool> onLikeButtonTapped(bool isLiked) async {
+  //   int temp_like;
+  //   List<String> temp_list;
+  //   print("POSTID ${widget.postId}");
+  //   await FirebaseFirestore.instance
+  //       .collection('posts')
+  //       .doc(widget.postId)
+  //       .get()
+  //       .then((_querySnapshot) {
+  //     temp_like = _querySnapshot.data()['like_count'];
+  //     temp_list = _querySnapshot.data()['like_uid'];
+  //   });
+  //   print(temp_list.toString());
+  //   print(temp_like.toString());
 
-    /// if failed, you can do nothing
-    // return success? !isLiked:isLiked;
+  //   await FirebaseFirestore.instance
+  //       .collection('posts')
+  //       .doc(widget.postId)
+  //       .update({
+  //     "like_count": temp_like + 1,
+  //     // "like_uid": temp_list + [widget.currentUid]
+  //   });
 
-    return !isLiked;
-  }
+  //   return !isLiked;
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -404,6 +404,7 @@ class _PreviewPost extends State<PreviewPost> {
           "liked_uid": 0,
           "tags": tagsIds,
           "uid": uid,
+          "post_id": numPosts.toString(),
         }).then((_) {
           print("success!");
           Navigator.of(context).pushNamedAndRemoveUntil(
