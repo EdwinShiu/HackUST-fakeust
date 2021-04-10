@@ -39,12 +39,13 @@ class _SocialMediaPage extends State<SocialMediaPage> {
     // var screenHeight = MediaQuery.of(context).size.height;
     // var screenWidth = MediaQuery.of(context).size.width;
     String uid = Provider.of<CurrentUser>(context).getUid;
-
+    var post;
     return Stack(
       children: [
         StreamBuilder(
           stream: FirebaseFirestore.instance.collection('posts').snapshots(),
           builder: (context, snapshot) {
+            // post = snapshot.data.docs;
             if (!snapshot.hasData)
               return Text("NO POST");
             else
@@ -52,8 +53,10 @@ class _SocialMediaPage extends State<SocialMediaPage> {
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                      final post =
+                      print("NUM of POSTS ${snapshot.data.docs.length}");
+                      post =
                           snapshot.data.docs[index % snapshot.data.docs.length];
+                      // may need to sort posts
                       //get username by uid
                       return FutureBuilder<DocumentSnapshot>(
                         future: FirebaseFirestore.instance

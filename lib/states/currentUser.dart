@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CurrentUser extends ChangeNotifier {
-  String _uid = 'Nulluid';
-  String _username = 'Nullusername';
-  String _email = 'Nullemail';
+  String _uid = 'B5aoQJ4bykgbdQ3THbvta2DXdWm2';
+  String _username = 'testname';
+  String _email = 'test@gmail.com';
 
   String get getUid => _uid;
 
