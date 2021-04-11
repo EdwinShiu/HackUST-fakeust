@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +12,8 @@ import "../../Constants/constants.dart";
 import '../../Components/post.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:location/location.dart';
+import 'package:flutter/services.dart';
 
 class UploadPost extends StatefulWidget {
   @override
@@ -27,13 +30,29 @@ class _UploadPost extends State<UploadPost> {
   void initState() {
     super.initState();
     setState(() {
-      location = getLocation();
+      location = _determinePosition();
     });
   }
 
-  Future<Position> getLocation() async {
+  // Future getLoc() async {
+  //   Location location = new Location();
+
+  //   await Permission.location.request();
+
+  //   var permissionStatus = await Permission.location.status;
+
+  //   if (permissionStatus.isGranted) {
+  //     var loc = await location.getLocation();
+  //     print(loc.toString());
+  //   }
+  //   return;
+  // }
+
+  Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
+
+    // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       // Location services are not enabled don't continue
@@ -41,6 +60,7 @@ class _UploadPost extends State<UploadPost> {
       // App to enable the location services.
       return Future.error('Location services are disabled.');
     }
+
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -60,12 +80,12 @@ class _UploadPost extends State<UploadPost> {
       }
     }
 
-    // bool temp = (permission == LocationPermission.whileInUse);
-    // print("PERMISSION: $temp");
-    //permission granted
-    Position pos = await Geolocator.getCurrentPosition();
-    print("GOT LOCATION ${pos.toString()}");
-    return pos;
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    print("PERMISSION GRANTED");
+    var loc = await Geolocator.getCurrentPosition();
+    print(loc.toString());
+    return loc;
   }
 
   selectImage() async {
@@ -102,8 +122,8 @@ class _UploadPost extends State<UploadPost> {
     NewPost _newPost = Provider.of<NewPost>(context, listen: false);
     List<bool> tagsSelected = _newPost.getTagsSelected();
 
-    print("upload post page built");
-    print("CURRENT LOCATION: ${this.location.toString()}");
+    // print("upload post page built");
+    // print("CURRENT LOCATION: ${this.location.toString()}");
     return Container(
       color: Colors.teal[50],
       child: SafeArea(
@@ -163,7 +183,7 @@ class _UploadPost extends State<UploadPost> {
                     ),
                     (imagePath == null)
                         ? Container(
-                            height: screenHeight * postArea,
+                            height: screenHeight * imageArea,
                             width: screenWidth,
                             color: Colors.grey[300],
                             // alignment: Alignment.center,
@@ -189,7 +209,7 @@ class _UploadPost extends State<UploadPost> {
                             ),
                           )
                         : Container(
-                            height: screenHeight * postArea,
+                            height: screenHeight * imageArea,
                             // image background
                             decoration: BoxDecoration(
                               image: DecorationImage(
@@ -198,66 +218,71 @@ class _UploadPost extends State<UploadPost> {
                               ),
                             ),
                           ),
+
                     // chose image then display additional info
                     (imagePath == null)
                         ? Container()
-                        : Container(
-                            height: screenHeight * 0.05,
-                            color: Colors.teal[50],
-                            child: Stack(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10.0, right: 20),
-                                    child: SizedBox(
-                                      height: 50,
-                                      width: 50,
-                                      child: FloatingActionButton(
-                                        onPressed: () => selectImage(),
-                                        child: Icon(Icons.photo),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10.0, right: 75),
-                                    child: Container(
-                                      height: 50,
-                                      width: 55,
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "Another Photo",
-                                          textAlign: TextAlign.center,
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Container(
+                              height: screenHeight * 0.07,
+                              color: Colors.teal[50],
+                              child: Stack(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5),
+                                      child: SizedBox(
+                                        height: screenHeight * 0.05,
+                                        // width: screenHeight * 0.05,
+                                        child: FloatingActionButton(
+                                          onPressed: () => selectImage(),
+                                          child: Icon(Icons.photo,
+                                              size: screenHeight * 0.07 * 0.5),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 20, left: 10),
-                                    child: Text(
-                                      "Description",
-                                      style: TextStyle(fontSize: 20),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 0.0, bottom: 0, right: 55),
+                                      child: Container(
+                                        height: 50,
+                                        width: 55,
+                                        child: Align(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "Another Photo",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                )
-                              ],
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        "Description",
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                     (imagePath == null)
                         ? Container()
                         : Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 10),
+                            padding: const EdgeInsets.only(
+                                bottom: 20, left: 10, right: 10),
                             child: TextFormField(
                               autocorrect: false,
                               controller: _description,
@@ -274,7 +299,7 @@ class _UploadPost extends State<UploadPost> {
                         : Container(
                             height: screenHeight * 0.05,
                             child: Align(
-                              alignment: Alignment.topLeft,
+                              alignment: Alignment.centerLeft,
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 10.0),
                                 child: Text(
@@ -288,8 +313,7 @@ class _UploadPost extends State<UploadPost> {
                         : Container(
                             height: 40,
                             child: TagsScrollView(),
-                          )
-                    //ff
+                          ),
                   ],
                 ),
               ),
@@ -314,7 +338,7 @@ class _TagsScrollView extends State<TagsScrollView> {
         context.select<NewPost, List<bool>>((post) => (post.getTagsSelected()));
     var tags = _newPost.getTags();
 
-    print("TAGS BUILT");
+    // print("TAGS BUILT");
     return CustomScrollView(
       slivers: <Widget>[
         SliverList(
@@ -322,7 +346,7 @@ class _TagsScrollView extends State<TagsScrollView> {
               SliverChildBuilderDelegate((BuildContext context, int index) {
             // return Container();
             return Padding(
-              padding: const EdgeInsets.only(left: 10.0),
+              padding: const EdgeInsets.only(left: 10.0, top: 5),
               child: ElevatedButton(
                 onPressed: () => _newPost.onTagSelect(index),
                 child: Text(tags[index]),
@@ -331,7 +355,8 @@ class _TagsScrollView extends State<TagsScrollView> {
                       MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => tagsSelected[index]
-                        ? Color((0xff11AA33).toInt()).withOpacity(0.8)
+                        ? Color((Random().nextDouble() * 0xFFFFFFFF).toInt())
+                            .withOpacity(1)
                         : Color((0x11111111).toInt()).withOpacity(0.3),
                   ),
                 ),
@@ -351,7 +376,8 @@ class PreviewPost extends StatefulWidget {
 }
 
 class _PreviewPost extends State<PreviewPost> {
-  var imageUrl;
+  bool sendingPost = false;
+  bool sentPost = false;
 
   @override
   Widget build(BuildContext context) {
@@ -360,10 +386,12 @@ class _PreviewPost extends State<PreviewPost> {
     var screenWidth = MediaQuery.of(context).size.width;
     String uid = Provider.of<CurrentUser>(context).getUid;
     String username = Provider.of<CurrentUser>(context).getUsername;
-    var tagsSelected =
-        context.select<NewPost, List<bool>>((post) => (post.getTagsSelected()));
 
     sendPost() async {
+      setState(() {
+        sendingPost = true;
+      });
+
       // Upload to Firebase
       var firebaseStorageRef = FirebaseStorage.instance
           .ref()
@@ -389,7 +417,7 @@ class _PreviewPost extends State<PreviewPost> {
             .collection("posts")
             .get()
             .then((query) => numPosts = query.docs.length);
-        print("$numPosts");
+        // print("$numPosts");
         String timestamp = DateTime.now().toString();
         FirebaseFirestore.instance.collection("posts").doc("$numPosts").set({
           "create_date": timestamp,
@@ -406,59 +434,82 @@ class _PreviewPost extends State<PreviewPost> {
           "uid": uid,
           "post_id": numPosts.toString(),
         }).then((_) {
-          print("success!");
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              '/landing', (Route<dynamic> route) => false);
+          print("Post sent!");
+          setState(() {
+            sentPost = true;
+          });
+          Future.delayed(Duration(milliseconds: 1000), () {
+            // Do something
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/landing', (Route<dynamic> route) => false);
+          });
         });
       } else {
         print("Cannot upload to cloud");
       }
     }
 
-    return Container(
-      color: Colors.teal[50],
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.teal[50],
-          body: Column(
-            children: [
-              Container(
-                height: screenHeight * 0.05,
-                child: Stack(
+    return sendingPost
+        ? Container(
+            color: Colors.teal[50],
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: Colors.teal[50],
+                body: sentPost
+                    ? Center(
+                        child: Icon(Icons.done),
+                      )
+                    : Center(
+                        child: CircularProgressIndicator(),
+                      ),
+              ),
+            ),
+          )
+        : Container(
+            color: Colors.teal[50],
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: Colors.teal[50],
+                body: Column(
                   children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Post Preview",
-                        style: TextStyle(fontSize: 20),
+                    Container(
+                      height: screenHeight * 0.05,
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Post Preview",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: TextButton(
+                                onPressed: () => sendPost(),
+                                child: Text(
+                                  "Post",
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.teal),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: TextButton(
-                          onPressed: () => sendPost(),
-                          child: Text(
-                            "Post",
-                            style: TextStyle(fontSize: 20, color: Colors.teal),
-                          ),
-                        ),
-                      ),
+                    Post(
+                      username: username,
+                      imagePATH: _newPost.getimagePath(),
+                      likeCount: 999,
+                      caption: _newPost.getDescription(),
                     ),
                   ],
                 ),
               ),
-              Post(
-                username: username,
-                imagePATH: _newPost.getimagePath(),
-                likeCount: 999,
-                caption: _newPost.getDescription(),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

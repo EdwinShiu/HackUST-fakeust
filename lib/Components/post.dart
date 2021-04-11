@@ -1,14 +1,8 @@
-import 'dart:io';
-
 // import '../Constants/constants.dart';
 import 'package:flutter/material.dart';
 import "package:like_button/like_button.dart";
-// import 'package:path_provider/path_provider.dart';
-import 'package:network_to_file_image/network_to_file_image.dart';
-import 'package:loading_animations/loading_animations.dart';
+// import 'package:loading_animations/loading_animations.dart';
 import "../Constants/constants.dart";
-import 'package:hackust_fakeust/Components/expandableText.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Post extends StatefulWidget {
   final String caption;
@@ -71,80 +65,100 @@ class _Post extends State<Post> {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-    print('post built');
+    // print('post built');
     return Container(
       height: screenHeight * postArea,
       width: screenWidth,
       margin: const EdgeInsets.only(bottom: 0),
       child: Column(
         children: [
-          // Image
-
+          // Image and username
           (widget.imageURL == "" && widget.imagePATH == "")
               ? Container(
                   height: screenHeight * imageArea,
-                  child: Center(
-                    child: LoadingRotating.square(
-                      duration: Duration(milliseconds: 500),
-                    ),
-                  ),
+                  child: Container(),
                 )
-              : Container(
+              :
+              // username
+              Container(
                   height: screenHeight * imageArea,
-                  // image background
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      // image: AssetImage("assets/images/logCard2.jpeg"),
-                      image: (widget.imagePATH == "")
-                          ? NetworkToFileImage(url: widget.imageURL)
-                          : FileImage(widget.imagePATH),
-                      // fit makes the image occupies the whole allocated space
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  width: screenWidth,
+                  child: Stack(
+                    children: [
+                      (widget.imagePATH == "")
+                          ? Container(
+                              height: screenHeight * imageArea,
+                              width: screenWidth,
+                              child: Image.network(
+                                widget.imageURL,
+                                fit: BoxFit.cover,
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
 
-                  // username
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10,
-                          bottom: 10,
-                        ),
-                        child: Container(
-                          height: screenHeight * usernameArea,
-                          width: screenWidth * 0.4,
-                          child: Stack(
-                            children: [
-                              Container(
-                                height: screenHeight * usernameArea,
-                                width: screenHeight * usernameArea,
-                                // color: Colors.white,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                        "assets/images/profilePic.png"),
-                                    // fit makes the image occupies the whole allocated space
-                                    fit: BoxFit.cover,
+                                  // return LoadingRotating.square(
+                                  //   duration: Duration(milliseconds: 500),
+                                  // );
+                                  // or LinearProgressIndicator or CircularProgressIndicator instead
+                                  return LinearProgressIndicator();
+                                },
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Text('Some errors occurred!'),
+                              ),
+                            )
+                          : Container(
+                              height: screenHeight * imageArea,
+                              // image background
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: FileImage(widget.imagePATH),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                            padding: const EdgeInsets.only(
+                              left: 10,
+                              bottom: 10,
+                            ),
+                            child: Container(
+                              height: screenHeight * usernameArea,
+                              width: screenWidth * 0.4,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    height: screenHeight * usernameArea,
+                                    width: screenHeight * usernameArea,
+                                    // color: Colors.white,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/images/profilePic.png"),
+                                        // fit makes the image occupies the whole allocated space
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      widget.username,
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.white),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  widget.username,
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                        // child: Text(
-                        //   "USERNAME",
-                        //   style: TextStyle(fontSize: 20, color: Colors.white),
-                        // ),
-                        ),
+                            )
+                            // child: Text(
+                            //   "USERNAME",
+                            //   style: TextStyle(fontSize: 20, color: Colors.white),
+                            // ),
+                            ),
+                      ),
+                    ],
                   ),
                 ),
 
@@ -153,26 +167,30 @@ class _Post extends State<Post> {
             height: screenHeight * locationrowArea,
             width: screenWidth,
             // color: Colors.black,
-            child: Stack(
+            child: Row(
               children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 15),
-                    child: Text(
-                      widget.caption,
-                      style: TextStyle(fontSize: 20),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 15),
+                      child: Text(
+                        widget.caption,
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 230, top: 10),
-                    child: LikeButton(
-                      size: 20,
-                      likeCount: widget.likeCount,
-                      // onTap: onLikeButtonTapped,
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 0),
+                      child: LikeButton(
+                        size: 20,
+                        likeCount: widget.likeCount,
+                        // onTap: onLikeButtonTapped,
+                      ),
                     ),
                   ),
                 ),
