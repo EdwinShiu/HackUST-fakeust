@@ -10,6 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hackust_fakeust/Pages/SitePage/sitePage.dart';
 import 'package:hackust_fakeust/models/area_model.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MapWidget extends StatefulWidget {
   @override
@@ -26,13 +27,110 @@ class MapWidgetState extends State<MapWidget> {
   bool cleared = false;
   bool loading = true;
   Completer<GoogleMapController> _controller = Completer();
+  Map<String, LatLng> _circleCenters = Map<String, LatLng>();
   Set<Polygon> _polygons = HashSet<Polygon>();
-  List<Marker> markers = [];
+  Set<Circle> _circle = HashSet<Circle>();
+  Set<Marker> _markers = HashSet<Marker>();
 
   static final CameraPosition initPosition = CameraPosition(
     target: LatLng(22.349051751000047, 114.17942283900004),
     zoom: 10,
   );
+
+  bool _isInArea(List<LatLng> vertices) {
+    LatLng cpos = LatLng(_locationData.latitude, _locationData.longitude);
+    int intersectCount = 0;
+    for (int j = 0; j < vertices.length - 1; j++) {
+      if (rayCastIntersect(cpos, vertices[j], vertices[j + 1])) {
+        intersectCount++;
+      }
+    }
+
+    return ((intersectCount % 2) == 1); // odd = inside, even = outside;
+  }
+
+  bool rayCastIntersect(LatLng tap, LatLng vertA, LatLng vertB) {
+    double aY = vertA.latitude;
+    double bY = vertB.latitude;
+    double aX = vertA.longitude;
+    double bX = vertB.longitude;
+    double pY = tap.latitude;
+    double pX = tap.longitude;
+
+    if ((aY > pY && bY > pY) || (aY < pY && bY < pY) || (aX < pX && bX < pX)) {
+      return false; // a and b can't both be above or below pt.y, and a or
+      // b must be east of pt.x
+    }
+
+    double m = (aY - bY) / (aX - bX); // Rise over run
+    double bee = (-aX) * m + aY; // y = mx + b
+    double x = (pY - bee) / m; // algebra is neat!
+
+    return x > pX;
+  }
+
+  String findRegion() {
+    for (var i = 0; i < data.areas.length; i++) {
+      for (var j = 0; j < data.areas[i].latlng.length; j++) {
+        List<LatLng> latLngs = [];
+        for (var k = 0; k < data.areas[i].latlng[j].length; k++) {
+          double latitude = data.areas[i].latlng[j][k][1];
+          double longitude = data.areas[i].latlng[j][k][0];
+          latLngs.add(LatLng(latitude, longitude));
+        }
+        if (_isInArea(latLngs)) return data.areas[i].location;
+      }
+    }
+    return "None";
+  }
+
+  bool _isInCircle(LatLng centerPoint, double r) {
+    LatLng cpos = LatLng(_locationData.latitude, _locationData.longitude);
+    var ky = 40000 / 360;
+    var kx = cos(pi * centerPoint.latitude / 180.0) * ky;
+    var dx = (centerPoint.longitude - cpos.longitude).abs() * kx;
+    var dy = (centerPoint.latitude - cpos.latitude).abs() * ky;
+    return sqrt(dx * dx + dy * dy) <= r;
+  }
+
+  String findLocation() {
+    String location = "None";
+    _circleCenters.forEach((key, value) {
+      if (_isInCircle(value, 0.1)) location = key;
+    });
+    return location;
+  }
+
+  void _setMarker() async {
+    await FirebaseFirestore.instance
+        .collection('locations')
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              _markers.add(Marker(
+                  markerId: MarkerId(element.data()['lid']),
+                  position:
+                      LatLng(element.data()['lat'], element.data()['long']),
+                  onTap: () {}));
+            }));
+  }
+
+  void _setCircle() async {
+    await FirebaseFirestore.instance
+        .collection('locations')
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              LatLng _center =
+                  LatLng(element.data()['lat'], element.data()['long']);
+              _circleCenters[element.data()['location_name']] = _center;
+              _circle.add(Circle(
+                  circleId: CircleId(element.data()['lid']),
+                  center: _center,
+                  radius: 100.0,
+                  fillColor: Colors.redAccent.withOpacity(0.5),
+                  strokeWidth: 0,
+                  onTap: () {}));
+            }));
+  }
 
   void _setPolygons() async {
     bool traveled = true;
@@ -41,7 +139,7 @@ class MapWidgetState extends State<MapWidget> {
       Color color =
           Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(0.5);
       for (var j = 0; j < data.areas[i].latlng.length; j++) {
-        List<LatLng> polygonLatLngs = List<LatLng>();
+        List<LatLng> polygonLatLngs = [];
         for (var k = 0; k < data.areas[i].latlng[j].length; k++) {
           double latitude = data.areas[i].latlng[j][k][1];
           // print(latitude);
@@ -92,6 +190,8 @@ class MapWidgetState extends State<MapWidget> {
 
   void asyncMethod() async {
     await loadJsonData();
+    _setMarker();
+    _setCircle();
     _setPolygons();
 
     _serviceEnabled = await location.serviceEnabled();
@@ -115,8 +215,7 @@ class MapWidgetState extends State<MapWidget> {
 
   _handleTap(LatLng tappedPoint) {
     setState(() {
-      markers = [];
-      markers.add(Marker(
+      _markers.add(Marker(
           markerId: MarkerId(tappedPoint.toString()),
           position: tappedPoint,
           onTap: () {}));
@@ -138,8 +237,12 @@ class MapWidgetState extends State<MapWidget> {
           initialCameraPosition: initPosition,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
+            location.onLocationChanged.listen((l) {
+              _locationData = l;
+            });
           },
-          markers: Set.from(markers),
+          // markers: _markers,
+          circles: _circle,
           polygons: _polygons,
           buildingsEnabled: false,
           myLocationEnabled: true,
@@ -157,7 +260,7 @@ class MapWidgetState extends State<MapWidget> {
                 cleared = false;
               });
           },
-          onTap: _handleTap,
+          // onTap: _handleTap,
         ),
         loading
             ? Container(
@@ -169,10 +272,17 @@ class MapWidgetState extends State<MapWidget> {
                 ),
               )
             : Container(),
-        // FloatingActionButton(
-        //   onPressed: () => print(_locationData),
-        //   heroTag: Null,
-        // ),
+        FloatingActionButton(
+          onPressed: () => print(findLocation()),
+          heroTag: Null,
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 60.0),
+          child: FloatingActionButton(
+            onPressed: () => print(findRegion()),
+            heroTag: Null,
+          ),
+        ),
       ],
     );
   }
