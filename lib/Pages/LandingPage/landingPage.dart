@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hackust_fakeust/Pages/SocialMediaPage/UploadPost.dart';
+import 'package:hackust_fakeust/states/currentUser.dart';
+import 'package:provider/provider.dart';
 import 'package:hackust_fakeust/Components/mapWidget.dart';
 import 'package:hackust_fakeust/Pages/SocialMediaPage/SocialMediaPage.dart';
 import 'package:hackust_fakeust/Pages/TravelLogPage/travellogpage.dart';
 import 'package:hackust_fakeust/Pages/mapPage/mapPage.dart';
+import 'package:hackust_fakeust/models/new_post.dart';
 
 import '../../Cards/travellogCard.dart';
 import '../LeaderboardPage/LeaderboardPage.dart';
@@ -16,10 +20,23 @@ class _LandingPage extends State<LandingPage> {
   int _currentIndex = 1;
   final List<Widget> stay_alive_screens = [
     MapPage(),
-    SocialMediaPage(),
+    //SocialMediaPage(),
+    Container(child: Text("s")),
     LeaderBoardPage(),
     TravelLogPage()
   ];
+
+  void addPost(String uid) {
+    print("UPLOAD POST");
+    NewPost _newPost = Provider.of<NewPost>(context, listen: false);
+    _newPost.initTags();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UploadPost(),
+      ),
+    );
+  }
 
   void onTabTapped(int index) {
     print("GO TO page $index");
@@ -30,6 +47,8 @@ class _LandingPage extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    String uid = Provider.of<CurrentUser>(context).getUid;
+
     return Container(
       color: Colors.white,
       child: SafeArea(
@@ -38,6 +57,14 @@ class _LandingPage extends State<LandingPage> {
             index: _currentIndex,
             children: stay_alive_screens,
           ),
+          floatingActionButton: FloatingActionButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            onPressed: () => addPost(uid),
+            child: Icon(Icons.add),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           bottomNavigationBar: BottomNavigationBar(
             elevation: 0,
             fixedColor: Colors.black,
