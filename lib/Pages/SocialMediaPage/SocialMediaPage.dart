@@ -42,8 +42,8 @@ class _SocialMediaPage extends State<SocialMediaPage> {
 
     return Stack(
       children: [
-        StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+        FutureBuilder(
+          future: FirebaseFirestore.instance.collection('posts').get(),
           builder: (context, snapshot) {
             // post = snapshot.data.docs;
             if (!snapshot.hasData)

@@ -17,7 +17,7 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPage extends State<LandingPage> {
-  int _currentIndex = 1;
+  int _currentIndex = 0;
   final List<Widget> stay_alive_screens = [
     MapPage(),
     //SocialMediaPage(),
