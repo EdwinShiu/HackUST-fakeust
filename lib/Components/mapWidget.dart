@@ -21,7 +21,8 @@ class MapWidgetState extends State<MapWidget> {
   bool _serviceEnabled;
   PermissionStatus _permissionGranted;
   LocationData currentLocation;
-  Location location;
+  Location location = new Location();
+  LocationData _locationData;
   bool cleared = false;
   bool loading = true;
   Completer<GoogleMapController> _controller = Completer();
@@ -108,6 +109,8 @@ class MapWidgetState extends State<MapWidget> {
         return;
       }
     }
+    print(_permissionGranted);
+    _locationData = await location.getLocation();
   }
 
   _handleTap(LatLng tappedPoint) {
@@ -154,7 +157,7 @@ class MapWidgetState extends State<MapWidget> {
                 cleared = false;
               });
           },
-          // onTap: _handleTap,
+          onTap: _handleTap,
         ),
         loading
             ? Container(
@@ -166,6 +169,10 @@ class MapWidgetState extends State<MapWidget> {
                 ),
               )
             : Container(),
+        // FloatingActionButton(
+        //   onPressed: () => print(_locationData),
+        //   heroTag: Null,
+        // ),
       ],
     );
   }

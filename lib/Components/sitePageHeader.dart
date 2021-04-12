@@ -42,23 +42,34 @@ class SitePageHeader extends SliverPersistentHeaderDelegate {
             children: [
               Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(left: 10),
-                    child: Text(
-                      country ?? "Country",
-                      style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontSize: 20,
-                          color: Colors.black),
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: List.generate(3, (int index) => CategoryButton())
+                  ..add(
+                    RawMaterialButton(
+                      onPressed: () {},
+                      elevation: 2.0,
+                      fillColor: Colors.blue[300],
+                      child: Icon(
+                        Icons.add,
+                        size: 30.0,
+                      ),
+                      padding: EdgeInsets.all(5.0),
+                      shape: CircleBorder(),
+                      constraints:
+                          BoxConstraints.expand(height: 40.0, width: 40.0),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: List.generate(3, (int index) => CategoryButton()),
-                  ),
-                ],
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  country ?? "Country",
+                  style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontSize: 20,
+                      color: Colors.black),
+                ),
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
