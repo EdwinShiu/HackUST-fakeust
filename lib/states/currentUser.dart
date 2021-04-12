@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
+class USER {
+  final String uid;
+  USER({this.uid});
+}
 
 class CurrentUser extends ChangeNotifier {
   String _uid = 'B5aoQJ4bykgbdQ3THbvta2DXdWm2';
@@ -15,7 +19,7 @@ class CurrentUser extends ChangeNotifier {
 
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<bool> signupUser(String email, String password) async {
+/*  Future<bool> signupUser(String email, String password) async {
     bool returnVal = false;
 
     try {
@@ -29,6 +33,25 @@ class CurrentUser extends ChangeNotifier {
     }
 
     return returnVal;
+  } */
+
+  // ignore: non_constant_identifier_names
+  USER _UserFromFirebaseUser(User user) {
+    return user != null ? USER(uid: user.uid) : null;
+  }
+
+  // Register with new account
+  // ignore: non_constant_identifier_names
+  Future RegisterWithEmailAndPW(String email, String password) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      User user = result.user;
+      return _UserFromFirebaseUser(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
 
   Future<bool> signinUser(String email, String password) async {
@@ -42,16 +65,6 @@ class CurrentUser extends ChangeNotifier {
         _uid = _authResult.user.uid;
         _email = _authResult.user.email;
         returnVal = true;
-
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(_uid)
-            .get()
-            .then((querySnapshot) {
-          _username = querySnapshot.data()['username'];
-          print("$_username logged in");
-        });
-
         notifyListeners();
       }
     } catch (e) {

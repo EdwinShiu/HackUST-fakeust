@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hackust_fakeust/Pages/SignUpPage/signupPage.dart';
 import 'package:hackust_fakeust/models/new_post.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
             headline2: header2TextTheme,
           ),
         ),
-        home: LandingPage(),
+        home: SignupPage(),
         routes: {
           '/signin': (context) => SigninPage(),
           '/landing': (context) => LandingPage(),

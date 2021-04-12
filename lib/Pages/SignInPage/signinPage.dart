@@ -67,7 +67,10 @@ class SigninPage extends StatelessWidget {
 
 class SignInForm extends StatefulWidget {
   @override
-  _SignInForm createState() => _SignInForm();
+  // _SignInForm createState() => _SignInForm();
+  State<StatefulWidget> createState() {
+    return _SignInForm();
+  }
 }
 
 class _SignInForm extends State<SignInForm> {
@@ -152,6 +155,26 @@ class _SignInForm extends State<SignInForm> {
                   TextStyle(color: const Color(textPrimaryColor), fontSize: 25),
             ),
           ),
+        ),
+        SizedBox(height: 60.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('New to "our app name"'),
+            SizedBox(width: 6.0),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).pushNamed('/signup');
+              },
+              child: Text(
+                'Register',
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+          ],
         ),
       ],
     ));
