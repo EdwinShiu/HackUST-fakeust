@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hackust_fakeust/Cards/travellogCard.dart';
+import 'package:hackust_fakeust/models/mapDataProvider.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:provider/provider.dart';
 
 class TravelLogPage extends StatelessWidget {
   @override
@@ -9,6 +11,12 @@ class TravelLogPage extends StatelessWidget {
       padding: EdgeInsets.all(10.0),
       child: Column(
         children: [
+          FloatingActionButton(
+            onPressed: () => print(
+                Provider.of<MapDataProvider>(context, listen: false)
+                    .findRegion()),
+            heroTag: Null,
+          ),
           Container(
             height: MediaQuery.of(context).size.height * 0.05,
             child: Text("Travel Log"),

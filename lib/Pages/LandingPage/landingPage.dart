@@ -5,7 +5,7 @@ import 'package:hackust_fakeust/states/currentUser.dart';
 import 'package:provider/provider.dart';
 import 'package:hackust_fakeust/Components/mapWidget.dart';
 import 'package:hackust_fakeust/Pages/SocialMediaPage/SocialMediaPage.dart';
-import 'package:hackust_fakeust/Pages/TravelLogPage/travellogpage.dart';
+// import 'package:hackust_fakeust/Pages/TravelLogPage/travellogpage.dart';
 import 'package:hackust_fakeust/Pages/mapPage/mapPage.dart';
 import 'package:hackust_fakeust/models/new_post.dart';
 

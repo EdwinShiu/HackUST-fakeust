@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../Cards/travellogCard.dart';
 
-class TravelLog extends StatelessWidget {
+class TravelLogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
