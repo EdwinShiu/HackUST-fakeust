@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hackust_fakeust/Pages/SocialMediaPage/UploadPost.dart';
+import 'package:hackust_fakeust/Pages/TravelLogPage/newTravelLogPage.dart';
 import 'package:hackust_fakeust/states/currentUser.dart';
 import 'package:provider/provider.dart';
 import 'package:hackust_fakeust/Components/mapWidget.dart';
