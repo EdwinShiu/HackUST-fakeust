@@ -14,6 +14,7 @@ import 'package:hackust_fakeust/models/area_model.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MapWidget extends StatefulWidget {
   @override
@@ -226,11 +227,43 @@ class MapWidgetState extends State<MapWidget> {
       }
     }
     print(_permissionGranted);
-    _locationData = await location.getLocation();
+    var loc = await Geolocator.getCurrentPosition();
+    LocationData locationData = LocationData.fromMap(
+        {"latitude": loc.latitude, "longitude": loc.longitude});
     Provider.of<CurrentUser>(context, listen: false)
-        .updateLocation(_locationData);
+        .updateLocation(locationData);
     Provider.of<MapDataProvider>(context, listen: false)
-        .setLocation(_locationData);
+        .setLocation(locationData);
+
+    _locationData = locationData;
+
+    CurrentUser currentUser = Provider.of<CurrentUser>(context, listen: false);
+
+    String locationName =
+        Provider.of<MapDataProvider>(context, listen: false).findLocation();
+    String regionName =
+        Provider.of<MapDataProvider>(context, listen: false).findRegion();
+    FirebaseFirestore.instance
+        .collection('locations')
+        .where('location_name', isEqualTo: locationName)
+        .limit(1)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty)
+        currentUser.updateLocationId(snapshot.docs[0]['lid']);
+      else
+        currentUser.updateLocationId("other");
+    });
+
+    FirebaseFirestore.instance
+        .collection('regions')
+        .where('region_name', isEqualTo: regionName)
+        .limit(1)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty)
+        currentUser.updateRegionId(snapshot.docs[0]['rid']);
+    });
   }
 
   _handleTap(LatLng tappedPoint) {
@@ -298,7 +331,7 @@ class MapWidgetState extends State<MapWidget> {
           onPressed: () => print(
               Provider.of<MapDataProvider>(context, listen: false)
                   .findLocation()),
-          heroTag: Null,
+          heroTag: "findlocation",
         ),
         Container(
           margin: const EdgeInsets.only(top: 60.0),
@@ -306,7 +339,7 @@ class MapWidgetState extends State<MapWidget> {
             onPressed: () => print(
                 Provider.of<MapDataProvider>(context, listen: false)
                     .findRegion()),
-            heroTag: Null,
+            heroTag: "findregion",
           ),
         ),
       ],

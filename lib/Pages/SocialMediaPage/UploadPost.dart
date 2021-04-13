@@ -11,8 +11,7 @@ import '../../models/new_post.dart';
 import '../../models/post_model.dart';
 import "../../Constants/constants.dart";
 import '../../Components/post.dart';
-// import 'package:geolocator/geolocator.dart';
-import 'package:location/location.dart';
+import '../../models/mapDataProvider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UploadPost extends StatefulWidget {
@@ -96,6 +95,7 @@ class _UploadPost extends State<UploadPost> {
 
   @override
   Widget build(BuildContext context) {
+    print(Provider.of<MapDataProvider>(context).findLocation());
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     String uid = Provider.of<CurrentUser>(context).getUid;
@@ -429,8 +429,11 @@ class _PreviewPost extends State<PreviewPost> {
             .doc("${user.getUid}")
             .get()
             .then((document) {
-          int newNum =
-              document.data()['travelled_regions'][user.getRegionId] + 1;
+          int newNum;
+          if (document.data()['travelled_regions'][user.getRegionId] == null)
+            newNum = 1;
+          else
+            newNum = document.data()['travelled_regions'][user.getRegionId] + 1;
           FirebaseFirestore.instance
               .collection("users")
               .doc("${user.getUid}")
