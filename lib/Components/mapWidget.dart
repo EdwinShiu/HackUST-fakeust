@@ -48,7 +48,7 @@ class MapWidgetState extends State<MapWidget> {
       }
     }
 
-    return ((intersectCount % 2) == 1); // odd = inside, even = outside;
+    return ((intersectCount % 2) == 1);
   }
 
   bool rayCastIntersect(LatLng tap, LatLng vertA, LatLng vertB) {
@@ -60,13 +60,12 @@ class MapWidgetState extends State<MapWidget> {
     double pX = tap.longitude;
 
     if ((aY > pY && bY > pY) || (aY < pY && bY < pY) || (aX < pX && bX < pX)) {
-      return false; // a and b can't both be above or below pt.y, and a or
-      // b must be east of pt.x
+      return false;
     }
 
-    double m = (aY - bY) / (aX - bX); // Rise over run
-    double bee = (-aX) * m + aY; // y = mx + b
-    double x = (pY - bee) / m; // algebra is neat!
+    double m = (aY - bY) / (aX - bX);
+    double bee = (-aX) * m + aY;
+    double x = (pY - bee) / m;
 
     return x > pX;
   }
