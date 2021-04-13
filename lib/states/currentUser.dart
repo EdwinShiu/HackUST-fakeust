@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:location/location.dart';
 
 class USER {
   final String uid;
@@ -10,12 +11,15 @@ class CurrentUser extends ChangeNotifier {
   String _uid = 'B5aoQJ4bykgbdQ3THbvta2DXdWm2';
   String _username = 'testname';
   String _email = 'test@gmail.com';
+  LocationData _location;
 
   String get getUid => _uid;
 
   String get getEmail => _email;
 
   String get getUsername => _username;
+
+  LocationData get getLocation => _location;
 
   FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -34,6 +38,10 @@ class CurrentUser extends ChangeNotifier {
 
     return returnVal;
   } */
+
+  void updateLocation(LocationData newLocation) {
+    _location = newLocation;
+  }
 
   // ignore: non_constant_identifier_names
   USER _UserFromFirebaseUser(User user) {

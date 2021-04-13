@@ -223,6 +223,8 @@ class MapWidgetState extends State<MapWidget> {
     }
     print(_permissionGranted);
     _locationData = await location.getLocation();
+    Provider.of<CurrentUser>(context, listen: false)
+        .updateLocation(_locationData);
   }
 
   _handleTap(LatLng tappedPoint) {
@@ -251,6 +253,8 @@ class MapWidgetState extends State<MapWidget> {
             _controller.complete(controller);
             location.onLocationChanged.listen((l) {
               _locationData = l;
+              Provider.of<CurrentUser>(context, listen: false)
+                  .updateLocation(_locationData);
             });
           },
           // markers: _markers,
