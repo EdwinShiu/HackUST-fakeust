@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
             headline2: header2TextTheme,
           ),
         ),
-        home: SignupPage(),
+        home: LandingPage(),
         routes: {
           '/signin': (context) => SigninPage(),
           '/landing': (context) => LandingPage(),
