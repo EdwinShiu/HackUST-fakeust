@@ -26,7 +26,7 @@ final TextStyle body1TextTheme = GoogleFonts.comfortaa(
 
 final TextStyle body2TextTheme = GoogleFonts.comfortaa(
   fontSize: 16,
-  fontWeight: FontWeight.w600,
+  fontWeight: FontWeight.w500,
   color: const Color(0xFFFFFFFF),
 );
 
