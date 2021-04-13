@@ -5,11 +5,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hackust_fakeust/states/currentUser.dart';
 import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hackust_fakeust/Pages/SitePage/sitePage.dart';
 import 'package:hackust_fakeust/models/area_model.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MapWidget extends StatefulWidget {
@@ -108,8 +110,8 @@ class MapWidgetState extends State<MapWidget> {
         .then((value) => value.docs.forEach((element) {
               _markers.add(Marker(
                   markerId: MarkerId(element.data()['lid']),
-                  position:
-                      LatLng(element.data()['lat'], element.data()['long']),
+                  position: LatLng(element.data()['latlng'].latitude,
+                      element.data()['latlng'].longitude),
                   onTap: () {}));
             }));
   }
@@ -119,8 +121,8 @@ class MapWidgetState extends State<MapWidget> {
         .collection('locations')
         .get()
         .then((value) => value.docs.forEach((element) {
-              LatLng _center =
-                  LatLng(element.data()['lat'], element.data()['long']);
+              LatLng _center = LatLng(element.data()['latlng'].latitude,
+                  element.data()['latlng'].longitude);
               _circleCenters[element.data()['location_name']] = _center;
               _circle.add(Circle(
                   circleId: CircleId(element.data()['lid']),
@@ -133,11 +135,20 @@ class MapWidgetState extends State<MapWidget> {
   }
 
   void _setPolygons() async {
-    bool traveled = true;
+    Map<String, dynamic> travelledRegion = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Provider.of<CurrentUser>(context, listen: false).getUid)
+        .get()
+        .then((value) => value.data()['travelled_regions']);
+    print(travelledRegion);
     for (var i = 0; i < data.areas.length; i++) {
       print("Start " + i.toString());
-      Color color =
-          Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(0.5);
+      Color color = travelledRegion.containsKey(i.toString()) &&
+              travelledRegion[i.toString()] > 0
+          ? Colors.blue
+              .withOpacity(0.5)
+              .withAlpha(255 * travelledRegion[i.toString()] ~/ 10)
+          : Colors.grey[800].withOpacity(0.5);
       for (var j = 0; j < data.areas[i].latlng.length; j++) {
         List<LatLng> polygonLatLngs = [];
         for (var k = 0; k < data.areas[i].latlng[j].length; k++) {
@@ -152,7 +163,8 @@ class MapWidgetState extends State<MapWidget> {
             polygonId: PolygonId(data.areas[i].location + "-" + j.toString()),
             points: polygonLatLngs,
             strokeWidth: 1,
-            fillColor: traveled ? color : Colors.grey.withOpacity(0.5),
+            strokeColor: Colors.grey[300],
+            fillColor: color,
             consumeTapEvents: true,
             onTap: () {
               print(data.areas[i].location + "-" + j.toString());
@@ -211,6 +223,8 @@ class MapWidgetState extends State<MapWidget> {
     }
     print(_permissionGranted);
     _locationData = await location.getLocation();
+    Provider.of<CurrentUser>(context, listen: false)
+        .updateLocation(_locationData);
   }
 
   _handleTap(LatLng tappedPoint) {
@@ -239,6 +253,8 @@ class MapWidgetState extends State<MapWidget> {
             _controller.complete(controller);
             location.onLocationChanged.listen((l) {
               _locationData = l;
+              Provider.of<CurrentUser>(context, listen: false)
+                  .updateLocation(_locationData);
             });
           },
           // markers: _markers,
