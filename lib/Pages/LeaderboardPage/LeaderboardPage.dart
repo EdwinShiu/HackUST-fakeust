@@ -44,36 +44,4 @@ class LeaderBoardState extends State<LeaderBoardPage> {
       ),
     );
   }
-
-  Widget _buildName({String imageAsset, String name, double score}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
-        children: <Widget>[
-          SizedBox(height: 12),
-          Container(height: 2, color: Colors.redAccent),
-          SizedBox(height: 12),
-          Row(
-            children: <Widget>[
-              CircleAvatar(
-                backgroundImage: AssetImage(imageAsset),
-                radius: 30,
-              ),
-              SizedBox(width: 12),
-              Text(name),
-              Spacer(),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                child: Text("$score"),
-                decoration: BoxDecoration(
-                  color: Colors.yellow[900],
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 }
