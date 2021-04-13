@@ -8,12 +8,11 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../states/currentUser.dart';
 import '../../models/new_post.dart';
+import '../../models/post_model.dart';
 import "../../Constants/constants.dart";
 import '../../Components/post.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:location/location.dart';
-import 'package:flutter/services.dart';
 
 class UploadPost extends StatefulWidget {
   @override
@@ -33,20 +32,6 @@ class _UploadPost extends State<UploadPost> {
       location = _determinePosition();
     });
   }
-
-  // Future getLoc() async {
-  //   Location location = new Location();
-
-  //   await Permission.location.request();
-
-  //   var permissionStatus = await Permission.location.status;
-
-  //   if (permissionStatus.isGranted) {
-  //     var loc = await location.getLocation();
-  //     print(loc.toString());
-  //   }
-  //   return;
-  // }
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -82,7 +67,6 @@ class _UploadPost extends State<UploadPost> {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    print("PERMISSION GRANTED");
     var loc = await Geolocator.getCurrentPosition();
     print(loc.toString());
     return loc;
@@ -432,6 +416,7 @@ class _PreviewPost extends State<PreviewPost> {
           "liked_uid": 0,
           "tags": tagsIds,
           "uid": uid,
+          "username": username,
           "post_id": numPosts.toString(),
         }).then((_) {
           print("Post sent!");
@@ -501,10 +486,12 @@ class _PreviewPost extends State<PreviewPost> {
                       ),
                     ),
                     Post(
-                      username: username,
+                      post: PostModel(
+                        description: _newPost.getDescription(),
+                        image_URL: "",
+                        username: username,
+                      ),
                       imagePATH: _newPost.getimagePath(),
-                      likeCount: 999,
-                      caption: _newPost.getDescription(),
                     ),
                   ],
                 ),
