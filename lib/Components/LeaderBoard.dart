@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:loading_animations/loading_animations.dart';
 
 class LeaderBoard extends StatelessWidget {
   @override
@@ -20,60 +22,107 @@ class LeaderBoard extends StatelessWidget {
         child: FutureBuilder<List<UserScore>>(
           future: _UserDatabase().userScoreList,
           builder: (context, snapshot) {
-            // Get user score list
-            List<UserScore> userScoreList = snapshot.data;
-            // Sort user score list by score
-            userScoreList.sort((a, b) => a.score.compareTo(b.score));
-            return Padding(
-              padding: EdgeInsets.all(5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(userScoreList.length > 0
-                              ? userScoreList[0]?.username
-                              : '---'),
-                        ),
-                        Flexible(
-                          child: Text(userScoreList.length > 0
-                              ? userScoreList[0]?.score.toString()
-                              : '---'),
-                        ),
-                      ],
+            if (snapshot.connectionState != ConnectionState.done) {
+              return LoadingRotating.square(
+                duration: Duration(milliseconds: 500),
+              );
+            } else {
+              // Get user score list
+              List<UserScore> userScoreList = snapshot.data;
+              // Sort user score list by score
+              userScoreList.sort((a, b) => b.score.compareTo(a.score));
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Icon(
+                              FontAwesomeIcons.trophy,
+                              color: Color(0xFFF5C938),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              userScoreList.length > 0
+                                  ? userScoreList[0]?.username
+                                  : '---',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                          Container(
+                            width: 50,
+                            child: Text(
+                              userScoreList.length > 0
+                                  ? userScoreList[0]?.score.toString()
+                                  : '---',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Flexible(
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(userScoreList[1]?.username ?? '---'),
-                        ),
-                        Flexible(
-                          child:
-                              Text(userScoreList[1]?.score.toString() ?? '---'),
-                        ),
-                      ],
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Icon(
+                              FontAwesomeIcons.trophy,
+                              color: Color(0xFFD9D9D9),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              userScoreList[1]?.username ?? '---',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                          Container(
+                            width: 50,
+                            child: Text(
+                              userScoreList[1]?.score.toString() ?? '---',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Flexible(
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(userScoreList[2]?.username ?? '---'),
-                        ),
-                        Flexible(
-                          child:
-                              Text(userScoreList[2]?.score.toString() ?? '---'),
-                        ),
-                      ],
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Icon(
+                              FontAwesomeIcons.trophy,
+                              color: Color(0xFFC79540),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              userScoreList[2]?.username ?? '---',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                          Container(
+                            width: 50,
+                            child: Text(
+                              userScoreList[2]?.score.toString() ?? '---',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
+                  ],
+                ),
+              );
+            }
           },
         ),
       ),

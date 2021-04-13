@@ -18,6 +18,12 @@ final TextStyle header2TextTheme = GoogleFonts.comfortaa(
   color: const Color(0xFF1e1e1e),
 );
 
+final TextStyle body1TextTheme = GoogleFonts.comfortaa(
+  fontSize: 14,
+  fontWeight: FontWeight.w400,
+  color: const Color(0xFF1e1e1e),
+);
+
 double postArea = 0.52;
 double imageArea = postArea * 0.88;
 double locationrowArea = postArea * 0.12;
