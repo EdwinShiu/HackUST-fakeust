@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 // import '../../Constants/constants.dart';
 import '../../states/currentUser.dart';
@@ -86,21 +85,6 @@ class _SocialMediaPage extends State<SocialMediaPage> {
               );
             }
           },
-        ),
-
-        // add post
-
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 15.0, bottom: 15.0),
-            child: FloatingActionButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
-              onPressed: () => addPost(uid),
-              child: Icon(Icons.add),
-            ),
-          ),
         ),
       ],
     );

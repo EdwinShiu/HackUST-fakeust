@@ -183,6 +183,7 @@ class _UploadPost extends State<UploadPost> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 10.0),
                                       child: FloatingActionButton(
+                                        heroTag: "addPost",
                                         onPressed: () => selectImage(),
                                         child: Icon(Icons.photo),
                                       ),
@@ -222,6 +223,7 @@ class _UploadPost extends State<UploadPost> {
                                         height: screenHeight * 0.05,
                                         // width: screenHeight * 0.05,
                                         child: FloatingActionButton(
+                                          heroTag: "selectAnotherImage",
                                           onPressed: () => selectImage(),
                                           child: Icon(Icons.photo,
                                               size: screenHeight * 0.07 * 0.5),

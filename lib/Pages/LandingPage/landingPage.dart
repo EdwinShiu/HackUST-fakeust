@@ -58,6 +58,7 @@ class _LandingPage extends State<LandingPage> {
             children: stay_alive_screens,
           ),
           floatingActionButton: FloatingActionButton(
+            heroTag: "addPost",
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20.0))),
             onPressed: () => addPost(uid),
