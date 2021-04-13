@@ -294,6 +294,8 @@ class MapWidgetState extends State<MapWidget> {
               _locationData = l;
               Provider.of<CurrentUser>(context, listen: false)
                   .updateLocation(_locationData);
+              Provider.of<MapDataProvider>(context, listen: false)
+                  .setLocation(_locationData);
             });
           },
           // markers: _markers,
