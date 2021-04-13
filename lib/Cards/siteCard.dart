@@ -71,8 +71,9 @@ class _SiteCardState extends State<SiteCard> {
                       child: Row(
                         children: [
                           IconButton(
+                            splashRadius: 0.1,
                             constraints: BoxConstraints(),
-                            icon: Icon(Icons.thumb_up),
+                            icon: Icon(Icons.favorite),
                             onPressed: () {
                               if (!liked) {
                                 setState(() => likes += 1);

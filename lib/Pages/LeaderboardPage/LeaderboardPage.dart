@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:hackust_fakeust/Components/LeaderBoard.dart';
 
 class LeaderBoardPage extends StatefulWidget {
   @override
@@ -30,15 +31,7 @@ class LeaderBoardState extends State<LeaderBoardPage> {
               'LeaderBoard',
               style: Theme.of(context).textTheme.headline2,
             ),
-            Container(
-              height: screenHeight * 0.15,
-              margin: EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
-                color: Color(0xFF44CF73),
-              ),
-              child: Align(child: Text('leaderboard')),
-            ),
+            LeaderBoard(),
             SizedBox(
               height: screenHeight * 0.01,
             ),
