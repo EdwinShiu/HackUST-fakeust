@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hackust_fakeust/states/currentUser.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:loading_animations/loading_animations.dart';
 
 class Profile extends StatelessWidget {
   Profile({Key key, this.setPage}) : super(key: key);
@@ -38,12 +40,25 @@ class Profile extends StatelessWidget {
           Container(
             height: screenHeight * 0.1,
             child: Center(
-              child: Text(
-                'Score: ',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    .copyWith(fontSize: 22),
+              child: FutureBuilder<DocumentSnapshot>(
+                future: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(uid)
+                    .get(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState != ConnectionState.done) {
+                    return LoadingRotating.square(
+                      duration: Duration(milliseconds: 500),
+                    );
+                  }
+                  return Text(
+                    'Score: ${snapshot.data?.data()['score']}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1
+                        .copyWith(fontSize: 22),
+                  );
+                },
               ),
             ),
           ),
