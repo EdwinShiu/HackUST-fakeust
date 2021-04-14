@@ -218,7 +218,6 @@ class _UploadPost extends State<UploadPost> {
                                           vertical: 5),
                                       child: SizedBox(
                                         height: screenHeight * 0.05,
-                                        // width: screenHeight * 0.05,
                                         child: FloatingActionButton(
                                           heroTag: "selectAnotherImage",
                                           onPressed: () => selectImage(),

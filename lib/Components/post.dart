@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hackust_fakeust/Pages/SocialMediaPage/UploadPost.dart';
 import "package:like_button/like_button.dart";
 import 'package:loading_animations/loading_animations.dart';
-import "../Constants/constants.dart";
+import "../Constants/constants.dart" as constants;
 import "../models/post_model.dart";
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -21,9 +21,6 @@ class Post extends StatelessWidget {
     double postArea = 0.57;
     double imageArea = postArea * 0.81;
     double infocolArea = postArea * 0.19;
-    double locationrowArea = postArea * 0.19 * 0.5;
-    double tagArea = postArea * 0.05;
-    double usernameArea = postArea * 0.09;
 
     List<String> tags = post.getTags;
     var screenHeight = MediaQuery.of(context).size.height;
@@ -105,7 +102,6 @@ class Post extends StatelessWidget {
 
         // Location and Like
 
-        // color: Colors.black,
         Column(
           children: [
             Container(
@@ -166,9 +162,9 @@ class Post extends StatelessWidget {
                                       const EdgeInsets.only(top: 2, left: 8.0),
                                   child: FittedBox(
                                     child: Container(
-                                      // height: screenHeight * tagArea,
                                       decoration: BoxDecoration(
-                                        color: Colors.blue,
+                                        color: Color(
+                                            constants.tagColor[tags[index]]),
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(30),
                                         ),
@@ -177,10 +173,7 @@ class Post extends StatelessWidget {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 5, horizontal: 10),
                                         child: FittedBox(
-                                          child: Text(
-                                            tags[index],
-                                            // style: TextStyle(fontSize: 12),
-                                          ),
+                                          child: Text(tags[index]),
                                         ),
                                       ),
                                     ),
@@ -194,7 +187,7 @@ class Post extends StatelessWidget {
                       ),
                     ),
                   )
-                : SizedBox(height: 0),
+                : Container(),
           ],
         ),
       ],

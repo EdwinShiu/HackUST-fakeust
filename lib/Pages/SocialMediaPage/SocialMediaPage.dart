@@ -47,10 +47,6 @@ class _SocialMediaPage extends State<SocialMediaPage> {
 
   @override
   Widget build(BuildContext context) {
-    // var screenHeight = MediaQuery.of(context).size.height;
-    // var screenWidth = MediaQuery.of(context).size.width;
-    String uid = Provider.of<CurrentUser>(context).getUid;
-
     return Stack(
       children: [
         StreamBuilder(
@@ -59,7 +55,6 @@ class _SocialMediaPage extends State<SocialMediaPage> {
             if (!_snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
             } else {
-              print("POSTS NUM: ${_snapshot.data.length}");
               return RefreshIndicator(
                 onRefresh: posts.refresh,
                 child: ListView.builder(
