@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hackust_fakeust/Components/profile.dart';
-import 'package:hackust_fakeust/Pages/TravelLogPage/errorPage.dart';
+import 'package:hackust_fakeust/Pages/errorPage.dart';
 import 'package:hackust_fakeust/Pages/TravelLogPage/redeemPage.dart';
 
 import 'travelLogPage.dart';
@@ -25,9 +25,9 @@ class MyPageState extends State<MyPage> {
       case 0:
         return Profile(setPage: setPage);
       case 1:
-        return TravelLogPage();
+        return TravelLogPage(setPage: setPage);
       case 2:
-        return RedeemPage();
+        return RedeemPage(setPage: setPage);
       default:
         return ErrorPage();
     }
