@@ -59,26 +59,6 @@ class CurrentUser extends ChangeNotifier {
 
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  void updateLocationId(String locationId) {
-    _locationId = locationId;
-  }
-
-  void updateRegionId(String regionId) {
-    _regionId = regionId;
-  }
-
-  void updateLocation(LocationData newLocation) {
-    _location = newLocation;
-  }
-
-  void updateLocationName(String name) {
-    _locationName = name;
-  }
-
-  void updateRegionName(String name) {
-    _regionName = name;
-  }
-
   // ignore: non_constant_identifier_names
   CurrentUser _UserFromFirebaseUser(User user, String username) {
     return user != null ? CurrentUser.reg(user, username) : null;
