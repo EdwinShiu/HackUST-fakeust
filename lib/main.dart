@@ -35,6 +35,8 @@ class MyApp extends StatelessWidget {
           textTheme: TextTheme(
             headline1: header1TextTheme,
             headline2: header2TextTheme,
+            bodyText1: body1TextTheme,
+            bodyText2: body2TextTheme,
           ),
         ),
         home: LandingPage(),

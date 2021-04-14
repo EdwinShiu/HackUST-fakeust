@@ -97,7 +97,7 @@ class _LandingPage extends State<LandingPage> {
                   Icons.content_paste,
                   color: Colors.blue,
                 ),
-                label: 'Leaderboard',
+                label: 'InfoBoard',
               ),
               BottomNavigationBarItem(
                 backgroundColor: Colors.white,

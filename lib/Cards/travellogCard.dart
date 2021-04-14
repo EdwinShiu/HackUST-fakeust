@@ -5,13 +5,14 @@ import '../Components/LeaderBoard.dart';
 class TravelLogCard extends StatelessWidget {
   final String caption;
   final String title;
+  final imagePath;
   static const IconData bookmark =
       IconData(0xe5f8, fontFamily: 'MaterialIcons');
 
-  TravelLogCard({
-    this.title = 'DEFAULT TITLE',
-    this.caption = 'Default caption aaaaaa aaaaaaaaa aaa aaaaaaa aaaaaaaa',
-  });
+  TravelLogCard(
+      {this.title = 'DEFAULT TITLE',
+      this.caption = 'Default caption aaaaaa aaaaaaaaa aaa aaaaaaa aaaaaaaa',
+      this.imagePath});
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +31,12 @@ class TravelLogCard extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/logCard.jpeg"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                child: imagePath == null
+                    ? Image.asset("assets/images/logCard.jpeg")
+                    : Image.network(
+                        imagePath,
+                        fit: BoxFit.cover,
+                      ),
               ),
             ),
             // travel log text
