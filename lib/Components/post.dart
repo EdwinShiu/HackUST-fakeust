@@ -127,7 +127,7 @@ class Post extends StatelessWidget {
                               ? post.region_name
                               : post.location_name,
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             color: Colors.black,
                           ),
                         ),
@@ -162,7 +162,8 @@ class Post extends StatelessWidget {
                             delegate: SliverChildBuilderDelegate(
                               (BuildContext context, int index) {
                                 return Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
+                                  padding:
+                                      const EdgeInsets.only(top: 2, left: 8.0),
                                   child: FittedBox(
                                     child: Container(
                                       // height: screenHeight * tagArea,
