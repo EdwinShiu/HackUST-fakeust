@@ -31,7 +31,6 @@ class SitePage extends StatelessWidget {
                   .where('region_id', isEqualTo: rid)
                   .get(),
               builder: (context, snapshot) {
-                print(snapshot.data.docs.length);
                 return snapshot.connectionState == ConnectionState.done
                     ? CustomScrollView(slivers: [
                         SliverPersistentHeader(

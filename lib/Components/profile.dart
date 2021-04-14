@@ -108,9 +108,12 @@ class Profile extends StatelessWidget {
             height: screenHeight * 0.06,
             width: screenWidth * 0.5,
             child: TextButton(
-              onPressed: () {
+              onPressed: () async {
                 print('tomlam');
-                //_signOutUser(_currentUser);
+                // _signOutUser(_currentUser);
+                await _currentUser.signOutUser();
+                print("Sign Out!");
+                Navigator.popAndPushNamed(context, '/signin');
               },
               style: ButtonStyle(
                 backgroundColor:
@@ -128,13 +131,5 @@ class Profile extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  void _signOutUser(CurrentUser currentUser) async {
-    try {
-      await currentUser.signOutUser();
-      print("Sign Out!");
-      //Navigator.popAndPushNamed(context, '/landing');
-    } catch (e) {}
   }
 }

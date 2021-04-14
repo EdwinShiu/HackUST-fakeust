@@ -109,6 +109,7 @@ class Post extends StatelessWidget {
                   ? screenHeight * infocolArea * 0.35
                   : screenHeight * infocolArea * 0.5,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Expanded(
                     child: Align(
@@ -130,16 +131,14 @@ class Post extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 0),
-                        child: LikeButton(
-                          size: 20,
-                          // likeCount: widget.likeCount,
-                          // onTap: onLikeButtonTapped,
-                        ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 15, right: 20),
+                      child: LikeButton(
+                        size: 40,
+                        // likeCount: widget.likeCount,
+                        // onTap: onLikeButtonTapped,
                       ),
                     ),
                   ),
