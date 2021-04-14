@@ -1,14 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animations/loading_animations.dart';
 
 class SiteCard extends StatefulWidget {
   final String username;
   final String caption;
+  final imageUrl;
   static const IconData bookmark =
       IconData(0xe5f8, fontFamily: 'MaterialIcons');
 
   SiteCard({
     this.username = 'USERNAME',
     this.caption = 'Default caption aaaaaa aaaaaaaaa aaa aaaaaaa aaaaaaaa',
+    this.imageUrl = "",
   });
 
   @override
@@ -33,16 +37,19 @@ class _SiteCardState extends State<SiteCard> {
           children: [
             // travel log image
             Expanded(
-              flex: 2,
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/logCard.jpeg"),
+                flex: 2,
+                child: Container(
+                  child: CachedNetworkImage(
                     fit: BoxFit.cover,
+                    imageUrl: widget.imageUrl,
+                    fadeInDuration: const Duration(milliseconds: 10),
+                    // imageUrl: post.getImageURL(),
+                    placeholder: (context, url) => LoadingRotating.square(
+                      duration: Duration(milliseconds: 500),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
-                ),
-              ),
-            ),
+                )),
             // travel log text
             Expanded(
               flex: 3,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hackust_fakeust/Pages/SocialMediaPage/UploadPost.dart';
+import 'package:hackust_fakeust/Pages/SocialMediaPage/SocialMediaPage.dart';
 import 'package:hackust_fakeust/Pages/TravelLogPage/myPage.dart';
 import 'package:hackust_fakeust/states/currentUser.dart';
 import 'package:provider/provider.dart';
@@ -18,8 +19,8 @@ class _LandingPage extends State<LandingPage> {
   int _currentIndex = 0;
   final List<Widget> stayAliveScreens = [
     MapPage(),
-    //SocialMediaPage(),
-    Container(child: Text("s")),
+    SocialMediaPage(),
+    // Container(child: Text("s")),
     LeaderBoardPage(),
     MyPage(),
   ];

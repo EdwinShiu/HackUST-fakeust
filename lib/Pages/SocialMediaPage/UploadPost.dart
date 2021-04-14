@@ -101,12 +101,8 @@ class _UploadPost extends State<UploadPost> {
     var screenWidth = MediaQuery.of(context).size.width;
     String uid = Provider.of<CurrentUser>(context).getUid;
     NewPost _newPost = Provider.of<NewPost>(context, listen: false);
-    List<bool> tagsSelected = _newPost.getTagsSelected();
+    List<String> tagsSelected = _newPost.getTagsSelected();
 
-    // print("LOCATIONID ${Provider.of<CurrentUser>(context).getLocationId}");
-    // print("REGIONID ${Provider.of<CurrentUser>(context).getRegionId}");
-    // print("upload post page built");
-    // print("CURRENT LOCATION: ${this.location.toString()}");
     return Container(
       color: Colors.teal[50],
       child: SafeArea(
@@ -131,7 +127,8 @@ class _UploadPost extends State<UploadPost> {
                             alignment: Alignment.center,
                             child: Text(
                               "Select Photo",
-                              style: TextStyle(fontSize: 20),
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black),
                             ),
                           ),
                           (imagePath == null)
@@ -177,7 +174,8 @@ class _UploadPost extends State<UploadPost> {
                                   children: [
                                     Text(
                                       "Upload Image from Gallery",
-                                      style: TextStyle(fontSize: 20),
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.black),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 10.0),
@@ -230,32 +228,35 @@ class _UploadPost extends State<UploadPost> {
                                       ),
                                     ),
                                   ),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 0.0, bottom: 0, right: 55),
-                                      child: Container(
-                                        height: 50,
-                                        width: 55,
-                                        child: Align(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            "Another Photo",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(fontSize: 14),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                  // Align(
+                                  //   alignment: Alignment.centerRight,
+                                  //   child: Padding(
+                                  //     padding: const EdgeInsets.only(
+                                  //         top: 0.0, bottom: 0, right: 55),
+                                  //     child: Container(
+                                  //       height: 50,
+                                  //       width: 55,
+                                  //       child: Align(
+                                  //         alignment: Alignment.center,
+                                  //         child: Text(
+                                  //           "Another Photo",
+                                  //           textAlign: TextAlign.center,
+                                  //           style: TextStyle(
+                                  //               fontSize: 14,
+                                  //               color: Colors.black),
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // ),
                                   Align(
                                     alignment: Alignment.centerLeft,
                                     child: Padding(
                                       padding: const EdgeInsets.only(left: 10),
                                       child: Text(
                                         "Description",
-                                        style: TextStyle(fontSize: 20),
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.black),
                                       ),
                                     ),
                                   )
@@ -289,7 +290,8 @@ class _UploadPost extends State<UploadPost> {
                                 padding: const EdgeInsets.only(left: 10.0),
                                 child: Text(
                                   "Add some Tags!",
-                                  style: TextStyle(fontSize: 20),
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.black),
                                 ),
                               ),
                             )),
@@ -319,9 +321,12 @@ class _TagsScrollView extends State<TagsScrollView> {
   @override
   Widget build(BuildContext context) {
     NewPost _newPost = Provider.of<NewPost>(context, listen: false);
-    var tagsSelected =
-        context.select<NewPost, List<bool>>((post) => (post.getTagsSelected()));
-    var tags = _newPost.getTags();
+
+    var tags =
+        context.select<NewPost, List<String>>((post) => (post.getTags()));
+    var tagsSelected = context
+        .select<NewPost, List<String>>((post) => (post.getTagsSelected()));
+    // var tags = _newPost.getTags();
 
     // print("TAGS BUILT");
     return CustomScrollView(
@@ -339,7 +344,7 @@ class _TagsScrollView extends State<TagsScrollView> {
                   shape:
                       MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
                   backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => tagsSelected[index]
+                    (states) => tagsSelected.contains(tags[index])
                         ? Color((Random().nextDouble() * 0xFFFFFFFF).toInt())
                             .withOpacity(1)
                         : Color((0x11111111).toInt()).withOpacity(0.3),
@@ -385,22 +390,16 @@ class _PreviewPost extends State<PreviewPost> {
       if (downloadUrl != null) {
         print("Image uploaded to cloud");
         _newPost.setImageUrl(downloadUrl);
+
         // upload to Firestore
-        var tagsSelected = _newPost.getTagsSelected();
-        List<String> tagsIds = [];
-        for (int i = 0; i < tagsSelected.length; i++) {
-          if (tagsSelected[i]) {
-            tagsIds.add(i.toString());
-          }
-        }
-        // print(tagsIds);
+        List<String> tagsSelected = _newPost.getTagsSelected();
 
         int numPosts;
         await FirebaseFirestore.instance
             .collection("posts")
             .get()
             .then((query) => numPosts = query.docs.length);
-        // print("$numPosts");
+
         String timestamp = DateTime.now().toString();
 
         FirebaseFirestore.instance.collection("posts").doc("$numPosts").set({
@@ -413,7 +412,7 @@ class _PreviewPost extends State<PreviewPost> {
           "location_name": user.getLocationName,
           "image_URL": _newPost.getimageUrl(),
           "liked_uid": 0,
-          "tags": _newPost.tags,
+          "tags": tagsSelected,
           "uid": user.getUid,
           "username": user.getUsername,
           "post_id": numPosts.toString(),
@@ -483,7 +482,8 @@ class _PreviewPost extends State<PreviewPost> {
                             alignment: Alignment.center,
                             child: Text(
                               "Post Preview",
-                              style: TextStyle(fontSize: 20),
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black),
                             ),
                           ),
                           Align(
@@ -510,6 +510,7 @@ class _PreviewPost extends State<PreviewPost> {
                         username: user.getUsername,
                         location_name: user.getLocationName,
                         region_name: user.getRegionName,
+                        tags: _newPost.getTagsSelected(),
                       ),
                       imagePATH: _newPost.getimagePath(),
                     ),
