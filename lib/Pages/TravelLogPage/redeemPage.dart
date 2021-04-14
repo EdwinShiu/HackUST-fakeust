@@ -138,15 +138,18 @@ class RedeemPage extends StatelessWidget {
                     width: double.maxFinite,
                     margin: EdgeInsets.symmetric(vertical: 5),
                     padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
-                    decoration:
-                        BoxDecoration(color: Color(0xFFFFFFFF), boxShadow: [
-                      BoxShadow(
-                        color: Color(0x33333333),
-                        offset: Offset(0, 3),
-                        spreadRadius: 1,
-                        blurRadius: 3,
-                      )
-                    ]),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFFFFFF),
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0x33333333),
+                          offset: Offset(0, 3),
+                          spreadRadius: 1,
+                          blurRadius: 3,
+                        ),
+                      ],
+                    ),
                     child: Column(
                       children: [
                         Expanded(
