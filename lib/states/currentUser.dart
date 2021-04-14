@@ -2,15 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:location/location.dart';
 
-class USER {
-  final String uid;
-  USER({this.uid});
-}
-
 class CurrentUser extends ChangeNotifier {
   String _uid = 'B5aoQJ4bykgbdQ3THbvta2DXdWm2';
-  String _username = 'testname';
   String _email = 'test@gmail.com';
+  String _username = 'testname';
   LocationData _location;
   String _locationName = "other";
   String _regionName = "other";
@@ -26,28 +21,12 @@ class CurrentUser extends ChangeNotifier {
   LocationData get getLocation => _location;
 
   String get getLocationId => _locationId;
+
   String get getLocationName => _locationName;
 
   String get getRegionId => _regionId;
+
   String get getRegionName => _regionName;
-
-  FirebaseAuth _auth = FirebaseAuth.instance;
-
-/*  Future<bool> signupUser(String email, String password) async {
-    bool returnVal = false;
-
-    try {
-      UserCredential _authResult = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      if (_authResult.user != null) {
-        returnVal = true;
-      }
-    } catch (e) {
-      print(e);
-    }
-
-    return returnVal;
-  } */
 
   void updateLocationId(String locationId) {
     _locationId = locationId;
@@ -69,19 +48,31 @@ class CurrentUser extends ChangeNotifier {
     _regionName = name;
   }
 
+  CurrentUser();
+
   // ignore: non_constant_identifier_names
-  USER _UserFromFirebaseUser(User user) {
-    return user != null ? USER(uid: user.uid) : null;
+  CurrentUser.reg(User user, String username) {
+    _uid = user.uid;
+    _username = username;
+    _email = user.email;
+  }
+
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  // ignore: non_constant_identifier_names
+  CurrentUser _UserFromFirebaseUser(User user, String username) {
+    return user != null ? CurrentUser.reg(user, username) : null;
   }
 
   // Register with new account
   // ignore: non_constant_identifier_names
-  Future RegisterWithEmailAndPW(String email, String password) async {
+  Future RegisterWithEmailAndPW(
+      String email, String password, String username) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User user = result.user;
-      return _UserFromFirebaseUser(user);
+      return _UserFromFirebaseUser(user, username);
     } catch (e) {
       print(e.toString());
       return null;

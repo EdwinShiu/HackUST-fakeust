@@ -10,55 +10,55 @@ class SigninPage extends StatelessWidget {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     print('Sign in Page');
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        color: const Color(backgroundPrimaryColor),
-        width: screenWidth,
-        child: Column(
-          children: [
-            //logo
-            Padding(
-              padding: EdgeInsets.only(top: screenHeight * 0.15),
-              child: Center(
-                child: Container(
-                  width: 200,
-                  height: 150,
-                  child: Image.asset('assets/images/logo.png'),
+    return Container(
+      child: Scaffold(
+        backgroundColor: Color(backgroundPrimaryColor),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              //logo
+              Padding(
+                padding: EdgeInsets.only(top: screenHeight * 0.15),
+                child: Center(
+                  child: Container(
+                    width: 200,
+                    height: 150,
+                    child: Image.asset('assets/images/logo.png'),
+                  ),
                 ),
               ),
-            ),
-            SignInForm(),
-            SizedBox(
-              height: 50,
-            ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: TextButton(
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(const Color(colorWhite)),
-                  minimumSize: MaterialStateProperty.all<Size>(
-                      Size(screenWidth * 0.15, 30)),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+              SignInForm(),
+              SizedBox(
+                height: 50,
+              ),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: TextButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        const Color(colorWhite)),
+                    minimumSize: MaterialStateProperty.all<Size>(
+                        Size(screenWidth * 0.15, 30)),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    print("Return to startupPage");
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Return",
+                    style: TextStyle(
+                      color: const Color(textPrimaryColor),
                     ),
                   ),
                 ),
-                onPressed: () {
-                  print("Return to startupPage");
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "Return",
-                  style: TextStyle(
-                    color: const Color(textPrimaryColor),
-                  ),
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -104,8 +104,15 @@ class _SignInForm extends State<SignInForm> {
           child: TextFormField(
             autocorrect: false,
             controller: _emailController,
+            // style: new TextStyle(fontSize: 30),
             decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                contentPadding:
+                    new EdgeInsets.symmetric(vertical: 30.0, horizontal: 10.0),
+                filled: true, // <- this is required.
+                border: OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(30.0),
+                  borderSide: new BorderSide(),
+                ),
                 labelText: 'Email',
                 hintText: 'Enter valid email id as abc@gmail.com'),
           ),
@@ -131,8 +138,8 @@ class _SignInForm extends State<SignInForm> {
         Container(
           height: 50,
           width: 250,
-          decoration: BoxDecoration(
-              color: Colors.blue, borderRadius: BorderRadius.circular(20)),
+          // decoration: BoxDecoration(
+          //     color: Colors.white, borderRadius: BorderRadius.circular(20)),
           child: TextButton(
             style: ButtonStyle(
               backgroundColor:
@@ -141,9 +148,10 @@ class _SignInForm extends State<SignInForm> {
                   MaterialStateProperty.all<Size>(Size(screenWidth * 0.65, 50)),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(0),
                 ),
               ),
+              // shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
             ),
             onPressed: () {
               print('Submit log in');
