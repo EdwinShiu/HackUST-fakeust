@@ -151,7 +151,8 @@ class _SignUpForm extends State<SignUpForm> {
                       .set({
                     "email": result.getEmail,
                     "event_participated": 0,
-                    "score": 100,
+                    "score": 0,
+                    "point": 0,
                     "username": result.getUsername,
                     "uid": uid,
                   });

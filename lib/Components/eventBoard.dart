@@ -20,6 +20,15 @@ class EventBoardState extends State<EventBoard> {
               duration: Duration(milliseconds: 500),
             );
           }
+          print(snapshot.data);
+          if (snapshot.data.length == 0) {
+            return Center(
+              child: Text(
+                'No Event',
+                style: Theme.of(context).textTheme.headline1,
+              ),
+            );
+          }
           List<EventDetail> eventDetailList = snapshot.data;
           return EventMovingBlock(eventDetailList: eventDetailList);
         },
@@ -38,7 +47,7 @@ class _EventDataBase {
       var docData = doc.data();
       return EventDetail(
         name: docData['event_name'],
-        reward: docData['reward'],
+        reward: docData['reward'].toDouble(),
         description: docData['description'],
         color: Color(int.parse(docData['color'])),
         participants: List<String>.from(docData['participants']),

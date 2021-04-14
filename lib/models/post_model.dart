@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// PostModel has a constructor that can handle the `Map` data
-/// ...from the server.
 class PostModel {
   String description;
   // ignore: non_constant_identifier_names
@@ -10,9 +8,11 @@ class PostModel {
   String username;
   String location_name;
   String region_name;
+  List<String> tags;
 
-  String getDescription() => this.description;
-  String getImageURL() => this.image_URL;
+  String get getDescription => this.description;
+  String get getImageURL => this.image_URL;
+  List<String> get getTags => this.tags;
 
   PostModel({
     this.description,
@@ -20,6 +20,7 @@ class PostModel {
     this.username,
     this.location_name,
     this.region_name,
+    this.tags,
   });
   factory PostModel.fromServerMap(Map data) {
     return PostModel(
@@ -28,12 +29,11 @@ class PostModel {
       region_name: data['region_name'],
       image_URL: data['image_URL'],
       username: data['username'],
+      tags: List<String>.from(data['tags']),
     );
   }
 }
 
-/// PostsModel controls a `Stream` of posts and handles
-/// ...refreshing data and loading more posts
 class PostsModel {
   Stream<List<PostModel>> stream;
   bool hasMore;
@@ -41,14 +41,12 @@ class PostsModel {
   Future<QuerySnapshot> querySnapshot;
   String last_create_date;
   bool _isLoading;
-  int batchLength = 6;
+  int batchLength = 3;
   List<Map> _data;
   StreamController<List<Map>> _controller;
 
   PostsModel() {
-    // _data = List<Map>();
     _data = [];
-    // last_create_date = '9999-99-99 99:99:99.999999';
     _controller = StreamController<List<Map>>.broadcast();
     _isLoading = false;
     stream = _controller.stream.map((List<Map> postsData) {
@@ -61,14 +59,12 @@ class PostsModel {
   }
 
   Future<void> refresh() {
-    print('REFRESHED');
     return loadMore(clearCachedData: true);
   }
 
   Future<void> loadMore({bool clearCachedData = false}) {
     // initial load or refresh
     if (clearCachedData) {
-      // print("POST DATA CLEANED");
       _data = [];
       hasMore = true;
       querySnapshot = FirebaseFirestore.instance
@@ -102,6 +98,7 @@ class PostsModel {
             'location_name': postdata['location_name'],
             'region_name': postdata['region_name'],
             'username': postdata['username'],
+            'tags': postdata['tags'],
           });
         });
         last_create_date = postsData.docs.last['create_date'];

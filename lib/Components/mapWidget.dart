@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,69 +39,6 @@ class MapWidgetState extends State<MapWidget> {
     target: LatLng(22.349051751000047, 114.17942283900004),
     zoom: 10,
   );
-
-  // bool _isInArea(List<LatLng> vertices) {
-  //   LatLng cpos = LatLng(_locationData.latitude, _locationData.longitude);
-  //   int intersectCount = 0;
-  //   for (int j = 0; j < vertices.length - 1; j++) {
-  //     if (rayCastIntersect(cpos, vertices[j], vertices[j + 1])) {
-  //       intersectCount++;
-  //     }
-  //   }
-
-  //   return ((intersectCount % 2) == 1);
-  // }
-
-  // bool rayCastIntersect(LatLng tap, LatLng vertA, LatLng vertB) {
-  //   double aY = vertA.latitude;
-  //   double bY = vertB.latitude;
-  //   double aX = vertA.longitude;
-  //   double bX = vertB.longitude;
-  //   double pY = tap.latitude;
-  //   double pX = tap.longitude;
-
-  //   if ((aY > pY && bY > pY) || (aY < pY && bY < pY) || (aX < pX && bX < pX)) {
-  //     return false;
-  //   }
-
-  //   double m = (aY - bY) / (aX - bX);
-  //   double bee = (-aX) * m + aY;
-  //   double x = (pY - bee) / m;
-
-  //   return x > pX;
-  // }
-
-  // String findRegion() {
-  //   for (var i = 0; i < data.areas.length; i++) {
-  //     for (var j = 0; j < data.areas[i].latlng.length; j++) {
-  //       List<LatLng> latLngs = [];
-  //       for (var k = 0; k < data.areas[i].latlng[j].length; k++) {
-  //         double latitude = data.areas[i].latlng[j][k][1];
-  //         double longitude = data.areas[i].latlng[j][k][0];
-  //         latLngs.add(LatLng(latitude, longitude));
-  //       }
-  //       if (_isInArea(latLngs)) return data.areas[i].location;
-  //     }
-  //   }
-  //   return "None";
-  // }
-
-  // bool _isInCircle(LatLng centerPoint, double r) {
-  //   LatLng cpos = LatLng(_locationData.latitude, _locationData.longitude);
-  //   var ky = 40000 / 360;
-  //   var kx = cos(pi * centerPoint.latitude / 180.0) * ky;
-  //   var dx = (centerPoint.longitude - cpos.longitude).abs() * kx;
-  //   var dy = (centerPoint.latitude - cpos.latitude).abs() * ky;
-  //   return sqrt(dx * dx + dy * dy) <= r;
-  // }
-
-  // String findLocation() {
-  //   String location = "None";
-  //   _circleCenters.forEach((key, value) {
-  //     if (_isInCircle(value, 0.1)) location = key;
-  //   });
-  //   return location;
-  // }
 
   void _setMarker() async {
     await FirebaseFirestore.instance
@@ -143,9 +79,7 @@ class MapWidgetState extends State<MapWidget> {
         .doc(Provider.of<CurrentUser>(context, listen: false).getUid)
         .get()
         .then((value) => value.data()['travelled_regions']);
-    print(travelledRegion);
     for (var i = 0; i < data.areas.length; i++) {
-      print("Start " + i.toString());
       Color color = travelledRegion.containsKey(i.toString()) &&
               travelledRegion[i.toString()] > 0
           ? Colors.blue
@@ -156,9 +90,7 @@ class MapWidgetState extends State<MapWidget> {
         List<LatLng> polygonLatLngs = [];
         for (var k = 0; k < data.areas[i].latlng[j].length; k++) {
           double latitude = data.areas[i].latlng[j][k][1];
-          // print(latitude);
           double longitude = data.areas[i].latlng[j][k][0];
-          // print(longitude);
           polygonLatLngs.add(LatLng(latitude, longitude));
         }
         _polygons.add(
@@ -179,7 +111,7 @@ class MapWidgetState extends State<MapWidget> {
                   MaterialPageRoute(
                       builder: (context) => SitePage(
                             country: "Hong Kong",
-                            site: data.areas[i].location,
+                            region: data.areas[i].location,
                             description:
                                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse lacinia tortor ut erat interdum, vitae efficitur mi molestie. Phasellus viverra nibh sit amet dui facilisis, pellentesque varius eros lacinia. In nec rhoncus tortor. Nullam id est quis ex interdum maximus. Cras semper porta sollicitudin. Nam a tincidunt dolor, non lobortis velit. Nulla malesuada elit ac mauris efficitur viverra. Duis quam libero, pulvinar sit amet vulputate nec, aliquam vitae dui. Mauris porta ante a nisl feugiat rutrum. Donec commodo tincidunt accumsan.",
                           )));
@@ -187,7 +119,6 @@ class MapWidgetState extends State<MapWidget> {
           ),
         );
       }
-      print("Complete " + i.toString());
     }
     setState(() {
       loading = false;
@@ -309,7 +240,6 @@ class MapWidgetState extends State<MapWidget> {
           myLocationEnabled: true,
           myLocationButtonEnabled: true,
           onCameraMove: (CameraPosition cameraPosition) {
-            // print(cameraPosition.zoom);
             if (cameraPosition.zoom > 13 && !cleared)
               setState(() {
                 _polygons.clear();
@@ -333,21 +263,21 @@ class MapWidgetState extends State<MapWidget> {
                 ),
               )
             : Container(),
-        FloatingActionButton(
-          onPressed: () => print(
-              Provider.of<MapDataProvider>(context, listen: false)
-                  .findLocation()),
-          heroTag: "findlocation",
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 60.0),
-          child: FloatingActionButton(
-            onPressed: () => print(
-                Provider.of<MapDataProvider>(context, listen: false)
-                    .findRegion()),
-            heroTag: "findregion",
-          ),
-        ),
+        // FloatingActionButton(
+        //   onPressed: () => print(
+        //       Provider.of<MapDataProvider>(context, listen: false)
+        //           .findLocation()),
+        //   heroTag: "findlocation",
+        // ),
+        // Container(
+        //   margin: const EdgeInsets.only(top: 60.0),
+        //   child: FloatingActionButton(
+        //     onPressed: () => print(
+        //         Provider.of<MapDataProvider>(context, listen: false)
+        //             .findRegion()),
+        //     heroTag: "findregion",
+        //   ),
+        // ),
       ],
     );
   }

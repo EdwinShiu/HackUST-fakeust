@@ -30,7 +30,24 @@ final TextStyle body2TextTheme = GoogleFonts.comfortaa(
   color: const Color(0xFFFFFFFF),
 );
 
-double postArea = 0.52;
-double imageArea = postArea * 0.88;
-double locationrowArea = postArea * 0.12;
-double usernameArea = postArea * 0.09;
+double postArea = 0.57;
+double imageArea = postArea * 0.81;
+double infocolArea = postArea * 0.19;
+
+Map<String, int> tagColor = {
+  "Exciting": 0xFFFF6868,
+  "Artistic": 0xFF68E51C,
+  "Thrilling": 0xFF2B50AA,
+  "Beautiful": 0xFFFF9FE5,
+  "Magnificent": 0xFFFFD4D4,
+  "Spectacular": 0xFFFF858D,
+  "Vintage": 0xFFC93F44,
+  "Nostalgic": 0xFFC13EC9,
+  "Breathtaking": 0xFFAB3EC9,
+  "Adventurous": 0xFF3E78C9,
+  "Wonderful": 0xFF40C9AB,
+  "Dazzling": 0xFF67DEC8,
+  "Delightful": 0xFFDEC868,
+  "Exquisite": 0xFF66B6DE,
+  "Splendid": 0xFFECE62B,
+};
