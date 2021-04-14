@@ -18,12 +18,11 @@ class SitePageHeader extends SliverPersistentHeaderDelegate {
   final String country;
   final String site;
   final String description;
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     overlapsContent = false;
-    int countryIndex;
-    int regionIndex;
     print(shrinkOffset);
     return Column(
       children: [

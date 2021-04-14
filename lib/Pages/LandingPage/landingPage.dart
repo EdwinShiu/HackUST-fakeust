@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hackust_fakeust/Pages/SocialMediaPage/UploadPost.dart';
-import 'package:hackust_fakeust/Pages/TravelLogPage/newTravelLogPage.dart';
+import 'package:hackust_fakeust/Pages/TravelLogPage/myPage.dart';
 import 'package:hackust_fakeust/states/currentUser.dart';
 import 'package:provider/provider.dart';
-import 'package:hackust_fakeust/Components/mapWidget.dart';
-import 'package:hackust_fakeust/Pages/SocialMediaPage/SocialMediaPage.dart';
 // import 'package:hackust_fakeust/Pages/TravelLogPage/travellogpage.dart';
 import 'package:hackust_fakeust/Pages/mapPage/mapPage.dart';
 import 'package:hackust_fakeust/models/new_post.dart';
 
-import '../../Cards/travellogCard.dart';
 import '../LeaderboardPage/LeaderboardPage.dart';
 
 class LandingPage extends StatefulWidget {
@@ -19,12 +16,12 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPage extends State<LandingPage> {
   int _currentIndex = 0;
-  final List<Widget> stay_alive_screens = [
+  final List<Widget> stayAliveScreens = [
     MapPage(),
     //SocialMediaPage(),
     Container(child: Text("s")),
     LeaderBoardPage(),
-    TravelLogPage()
+    MyPage(),
   ];
 
   void addPost(String uid) {
@@ -56,7 +53,7 @@ class _LandingPage extends State<LandingPage> {
         child: Scaffold(
           body: IndexedStack(
             index: _currentIndex,
-            children: stay_alive_screens,
+            children: stayAliveScreens,
           ),
           floatingActionButton: FloatingActionButton(
             heroTag: "addPost",
@@ -105,7 +102,7 @@ class _LandingPage extends State<LandingPage> {
                   Icons.book,
                   color: Colors.blue,
                 ),
-                label: 'Travel Log',
+                label: 'My Page',
               ),
             ],
           ),

@@ -98,4 +98,14 @@ class CurrentUser extends ChangeNotifier {
 
     return returnVal;
   }
+
+  Future<void> signOutUser() async {
+    try {
+      await _auth.signOut();
+      print('signout');
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
 }

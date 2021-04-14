@@ -24,8 +24,6 @@ class TravelLogCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-    // return Padding(
-    //   padding: const EdgeInsets.only(left: 40),
     return ClipRRect(
       borderRadius: BorderRadius.circular(20.0),
       child: Container(
@@ -58,14 +56,6 @@ class TravelLogCard extends StatelessWidget {
                         ),
                       ),
                     ),
-              // child: Container(
-              //   decoration: BoxDecoration(
-              //     image: DecorationImage(
-              //       image: AssetImage("assets/images/logCard.jpeg"),
-              //       fit: BoxFit.cover,
-              //     ),
-              //   ),
-              // ),
             ),
             // travel log text
             Expanded(
@@ -90,50 +80,19 @@ class TravelLogCard extends StatelessWidget {
                         style: TextStyle(fontSize: 15),
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 15, left: 15),
+                      child: Text(
+                        this.description,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
-          ], // padding
+          ],
         ),
-      ),
-    );
-  }
-}
-
-class TimeLine extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  width: 2,
-                  height: 80,
-                  color: Colors.black,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Icon(
-                    Icons.circle,
-                    color: Colors.white,
-                  ),
-                ),
-                Container(
-                  width: 2,
-                  height: 80,
-                  color: Colors.black,
-                )
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
