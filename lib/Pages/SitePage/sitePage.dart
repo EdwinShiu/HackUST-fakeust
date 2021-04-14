@@ -55,6 +55,7 @@ class SitePage extends StatelessWidget {
                                 username: snapshot.data.docs[index]['username'],
                                 caption: snapshot.data.docs[index]
                                     ['description'],
+                                date: snapshot.data.docs[index]['create_date'],
                                 imageUrl: snapshot.data.docs[index]
                                     ['image_URL'],
                               ),

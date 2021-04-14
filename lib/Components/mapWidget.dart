@@ -81,7 +81,6 @@ class MapWidgetState extends State<MapWidget> {
         .then((value) => value.data()['travelled_regions']);
     print(travelledRegion);
     for (var i = 0; i < data.areas.length; i++) {
-      print("Start " + i.toString());
       Color color = travelledRegion.containsKey(i.toString()) &&
               travelledRegion[i.toString()] > 0
           ? Colors.blue
@@ -123,7 +122,6 @@ class MapWidgetState extends State<MapWidget> {
           ),
         );
       }
-      print("Complete " + i.toString());
     }
     setState(() {
       loading = false;
@@ -269,21 +267,21 @@ class MapWidgetState extends State<MapWidget> {
                 ),
               )
             : Container(),
-        FloatingActionButton(
-          onPressed: () => print(
-              Provider.of<MapDataProvider>(context, listen: false)
-                  .findLocation()),
-          heroTag: "findlocation",
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 60.0),
-          child: FloatingActionButton(
-            onPressed: () => print(
-                Provider.of<MapDataProvider>(context, listen: false)
-                    .findRegion()),
-            heroTag: "findregion",
-          ),
-        ),
+        // FloatingActionButton(
+        //   onPressed: () => print(
+        //       Provider.of<MapDataProvider>(context, listen: false)
+        //           .findLocation()),
+        //   heroTag: "findlocation",
+        // ),
+        // Container(
+        //   margin: const EdgeInsets.only(top: 60.0),
+        //   child: FloatingActionButton(
+        //     onPressed: () => print(
+        //         Provider.of<MapDataProvider>(context, listen: false)
+        //             .findRegion()),
+        //     heroTag: "findregion",
+        //   ),
+        // ),
       ],
     );
   }

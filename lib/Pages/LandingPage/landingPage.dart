@@ -55,56 +55,81 @@ class _LandingPage extends State<LandingPage> {
             index: _currentIndex,
             children: stayAliveScreens,
           ),
-          floatingActionButton: FloatingActionButton(
-            heroTag: "addPost",
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0))),
-            onPressed: () => addPost(uid),
-            child: Icon(Icons.add),
+          floatingActionButton: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 0.5,
+                  blurRadius: 3,
+                  offset: Offset(0, 1),
+                ),
+              ],
+            ),
+            child: FloatingActionButton(
+              heroTag: "addPost",
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              onPressed: () => addPost(uid),
+              child: Icon(Icons.add),
+            ),
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          bottomNavigationBar: BottomNavigationBar(
-            elevation: 0,
-            fixedColor: Colors.black,
-            type: BottomNavigationBarType.fixed,
-            onTap: onTabTapped,
-            currentIndex: _currentIndex,
-            items: [
-              BottomNavigationBarItem(
-                backgroundColor: Colors.white,
-                icon: Icon(
-                  Icons.explore,
-                  color: Colors.blue,
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 30,
+                  offset: Offset(0, 10),
                 ),
-                label: 'Map',
-              ),
-              BottomNavigationBarItem(
-                backgroundColor: Colors.white,
-                icon: Icon(
-                  // color: Colors.blue,
-                  Icons.search,
-                  color: Colors.blue,
+              ],
+            ),
+            child: BottomNavigationBar(
+              elevation: 10,
+              fixedColor: Colors.black,
+              type: BottomNavigationBarType.fixed,
+              onTap: onTabTapped,
+              currentIndex: _currentIndex,
+              items: [
+                BottomNavigationBarItem(
+                  backgroundColor: Colors.white,
+                  icon: Icon(
+                    Icons.explore,
+                    color: Colors.blue,
+                  ),
+                  label: 'Map',
                 ),
-                label: 'Search',
-              ),
-              BottomNavigationBarItem(
-                backgroundColor: Colors.white,
-                icon: Icon(
-                  Icons.content_paste,
-                  color: Colors.blue,
+                BottomNavigationBarItem(
+                  backgroundColor: Colors.white,
+                  icon: Icon(
+                    // color: Colors.blue,
+                    Icons.search,
+                    color: Colors.blue,
+                  ),
+                  label: 'Search',
                 ),
-                label: 'InfoBoard',
-              ),
-              BottomNavigationBarItem(
-                backgroundColor: Colors.white,
-                icon: Icon(
-                  Icons.book,
-                  color: Colors.blue,
+                BottomNavigationBarItem(
+                  backgroundColor: Colors.white,
+                  icon: Icon(
+                    Icons.content_paste,
+                    color: Colors.blue,
+                  ),
+                  label: 'InfoBoard',
                 ),
-                label: 'My Page',
-              ),
-            ],
+                BottomNavigationBarItem(
+                  backgroundColor: Colors.white,
+                  icon: Icon(
+                    Icons.book,
+                    color: Colors.blue,
+                  ),
+                  label: 'My Page',
+                ),
+              ],
+            ),
           ),
         ),
       ),
