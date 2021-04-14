@@ -12,6 +12,8 @@ class CurrentUser extends ChangeNotifier {
   String _username = 'testname';
   String _email = 'test@gmail.com';
   LocationData _location;
+  String _locationName = "other";
+  String _regionName = "other";
   String _locationId = "0";
   String _regionId = "0";
 
@@ -24,8 +26,10 @@ class CurrentUser extends ChangeNotifier {
   LocationData get getLocation => _location;
 
   String get getLocationId => _locationId;
+  String get getLocationName => _locationName;
 
   String get getRegionId => _regionId;
+  String get getRegionName => _regionName;
 
   FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -55,6 +59,14 @@ class CurrentUser extends ChangeNotifier {
 
   void updateLocation(LocationData newLocation) {
     _location = newLocation;
+  }
+
+  void updateLocationName(String name) {
+    _locationName = name;
+  }
+
+  void updateRegionName(String name) {
+    _regionName = name;
   }
 
   // ignore: non_constant_identifier_names

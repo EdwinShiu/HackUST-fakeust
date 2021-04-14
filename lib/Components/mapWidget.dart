@@ -241,8 +241,12 @@ class MapWidgetState extends State<MapWidget> {
 
     String locationName =
         Provider.of<MapDataProvider>(context, listen: false).findLocation();
+    currentUser.updateLocationName(locationName);
+
     String regionName =
         Provider.of<MapDataProvider>(context, listen: false).findRegion();
+    currentUser.updateRegionName(regionName);
+
     FirebaseFirestore.instance
         .collection('locations')
         .where('location_name', isEqualTo: locationName)
@@ -294,6 +298,8 @@ class MapWidgetState extends State<MapWidget> {
               _locationData = l;
               Provider.of<CurrentUser>(context, listen: false)
                   .updateLocation(_locationData);
+              Provider.of<MapDataProvider>(context, listen: false)
+                  .setLocation(_locationData);
             });
           },
           // markers: _markers,

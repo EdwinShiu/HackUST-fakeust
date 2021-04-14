@@ -8,14 +8,24 @@ class PostModel {
   // ignore: non_constant_identifier_names
   String image_URL;
   String username;
+  String location_name;
+  String region_name;
 
   String getDescription() => this.description;
   String getImageURL() => this.image_URL;
 
-  PostModel({this.description, this.image_URL, this.username});
+  PostModel({
+    this.description,
+    this.image_URL,
+    this.username,
+    this.location_name,
+    this.region_name,
+  });
   factory PostModel.fromServerMap(Map data) {
     return PostModel(
       description: data['description'],
+      location_name: data['location_name'],
+      region_name: data['region_name'],
       image_URL: data['image_URL'],
       username: data['username'],
     );
@@ -89,6 +99,8 @@ class PostsModel {
           _data.add({
             'description': postdata['description'],
             'image_URL': postdata['image_URL'],
+            'location_name': postdata['location_name'],
+            'region_name': postdata['region_name'],
             'username': postdata['username'],
           });
         });

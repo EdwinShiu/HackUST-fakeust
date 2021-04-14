@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:hackust_fakeust/Cards/travellogCard.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -405,15 +406,14 @@ class _PreviewPost extends State<PreviewPost> {
         FirebaseFirestore.instance.collection("posts").doc("$numPosts").set({
           "create_date": timestamp,
           "description": _newPost.getDescription(),
-          "district_id": 0,
-          "location_id": 0,
+          "region_id": user.getRegionId,
+          "location_id": user.getLocationId,
           "country_id": 0,
+          "region_name": user.getRegionName,
+          "location_name": user.getLocationName,
           "image_URL": _newPost.getimageUrl(),
-          "is_public": true,
-          "is_travel_log": true,
-          "like_count": 0,
           "liked_uid": 0,
-          "tags": tagsIds,
+          "tags": _newPost.tags,
           "uid": user.getUid,
           "username": user.getUsername,
           "post_id": numPosts.toString(),
@@ -508,8 +508,19 @@ class _PreviewPost extends State<PreviewPost> {
                         description: _newPost.getDescription(),
                         image_URL: "",
                         username: user.getUsername,
+                        location_name: user.getLocationName,
+                        region_name: user.getRegionName,
                       ),
                       imagePATH: _newPost.getimagePath(),
+                    ),
+                    SizedBox(
+                      height: screenHeight * 0.05,
+                    ),
+                    TravelLogCard(
+                      locationName: user.getLocationName,
+                      description: _newPost.getDescription(),
+                      imagePath: _newPost.getimagePath(),
+                      imageUrl: _newPost.getimageUrl(),
                     ),
                   ],
                 ),

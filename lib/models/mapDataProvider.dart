@@ -73,7 +73,7 @@ class MapDataProvider with ChangeNotifier {
         if (_isInArea(latLngs)) return _polygonsLatLngs.areas[i].location;
       }
     }
-    return "None";
+    return "other";
   }
 
   bool _isInCircle(LatLng centerPoint, double r) {
@@ -86,7 +86,7 @@ class MapDataProvider with ChangeNotifier {
   }
 
   String findLocation() {
-    String location = "None";
+    String location = "other";
     _circleCenters.forEach((key, value) {
       if (_isInCircle(value, 0.1)) location = key;
     });

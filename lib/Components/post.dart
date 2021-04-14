@@ -1,9 +1,11 @@
 // import '../Constants/constants.dart';
 import 'package:flutter/material.dart';
 import "package:like_button/like_button.dart";
-// import 'package:loading_animations/loading_animations.dart';
+import 'package:loading_animations/loading_animations.dart';
 import "../Constants/constants.dart";
 import "../models/post_model.dart";
+
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Post extends StatelessWidget {
   final PostModel post;
@@ -46,23 +48,18 @@ class Post extends StatelessWidget {
                                 ? Container(
                                     height: screenHeight * imageArea,
                                     width: screenWidth,
-                                    child: Image.network(
-                                      post.getImageURL(),
+                                    child: CachedNetworkImage(
                                       fit: BoxFit.cover,
-                                      loadingBuilder:
-                                          (context, child, loadingProgress) {
-                                        if (loadingProgress == null)
-                                          return child;
-
-                                        // return LoadingRotating.square(
-                                        //   duration: Duration(milliseconds: 500),
-                                        // );
-                                        // or LinearProgressIndicator or CircularProgressIndicator instead
-                                        return LinearProgressIndicator();
-                                      },
-                                      errorBuilder:
-                                          (context, error, stackTrace) =>
-                                              Text('Some errors occurred!'),
+                                      imageUrl: post.getImageURL(),
+                                      fadeInDuration:
+                                          const Duration(milliseconds: 10),
+                                      // imageUrl: post.getImageURL(),
+                                      placeholder: (context, url) =>
+                                          LoadingRotating.square(
+                                        duration: Duration(milliseconds: 500),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
                                     ),
                                   )
                                 : Container(
@@ -76,7 +73,7 @@ class Post extends StatelessWidget {
                                     ),
                                   ),
 
-                            // profile pic and username
+                            // username
                             Align(
                               alignment: Alignment.bottomLeft,
                               child: Padding(
@@ -84,36 +81,15 @@ class Post extends StatelessWidget {
                                   left: 10,
                                   bottom: 10,
                                 ),
-                                child: Container(
-                                  height: screenHeight * usernameArea,
-                                  width: screenWidth * 0.4,
-                                  child: Stack(
-                                    children: [
-                                      // profilepic
-                                      Container(
-                                        height: screenHeight * usernameArea,
-                                        width: screenHeight * usernameArea,
-                                        // color: Colors.white,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: AssetImage(
-                                                "assets/images/profilePic.png"),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      // username
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          post.username,
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+
+                                // username
+                                child: Text(
+                                  // "fwefwegfewgwegwe",
+                                  post.username,
+                                  style: TextStyle(
+                                      backgroundColor: Colors.black,
+                                      fontSize: 20,
+                                      color: Colors.white),
                                 ),
                               ),
                             ),
@@ -137,7 +113,10 @@ class Post extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.only(left: 15),
                       child: Text(
-                        post.description,
+                        (post.location_name == "other")
+                            ? post.region_name
+                            : post.location_name,
+                        // post.description,
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
