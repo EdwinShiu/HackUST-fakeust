@@ -3,7 +3,7 @@ import 'package:hackust_fakeust/Components/profile.dart';
 import 'package:hackust_fakeust/Pages/errorPage.dart';
 import 'package:hackust_fakeust/Pages/TravelLogPage/redeemPage.dart';
 
-import 'newTravelLogPage.dart';
+import 'TravelLogPage.dart';
 
 class MyPage extends StatefulWidget {
   @override

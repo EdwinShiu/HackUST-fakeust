@@ -79,9 +79,7 @@ class MapWidgetState extends State<MapWidget> {
         .doc(Provider.of<CurrentUser>(context, listen: false).getUid)
         .get()
         .then((value) => value.data()['travelled_regions']);
-    print(travelledRegion);
     for (var i = 0; i < data.areas.length; i++) {
-      print("Start " + i.toString());
       Color color = travelledRegion.containsKey(i.toString()) &&
               travelledRegion[i.toString()] > 0
           ? Colors.blue
@@ -92,9 +90,7 @@ class MapWidgetState extends State<MapWidget> {
         List<LatLng> polygonLatLngs = [];
         for (var k = 0; k < data.areas[i].latlng[j].length; k++) {
           double latitude = data.areas[i].latlng[j][k][1];
-          // print(latitude);
           double longitude = data.areas[i].latlng[j][k][0];
-          // print(longitude);
           polygonLatLngs.add(LatLng(latitude, longitude));
         }
         _polygons.add(
@@ -123,7 +119,6 @@ class MapWidgetState extends State<MapWidget> {
           ),
         );
       }
-      print("Complete " + i.toString());
     }
     setState(() {
       loading = false;
@@ -245,7 +240,6 @@ class MapWidgetState extends State<MapWidget> {
           myLocationEnabled: true,
           myLocationButtonEnabled: true,
           onCameraMove: (CameraPosition cameraPosition) {
-            // print(cameraPosition.zoom);
             if (cameraPosition.zoom > 13 && !cleared)
               setState(() {
                 _polygons.clear();
@@ -269,21 +263,21 @@ class MapWidgetState extends State<MapWidget> {
                 ),
               )
             : Container(),
-        FloatingActionButton(
-          onPressed: () => print(
-              Provider.of<MapDataProvider>(context, listen: false)
-                  .findLocation()),
-          heroTag: "findlocation",
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 60.0),
-          child: FloatingActionButton(
-            onPressed: () => print(
-                Provider.of<MapDataProvider>(context, listen: false)
-                    .findRegion()),
-            heroTag: "findregion",
-          ),
-        ),
+        // FloatingActionButton(
+        //   onPressed: () => print(
+        //       Provider.of<MapDataProvider>(context, listen: false)
+        //           .findLocation()),
+        //   heroTag: "findlocation",
+        // ),
+        // Container(
+        //   margin: const EdgeInsets.only(top: 60.0),
+        //   child: FloatingActionButton(
+        //     onPressed: () => print(
+        //         Provider.of<MapDataProvider>(context, listen: false)
+        //             .findRegion()),
+        //     heroTag: "findregion",
+        //   ),
+        // ),
       ],
     );
   }

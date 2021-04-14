@@ -12,23 +12,29 @@ class SigninPage extends StatelessWidget {
     print('Sign in Page');
     return Container(
       child: Scaffold(
-        backgroundColor: Color(backgroundPrimaryColor),
+        backgroundColor: Color.fromRGBO(239, 242, 200, 1),
+        resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              //logo
-              Padding(
-                padding: EdgeInsets.only(top: screenHeight * 0.15),
-                child: Center(
-                  child: Container(
-                    width: 200,
-                    height: 150,
-                    child: Image.asset('assets/images/logo.png'),
+          child: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: Column(
+              children: [
+                //logo
+                Padding(
+                  padding: EdgeInsets.only(top: screenHeight * 0.15),
+                  child: Center(
+                    child: Container(
+                      width: 200,
+                      height: 150,
+                      child: Image.asset('assets/images/logo.png'),
+                    ),
                   ),
                 ),
-              ),
-              SignInForm(),
-              SizedBox(
+                SignInForm(),
+
+                /*    SizedBox(
                 height: 50,
               ),
               Align(
@@ -57,7 +63,9 @@ class SigninPage extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
+              */
+              ],
+            ),
           ),
         ),
       ),
@@ -108,12 +116,17 @@ class _SignInForm extends State<SignInForm> {
             decoration: InputDecoration(
                 contentPadding:
                     new EdgeInsets.symmetric(vertical: 30.0, horizontal: 10.0),
+                fillColor: Color.fromRGBO(211, 241, 206, 1),
                 filled: true, // <- this is required.
                 border: OutlineInputBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
-                  borderSide: new BorderSide(),
+                  borderRadius: new BorderRadius.circular(60.0),
+                  // borderSide: new BorderSide(),
                 ),
-                labelText: 'Email',
+                labelText: '     Email',
+                labelStyle: TextStyle(
+                  color: Color.fromRGBO(8, 47, 69, 1),
+                  fontSize: 20,
+                ),
                 hintText: 'Enter valid email id as abc@gmail.com'),
           ),
         ),
@@ -127,8 +140,19 @@ class _SignInForm extends State<SignInForm> {
             controller: _pwController,
             obscureText: true,
             decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Password',
+                contentPadding:
+                    new EdgeInsets.symmetric(vertical: 30.0, horizontal: 10.0),
+                fillColor: Color.fromRGBO(211, 241, 206, 1),
+                filled: true, // <- this is required.
+                border: OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(60.0),
+                  // borderSide: new BorderSide(),
+                ),
+                labelText: '     Password',
+                labelStyle: TextStyle(
+                  color: Color.fromRGBO(8, 47, 69, 1),
+                  fontSize: 20,
+                ),
                 hintText: 'Enter password'),
           ),
         ),
@@ -142,13 +166,14 @@ class _SignInForm extends State<SignInForm> {
           //     color: Colors.white, borderRadius: BorderRadius.circular(20)),
           child: TextButton(
             style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(const Color(colorWhite)),
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  Color.fromRGBO(161, 246, 170, 1)),
               minimumSize:
                   MaterialStateProperty.all<Size>(Size(screenWidth * 0.65, 50)),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0),
+                  borderRadius: BorderRadius.circular(2),
+                  // side: BorderSide(color: Colors.black, width: 2)
                 ),
               ),
               // shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
@@ -158,31 +183,45 @@ class _SignInForm extends State<SignInForm> {
               _signinUser(_emailController.text, _pwController.text, context);
             },
             child: Text(
-              'Login',
+              'LOGIN',
               style:
                   TextStyle(color: const Color(textPrimaryColor), fontSize: 25),
             ),
           ),
         ),
         SizedBox(height: 60.0),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('New to "our app name"'),
-            SizedBox(width: 6.0),
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed('/signup');
-              },
-              child: Text(
-                'Register',
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
+
+        Container(
+          height: 50,
+          width: 250,
+
+          // decoration: BoxDecoration(
+          //     color: Colors.white, borderRadius: BorderRadius.circular(20)),
+          child: TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  Color.fromRGBO(236, 238, 217, 1)),
+              minimumSize:
+                  MaterialStateProperty.all<Size>(Size(screenWidth * 0.65, 50)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(2),
+                  // side: BorderSide(color: Colors.black, width: 2)
+                  // color : Color.fromRGBO(236, 238, 217, 1)
                 ),
               ),
-            )
-          ],
+              // shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
+            ),
+            onPressed: () {
+              print('Go to sign up page');
+              Navigator.of(context).pushNamed('/signup');
+            },
+            child: Text(
+              'SIGN UP FOR FREE',
+              style:
+                  TextStyle(color: const Color(textPrimaryColor), fontSize: 25),
+            ),
+          ),
         ),
       ],
     ));

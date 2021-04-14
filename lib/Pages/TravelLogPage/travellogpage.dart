@@ -111,6 +111,7 @@ class TravelLogPage extends StatelessWidget {
                                   ['location_name'],
                               description: snapshot.data.docs[index]
                                   ['description'],
+                              date: snapshot.data.docs[index]['create_date'],
                               imageUrl: snapshot.data.docs[index]['image_URL'],
                             ),
                           ),
