@@ -79,7 +79,6 @@ class MapWidgetState extends State<MapWidget> {
         .doc(Provider.of<CurrentUser>(context, listen: false).getUid)
         .get()
         .then((value) => value.data()['travelled_regions']);
-    print(travelledRegion);
     for (var i = 0; i < data.areas.length; i++) {
       Color color = travelledRegion.containsKey(i.toString()) &&
               travelledRegion[i.toString()] > 0
@@ -91,9 +90,7 @@ class MapWidgetState extends State<MapWidget> {
         List<LatLng> polygonLatLngs = [];
         for (var k = 0; k < data.areas[i].latlng[j].length; k++) {
           double latitude = data.areas[i].latlng[j][k][1];
-          // print(latitude);
           double longitude = data.areas[i].latlng[j][k][0];
-          // print(longitude);
           polygonLatLngs.add(LatLng(latitude, longitude));
         }
         _polygons.add(
@@ -243,7 +240,6 @@ class MapWidgetState extends State<MapWidget> {
           myLocationEnabled: true,
           myLocationButtonEnabled: true,
           onCameraMove: (CameraPosition cameraPosition) {
-            // print(cameraPosition.zoom);
             if (cameraPosition.zoom > 13 && !cleared)
               setState(() {
                 _polygons.clear();

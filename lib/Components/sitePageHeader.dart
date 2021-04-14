@@ -22,7 +22,6 @@ class SitePageHeader extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     overlapsContent = false;
-    print(shrinkOffset);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.0),
@@ -59,7 +58,6 @@ class SitePageHeader extends SliverPersistentHeaderDelegate {
                         .get()
                         .then((snapshot) => snapshot.docs[0]["tags"]),
                     builder: (context, snapshot) {
-                      print(snapshot.data);
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: List.generate(
