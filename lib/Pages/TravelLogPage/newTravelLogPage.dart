@@ -5,8 +5,13 @@ import 'package:timeline_tile/timeline_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TravelLogPage extends StatelessWidget {
+  TravelLogPage({Key key, this.setPage}) : super(key: key);
+
+  final ValueSetter<int> setPage;
+
   @override
   Widget build(BuildContext context) {
     String uid = Provider.of<CurrentUser>(context).getUid;
@@ -14,34 +19,47 @@ class TravelLogPage extends StatelessWidget {
       child: Container(
         child: Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Container(
-                alignment: Alignment.center,
-                height: MediaQuery.of(context).size.height * 0.05,
-                width: double.infinity,
-                child: Text(
-                  "Travel Log",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.8),
-                      spreadRadius: 1,
-                      blurRadius: 10,
-                      offset: Offset(0, 10),
+            Container(
+              alignment: Alignment.center,
+              height: MediaQuery.of(context).size.height * 0.06,
+              width: double.infinity,
+              child: Stack(
+                children: [
+                  Center(
+                    child: Text(
+                      "Travel Log",
+                      style: Theme.of(context).textTheme.headline2,
                     ),
-                  ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.06,
+                    width: MediaQuery.of(context).size.height * 0.06,
+                    child: TextButton(
+                      onPressed: () {
+                        setPage(0);
+                      },
+                      child: Icon(
+                        FontAwesomeIcons.chevronLeft,
+                        color: Color(0xFF1e1e1e),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.8),
+                    spreadRadius: 1,
+                    blurRadius: 3,
+                    offset: Offset(0, 3),
+                  ),
+                ],
               ),
             ),
             Expanded(
