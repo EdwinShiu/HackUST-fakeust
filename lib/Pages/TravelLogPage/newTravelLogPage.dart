@@ -21,7 +21,10 @@ class TravelLogPage extends StatelessWidget {
                 width: double.infinity,
                 child: Text(
                   "Travel Log",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white,
