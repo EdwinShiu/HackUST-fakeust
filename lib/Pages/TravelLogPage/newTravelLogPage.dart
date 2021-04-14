@@ -4,6 +4,7 @@ import 'package:hackust_fakeust/states/currentUser.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:loading_animations/loading_animations.dart';
 
 class TravelLogPage extends StatelessWidget {
   @override
@@ -51,6 +52,11 @@ class TravelLogPage extends StatelessWidget {
                     .get(),
                 builder: (context, snapshot) {
                   // for (var doc in snapshot.data.docs) print(doc['description']);
+                  if (snapshot.connectionState != ConnectionState.done) {
+                    return LoadingRotating.square(
+                      duration: Duration(milliseconds: 500),
+                    );
+                  }
                   return Container(
                     padding: EdgeInsets.symmetric(horizontal: 10.0),
                     child: ListView(
