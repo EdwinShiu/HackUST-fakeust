@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
+import 'package:hackust_fakeust/states/currentUser.dart';
+import 'package:provider/provider.dart';
 import 'eventBoard.dart';
 
 class EventMovingBlock extends StatefulWidget {
@@ -166,6 +167,9 @@ class EventMovingBlockState extends State<EventMovingBlock> {
     final screenHeight = MediaQuery.of(context).size.height;
     // Get the width of the screen
     final screenWidth = MediaQuery.of(context).size.width;
+
+    String uid = Provider.of<CurrentUser>(context).getUid;
+    print('uid' + uid);
     return Column(
       children: [
         carouselSlider(screenHeight, screenWidth),
