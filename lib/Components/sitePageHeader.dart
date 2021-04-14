@@ -120,16 +120,15 @@ class SitePageHeader extends SliverPersistentHeaderDelegate {
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.info_outline),
-                          onPressed: () => showDialog(
-                              context: context,
-                              builder: (context) {
-                                return SiteDescriptionDialog(
-                                  site: site,
-                                  description: description,
-                                );
-                              }),
-                        ),
+                            icon: Icon(Icons.info_outline),
+                            onPressed: () => showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return SiteDescriptionDialog(
+                                    site: site,
+                                    description: description,
+                                  );
+                                })),
                       ]),
                 ),
               ],

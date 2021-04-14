@@ -1,37 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:hackust_fakeust/Constants/constants.dart';
 
-class CategoryButton extends StatefulWidget {
+typedef CallbackAction(String s);
+
+class CategoryButton extends StatelessWidget {
   final String text;
   final bool enabled;
-  final VoidCallback func;
+  final CallbackAction func;
 
   CategoryButton({this.text, @required this.enabled, this.func});
 
   @override
-  _CategoryButtonState createState() => _CategoryButtonState();
-}
-
-class _CategoryButtonState extends State<CategoryButton> {
-  bool en;
-
-  @override
   Widget build(BuildContext context) {
-    en = !widget.enabled;
+    bool en = !enabled;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2.0),
       child: ElevatedButton(
         onPressed: () {
-          if (widget.enabled) {
+          if (enabled) {
+            func(text);
             en = !en;
           }
         },
         style: ButtonStyle(
             shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
             backgroundColor: MaterialStateProperty.resolveWith(
-                (states) => en ? Colors.red : Colors.grey[600])),
+                (states) => en ? Color(tagColor[text]) : Colors.grey[600])),
         child: Text(
-          widget.text ?? "Category",
+          text ?? "Category",
         ),
       ),
     );
