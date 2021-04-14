@@ -111,7 +111,7 @@ class _LandingPage extends State<LandingPage> {
                     Icons.search,
                     color: Colors.blue,
                   ),
-                  label: 'Search',
+                  label: 'Explore',
                 ),
                 BottomNavigationBarItem(
                   backgroundColor: Colors.white,
@@ -127,7 +127,7 @@ class _LandingPage extends State<LandingPage> {
                     Icons.book,
                     color: Colors.blue,
                   ),
-                  label: 'My Page',
+                  label: 'MyPage',
                 ),
               ],
             ),

@@ -9,6 +9,14 @@ class EventBoard extends StatefulWidget {
 }
 
 class EventBoardState extends State<EventBoard> {
+  int eventValue = 0;
+
+  void setPage(index) {
+    setState(() {
+      eventValue = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -20,7 +28,6 @@ class EventBoardState extends State<EventBoard> {
               duration: Duration(milliseconds: 500),
             );
           }
-          print(snapshot.data);
           if (snapshot.data.length == 0) {
             return Center(
               child: Text(
@@ -30,7 +37,11 @@ class EventBoardState extends State<EventBoard> {
             );
           }
           List<EventDetail> eventDetailList = snapshot.data;
-          return EventMovingBlock(eventDetailList: eventDetailList);
+          return EventMovingBlock(
+            eventDetailList: eventDetailList,
+            eventValue: eventValue,
+            setPage: setPage,
+          );
         },
       ),
     );
