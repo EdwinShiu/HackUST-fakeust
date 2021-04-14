@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../Constants/constants.dart';
 import '../../states/currentUser.dart';
+import 'package:email_validator/email_validator.dart';
 
 class SignupPage extends StatelessWidget {
   @override
@@ -200,8 +201,10 @@ class _SignUpForm extends State<SignUpForm> {
               child: TextFormField(
                 autocorrect: false,
                 controller: _emailController,
-                validator: (String value) =>
-                    value.isEmpty ? 'Enter an email' : null,
+                validator: (String value) => (value.isNotEmpty &&
+                        EmailValidator.validate(_emailController.text))
+                    ? null
+                    : 'Enter a valid email',
                 decoration: InputDecoration(
                     contentPadding: new EdgeInsets.symmetric(
                         vertical: 30.0, horizontal: 10.0),
