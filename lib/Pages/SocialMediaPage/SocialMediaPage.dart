@@ -47,6 +47,10 @@ class _SocialMediaPage extends State<SocialMediaPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the height of the screen
+    final screenHeight = MediaQuery.of(context).size.height;
+    // Get the width of the screen
+    final screenWidth = MediaQuery.of(context).size.width;
     return Stack(
       children: [
         StreamBuilder(
@@ -60,10 +64,30 @@ class _SocialMediaPage extends State<SocialMediaPage> {
                 child: ListView.builder(
                   padding: EdgeInsets.symmetric(vertical: 8.0),
                   controller: scrollController,
-                  itemCount: _snapshot.data.length + 1,
+                  itemCount: _snapshot.data.length + 2,
                   itemBuilder: (BuildContext _context, int index) {
-                    if (index < _snapshot.data.length) {
-                      return Post(post: _snapshot.data[index]);
+                    if (index == 0) {
+                      return Container(
+                        height: screenHeight * 0.15,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: Center(
+                                child: Text('Explore',
+                                    style:
+                                        Theme.of(context).textTheme.headline1),
+                              ),
+                            ),
+                            Divider(
+                              indent: 20,
+                              endIndent: 20,
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (index < _snapshot.data.length + 1) {
+                      return Post(post: _snapshot.data[index - 1]);
                     } else if (posts.hasMore) {
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 0),

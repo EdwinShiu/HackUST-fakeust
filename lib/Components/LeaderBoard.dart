@@ -104,7 +104,7 @@ class LeaderBoard extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
-        color: Color(0xFF44CF73),
+        color: Color(0xFFA0DAE8),
       ),
       child: FutureBuilder<List<UserScore>>(
         future: _UserDatabase().userScoreList,
