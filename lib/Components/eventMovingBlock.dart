@@ -92,14 +92,12 @@ class EventMovingBlockState extends State<EventMovingBlock> {
                       SizedBox(height: 4),
                       SizedBox(
                         height: 80, // 5x fontSize
-                        child: Flexible(
-                          child: Text(
-                            widget?.eventDetailList[eventIndex]?.description,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText2
-                                .copyWith(height: 1),
-                          ),
+                        child: Text(
+                          widget?.eventDetailList[eventIndex]?.description,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              .copyWith(height: 1),
                         ),
                       ),
                       SizedBox(height: 8),
