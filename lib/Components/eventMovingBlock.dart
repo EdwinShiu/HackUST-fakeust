@@ -2,24 +2,79 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:hackust_fakeust/states/currentUser.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'eventBoard.dart';
 
 class EventMovingBlock extends StatefulWidget {
   final List<EventDetail> eventDetailList;
+  final int eventValue;
+  final ValueSetter setPage;
 
-  EventMovingBlock({Key key, @required this.eventDetailList}) : super(key: key);
+  EventMovingBlock(
+      {Key key,
+      @required this.eventDetailList,
+      @required this.eventValue,
+      @required this.setPage})
+      : super(key: key);
 
   @override
-  EventMovingBlockState createState() => EventMovingBlockState();
+  EventMovingBlockState createState() => EventMovingBlockState(eventValue);
 }
 
 class EventMovingBlockState extends State<EventMovingBlock> {
-  var eventIndex = 0;
+  var eventIndex;
+
+  EventMovingBlockState(this.eventIndex);
 
   String _fromDateToDateFormatter(DateTime startDate, DateTime endDate) {
     String startDateString = startDate.toIso8601String().substring(0, 10);
     String endDateString = endDate.toIso8601String().substring(0, 10);
     return 'From $startDateString to $endDateString';
+  }
+
+  bool _hasJoined(String uid, List<String> participants) {
+    if (participants == null) {
+      return false;
+    }
+    return participants.firstWhere((participant) => participant == uid,
+            orElse: () => null) !=
+        null;
+  }
+
+  Future<bool> _putUidToEvent(String uid, String eventIndex) async {
+    // First fetch firebase again
+    // Then check list contain uid
+    // If no post uid to participants
+    final DocumentSnapshot eventDoc = await FirebaseFirestore.instance
+        .collection('events')
+        .doc(eventIndex)
+        .get();
+    List<String> eventParticipationList =
+        List<String>.from(eventDoc.data()['participants']);
+    if (_hasJoined(uid, eventParticipationList)) {
+      return false;
+    } else {
+      eventParticipationList.add(uid);
+      eventDoc.reference.update({
+        'participants': eventParticipationList,
+      });
+      return true;
+    }
+  }
+
+  Future<void> _joinedDialog(context) {
+    return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Center(
+            child: Text('You have joined this event.'),
+          ),
+          titleTextStyle: Theme.of(context).textTheme.bodyText1,
+        );
+      },
+    );
   }
 
   Widget carouselSlider(double screenHeight, double screenWidth) {
@@ -120,6 +175,7 @@ class EventMovingBlockState extends State<EventMovingBlock> {
           padding: EdgeInsets.only(top: 10),
           child: CarouselSlider(
             options: CarouselOptions(
+              initialPage: eventIndex,
               height: screenHeight * 0.2,
               viewportFraction: screenHeight * 0.2 / (screenWidth - 20),
               enlargeCenterPage: true,
@@ -236,7 +292,7 @@ class EventMovingBlockState extends State<EventMovingBlock> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 20),
+                      padding: EdgeInsets.only(top: 15),
                       child: SizedBox(
                         width: double.maxFinite,
                         child: TextButton(
@@ -246,11 +302,31 @@ class EventMovingBlockState extends State<EventMovingBlock> {
                             textStyle: MaterialStateProperty.all<TextStyle>(
                                 Theme.of(context).textTheme.bodyText1),
                           ),
-                          onPressed: () {
-                            print('TomLam');
+                          onPressed: () async {
+                            if (_hasJoined(
+                                uid,
+                                widget?.eventDetailList[eventIndex]
+                                    ?.participants)) {
+                              // Joined
+                              _joinedDialog(context);
+                            } else {
+                              var result = await _putUidToEvent(
+                                  uid, eventIndex.toString());
+                              if (result) {
+                                print('updated!');
+                                widget.setPage(eventIndex);
+                              } else {
+                                _joinedDialog(context);
+                              }
+                            }
                           },
                           child: Text(
-                            'Join',
+                            _hasJoined(
+                                    uid,
+                                    widget?.eventDetailList[eventIndex]
+                                        ?.participants)
+                                ? 'Joined'
+                                : 'Join',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText2
