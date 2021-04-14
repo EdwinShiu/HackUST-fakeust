@@ -3,6 +3,7 @@ import 'package:hackust_fakeust/Components/addTagDialog.dart';
 import 'package:hackust_fakeust/Components/categoryButton.dart';
 import 'package:hackust_fakeust/Components/siteDescriptionDialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hackust_fakeust/Pages/SitePage/sitePage.dart';
 
 class SitePageHeader extends SliverPersistentHeaderDelegate {
   SitePageHeader(
@@ -10,14 +11,15 @@ class SitePageHeader extends SliverPersistentHeaderDelegate {
       this.maxExtent,
       this.country,
       this.site,
-      this.description});
+      this.description,
+      this.parent});
 
   final double minExtent;
   final double maxExtent;
   final String country;
   final String site;
   final String description;
-
+  final State<SitePage> parent;
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -75,7 +77,11 @@ class SitePageHeader extends SliverPersistentHeaderDelegate {
                               onPressed: () => showDialog(
                                 context: context,
                                 builder: (context) {
-                                  return AddTagDialog(list: snapshot.data);
+                                  return AddTagDialog(
+                                    site: site,
+                                    list: snapshot.data,
+                                    parent: parent,
+                                  );
                                 },
                               ),
                               elevation: 2.0,

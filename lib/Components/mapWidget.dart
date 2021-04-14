@@ -98,6 +98,11 @@ class MapWidgetState extends State<MapWidget> {
         .then((value) => value.data()['travelled_regions']);
     for (var i = 0; i < data.areas.length; i++) {
       Color color;
+      // int eventCount = await FirebaseFirestore.instance
+      //     .collection('regions')
+      //     .doc(i.toString())
+      //     .get()
+      //     .then((value) => value.data()['event_count']);
       travelledRegion != null
           ? color = travelledRegion.containsKey(i.toString()) &&
                   travelledRegion[i.toString()] > 0
@@ -159,7 +164,7 @@ class MapWidgetState extends State<MapWidget> {
 
   void asyncMethod() async {
     await loadJsonData();
-    _setMarker();
+    // _setMarker();
     _setCircle();
     _setPolygons();
 
@@ -220,11 +225,15 @@ class MapWidgetState extends State<MapWidget> {
   }
 
   _handleTap(LatLng tappedPoint) {
+    _markers.clear();
     setState(() {
-      _markers.add(Marker(
+      _markers.add(
+        Marker(
           markerId: MarkerId(tappedPoint.toString()),
           position: tappedPoint,
-          onTap: () {}));
+          onTap: () {},
+        ),
+      );
     });
   }
 
@@ -251,7 +260,7 @@ class MapWidgetState extends State<MapWidget> {
                   .setLocation(_locationData);
             });
           },
-          // markers: _markers,
+          markers: _markers,
           circles: _circle,
           polygons: _polygons,
           buildingsEnabled: false,
@@ -269,7 +278,7 @@ class MapWidgetState extends State<MapWidget> {
                 cleared = false;
               });
           },
-          // onTap: _handleTap,
+          onTap: _handleTap,
         ),
         loading
             ? Container(

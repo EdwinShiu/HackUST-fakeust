@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hackust_fakeust/Cards/siteCard.dart';
 import 'package:hackust_fakeust/Components/sitePageHeader.dart';
 
-class SitePage extends StatelessWidget {
+class SitePage extends StatefulWidget {
   final String country;
   final String region;
   final String rid;
@@ -18,6 +18,11 @@ class SitePage extends StatelessWidget {
       : super(key: key);
 
   @override
+  _SitePageState createState() => _SitePageState();
+}
+
+class _SitePageState extends State<SitePage> {
+  @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     return Container(
@@ -28,7 +33,7 @@ class SitePage extends StatelessWidget {
           body: FutureBuilder(
               future: FirebaseFirestore.instance
                   .collection("posts")
-                  .where('region_id', isEqualTo: rid)
+                  .where('region_id', isEqualTo: widget.rid)
                   .get(),
               builder: (context, snapshot) {
                 return snapshot.connectionState == ConnectionState.done
@@ -39,9 +44,10 @@ class SitePage extends StatelessWidget {
                           delegate: SitePageHeader(
                             minExtent: screenHeight * 0.21,
                             maxExtent: screenHeight * 0.4,
-                            country: country,
-                            site: region,
-                            description: description,
+                            country: widget.country,
+                            site: widget.region,
+                            description: widget.description,
+                            parent: this,
                           ),
                         ),
                         SliverPadding(
