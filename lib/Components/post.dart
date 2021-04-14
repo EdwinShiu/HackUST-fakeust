@@ -19,7 +19,6 @@ class Post extends StatelessWidget {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-    print("Description: ${post.description}");
     return Container(
       height: screenHeight * postArea,
       width: screenWidth,

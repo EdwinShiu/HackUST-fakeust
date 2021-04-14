@@ -80,9 +80,11 @@ class TravelLogPage extends StatelessWidget {
                           endChild: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TravelLogCard(
-                              title: snapshot.data.docs[index]['location_name'],
-                              caption: snapshot.data.docs[index]['description'],
-                              imagePath: snapshot.data.docs[index]['image_URL'],
+                              locationName: snapshot.data.docs[index]
+                                  ['location_name'],
+                              description: snapshot.data.docs[index]
+                                  ['description'],
+                              imageUrl: snapshot.data.docs[index]['image_URL'],
                             ),
                           ),
                         ),
