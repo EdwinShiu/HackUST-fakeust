@@ -21,15 +21,101 @@ class EventMovingBlockState extends State<EventMovingBlock> {
     return 'From $startDateString to $endDateString';
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // Get the height of the screen
-    final screenHeight = MediaQuery.of(context).size.height;
-    // Get the width of the screen
-    final screenWidth = MediaQuery.of(context).size.width;
-    return Column(
-      children: [
-        Padding(
+  Widget carouselSlider(double screenHeight, double screenWidth) {
+    final int length = widget.eventDetailList.length;
+    switch (length) {
+      case 1:
+        return Padding(
+          padding: EdgeInsets.only(top: 10),
+          child: Row(
+            children: [
+              Container(
+                height: screenHeight * 0.17,
+                width: screenHeight * 0.17,
+                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: widget.eventDetailList[0].color,
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    widget.eventDetailList[0].name.toString(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        .copyWith(fontSize: 28),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      case 2:
+        return Padding(
+          padding: EdgeInsets.only(top: 10),
+          child: Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    eventIndex = 0;
+                  });
+                },
+                child: Container(
+                  height: screenHeight * 0.17,
+                  width: screenHeight * 0.17,
+                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: widget.eventDetailList[0].color,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      widget.eventDetailList[0].name.toString(),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .copyWith(fontSize: 28),
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    eventIndex = 1;
+                  });
+                },
+                child: Container(
+                  height: screenHeight * 0.17,
+                  width: screenHeight * 0.17,
+                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: widget.eventDetailList[1].color,
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      widget.eventDetailList[1].name.toString(),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .copyWith(fontSize: 28),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      default:
+        return Padding(
           padding: EdgeInsets.only(top: 10),
           child: CarouselSlider(
             options: CarouselOptions(
@@ -52,7 +138,7 @@ class EventMovingBlockState extends State<EventMovingBlock> {
                     margin: EdgeInsets.symmetric(horizontal: 5.0),
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      color: Colors.amber,
+                      color: eventDetail.color,
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Align(
@@ -70,7 +156,19 @@ class EventMovingBlockState extends State<EventMovingBlock> {
               );
             }).toList(),
           ),
-        ),
+        );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Get the height of the screen
+    final screenHeight = MediaQuery.of(context).size.height;
+    // Get the width of the screen
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Column(
+      children: [
+        carouselSlider(screenHeight, screenWidth),
         Expanded(
           child: Container(
             margin: EdgeInsets.symmetric(vertical: 10),
@@ -79,80 +177,88 @@ class EventMovingBlockState extends State<EventMovingBlock> {
               borderRadius: BorderRadius.circular(15.0),
               color: widget?.eventDetailList[eventIndex]?.color,
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Text('Description:',
-                          style: Theme.of(context).textTheme.bodyText2),
-                      SizedBox(height: 4),
-                      SizedBox(
-                        height: 80, // 5x fontSize
-                        child: Text(
-                          widget?.eventDetailList[eventIndex]?.description,
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: screenHeight * 0.6,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text('Description:',
+                            style: Theme.of(context).textTheme.bodyText2),
+                        SizedBox(height: 4),
+                        SizedBox(
+                          height: 80, // 5x fontSize
+                          child: Text(
+                            widget?.eventDetailList[eventIndex]?.description,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(height: 1),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Date:',
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          _fromDateToDateFormatter(
+                              widget?.eventDetailList[eventIndex]?.startDate,
+                              widget?.eventDetailList[eventIndex]?.endDate),
                           style: Theme.of(context)
                               .textTheme
                               .bodyText2
-                              .copyWith(height: 1),
+                              .copyWith(fontSize: 20),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Reward:',
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Score ${widget?.eventDetailList[eventIndex]?.reward.toString()}x',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              .copyWith(fontSize: 20),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: SizedBox(
+                        width: double.maxFinite,
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Color(0xFFFFFFFF)),
+                            textStyle: MaterialStateProperty.all<TextStyle>(
+                                Theme.of(context).textTheme.bodyText1),
+                          ),
+                          onPressed: () {
+                            print('TomLam');
+                          },
+                          child: Text(
+                            'Join',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                                    fontSize: 20, color: Color(0xFF333333)),
+                          ),
                         ),
                       ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Date:',
-                        style: Theme.of(context).textTheme.bodyText2,
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        _fromDateToDateFormatter(
-                            widget?.eventDetailList[eventIndex]?.startDate,
-                            widget?.eventDetailList[eventIndex]?.endDate),
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2
-                            .copyWith(fontSize: 20),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Reward:',
-                        style: Theme.of(context).textTheme.bodyText2,
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Score ${widget?.eventDetailList[eventIndex]?.reward.toString()}x',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2
-                            .copyWith(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: double.maxFinite,
-                  child: TextButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Color(0xFFFFFFFF)),
-                      textStyle: MaterialStateProperty.all<TextStyle>(
-                          Theme.of(context).textTheme.bodyText1),
                     ),
-                    onPressed: () {
-                      print('TomLam');
-                    },
-                    child: Text(
-                      'Join',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2
-                          .copyWith(fontSize: 20, color: Color(0xFF333333)),
-                    ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
