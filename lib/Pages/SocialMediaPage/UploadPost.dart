@@ -2,18 +2,18 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:hackust_fakeust/Cards/travellogCard.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../states/currentUser.dart';
 import '../../models/new_post.dart';
+import '../../models/post_model.dart';
 import "../../Constants/constants.dart";
 import '../../Components/post.dart';
-import 'package:geolocator/geolocator.dart';
+import '../../models/mapDataProvider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:location/location.dart';
-import 'package:flutter/services.dart';
 
 class UploadPost extends StatefulWidget {
   @override
@@ -29,64 +29,44 @@ class _UploadPost extends State<UploadPost> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      location = _determinePosition();
-    });
+    // setState(() {
+    //   location = _determinePosition();
+    // });
   }
 
-  // Future getLoc() async {
-  //   Location location = new Location();
+  // // get location
+  // Future<Position> _determinePosition() async {
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
 
-  //   await Permission.location.request();
-
-  //   var permissionStatus = await Permission.location.status;
-
-  //   if (permissionStatus.isGranted) {
-  //     var loc = await location.getLocation();
-  //     print(loc.toString());
+  //   // Test if location services are enabled.
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     // Location services are not enabled don't continue
+  //     // accessing the position and request users of the
+  //     // App to enable the location services.
+  //     return Future.error('Location services are disabled.');
   //   }
-  //   return;
+
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.deniedForever) {
+  //       return Future.error(
+  //           'Location permissions are permanently denied, we cannot request permissions.');
+  //     }
+
+  //     if (permission == LocationPermission.denied) {
+  //       return Future.error('Location permissions are denied');
+  //     }
+  //   }
+
+  //   // When we reach here, permissions are granted and we can
+  //   // continue accessing the position of the device.
+  //   var loc = await Geolocator.getCurrentPosition();
+  //   print(loc.toString());
+  //   return loc;
   // }
-
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.deniedForever) {
-        // Permissions are denied forever, handle appropriately.
-        return Future.error(
-            'Location permissions are permanently denied, we cannot request permissions.');
-      }
-
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    print("PERMISSION GRANTED");
-    var loc = await Geolocator.getCurrentPosition();
-    print(loc.toString());
-    return loc;
-  }
 
   selectImage() async {
     final _picker = ImagePicker();
@@ -116,12 +96,15 @@ class _UploadPost extends State<UploadPost> {
 
   @override
   Widget build(BuildContext context) {
+    print(Provider.of<MapDataProvider>(context).findLocation());
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     String uid = Provider.of<CurrentUser>(context).getUid;
     NewPost _newPost = Provider.of<NewPost>(context, listen: false);
     List<bool> tagsSelected = _newPost.getTagsSelected();
 
+    // print("LOCATIONID ${Provider.of<CurrentUser>(context).getLocationId}");
+    // print("REGIONID ${Provider.of<CurrentUser>(context).getRegionId}");
     // print("upload post page built");
     // print("CURRENT LOCATION: ${this.location.toString()}");
     return Container(
@@ -199,6 +182,7 @@ class _UploadPost extends State<UploadPost> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 10.0),
                                       child: FloatingActionButton(
+                                        heroTag: "addPost",
                                         onPressed: () => selectImage(),
                                         child: Icon(Icons.photo),
                                       ),
@@ -238,6 +222,7 @@ class _UploadPost extends State<UploadPost> {
                                         height: screenHeight * 0.05,
                                         // width: screenHeight * 0.05,
                                         child: FloatingActionButton(
+                                          heroTag: "selectAnotherImage",
                                           onPressed: () => selectImage(),
                                           child: Icon(Icons.photo,
                                               size: screenHeight * 0.07 * 0.5),
@@ -384,8 +369,7 @@ class _PreviewPost extends State<PreviewPost> {
     NewPost _newPost = Provider.of<NewPost>(context, listen: false);
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-    String uid = Provider.of<CurrentUser>(context).getUid;
-    String username = Provider.of<CurrentUser>(context).getUsername;
+    CurrentUser user = Provider.of<CurrentUser>(context);
 
     sendPost() async {
       setState(() {
@@ -393,9 +377,8 @@ class _PreviewPost extends State<PreviewPost> {
       });
 
       // Upload to Firebase
-      var firebaseStorageRef = FirebaseStorage.instance
-          .ref()
-          .child('posts/$uid${DateTime.now().millisecondsSinceEpoch}');
+      var firebaseStorageRef = FirebaseStorage.instance.ref().child(
+          'posts/${user.getUid}${DateTime.now().millisecondsSinceEpoch}');
       var snapshot = await firebaseStorageRef.putFile(_newPost.getimagePath());
 
       var downloadUrl = await snapshot.ref.getDownloadURL();
@@ -419,29 +402,49 @@ class _PreviewPost extends State<PreviewPost> {
             .then((query) => numPosts = query.docs.length);
         // print("$numPosts");
         String timestamp = DateTime.now().toString();
+
         FirebaseFirestore.instance.collection("posts").doc("$numPosts").set({
           "create_date": timestamp,
           "description": _newPost.getDescription(),
-          "district_id": 0,
-          "location_id": 0,
+          "region_id": user.getRegionId,
+          "location_id": user.getLocationId,
           "country_id": 0,
+          "region_name": user.getRegionName,
+          "location_name": user.getLocationName,
           "image_URL": _newPost.getimageUrl(),
-          "is_public": true,
-          "is_travel_log": true,
-          "like_count": 0,
           "liked_uid": 0,
-          "tags": tagsIds,
-          "uid": uid,
+          "tags": _newPost.tags,
+          "uid": user.getUid,
+          "username": user.getUsername,
           "post_id": numPosts.toString(),
         }).then((_) {
           print("Post sent!");
           setState(() {
             sentPost = true;
           });
-          Future.delayed(Duration(milliseconds: 1000), () {
-            // Do something
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                '/landing', (Route<dynamic> route) => false);
+        });
+
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc("${user.getUid}")
+            .get()
+            .then((document) {
+          int newNum;
+          if (document.data()['travelled_regions'][user.getRegionId] == null)
+            newNum = 1;
+          else
+            newNum = document.data()['travelled_regions'][user.getRegionId] + 1;
+          FirebaseFirestore.instance
+              .collection("users")
+              .doc("${user.getUid}")
+              .update({
+            'travelled_regions.${user.getRegionId}': newNum,
+          }).then((_) {
+            Future.delayed(Duration(milliseconds: 1000), () {
+              // Do something
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/landing', (Route<dynamic> route) => false);
+            });
           });
         });
       } else {
@@ -501,10 +504,23 @@ class _PreviewPost extends State<PreviewPost> {
                       ),
                     ),
                     Post(
-                      username: username,
+                      post: PostModel(
+                        description: _newPost.getDescription(),
+                        image_URL: "",
+                        username: user.getUsername,
+                        location_name: user.getLocationName,
+                        region_name: user.getRegionName,
+                      ),
                       imagePATH: _newPost.getimagePath(),
-                      likeCount: 999,
-                      caption: _newPost.getDescription(),
+                    ),
+                    SizedBox(
+                      height: screenHeight * 0.05,
+                    ),
+                    TravelLogCard(
+                      locationName: user.getLocationName,
+                      description: _newPost.getDescription(),
+                      imagePath: _newPost.getimagePath(),
+                      imageUrl: _newPost.getimageUrl(),
                     ),
                   ],
                 ),

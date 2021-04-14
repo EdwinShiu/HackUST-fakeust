@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hackust_fakeust/Pages/SignUpPage/signupPage.dart';
+import 'package:hackust_fakeust/models/mapDataProvider.dart';
 import 'package:hackust_fakeust/models/new_post.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => CurrentUser()),
         ChangeNotifierProvider(create: (context) => NewPost()),
+        ChangeNotifierProvider(create: (context) => MapDataProvider()),
       ],
       child: MaterialApp(
         title: appTitle,
@@ -33,9 +35,11 @@ class MyApp extends StatelessWidget {
           textTheme: TextTheme(
             headline1: header1TextTheme,
             headline2: header2TextTheme,
+            bodyText1: body1TextTheme,
+            bodyText2: body2TextTheme,
           ),
         ),
-        home: SignupPage(),
+        home: LandingPage(),
         routes: {
           '/signin': (context) => SigninPage(),
           '/landing': (context) => LandingPage(),
