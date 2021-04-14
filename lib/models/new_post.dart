@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NewPost extends ChangeNotifier {
-  List<bool> tagsSelected = [];
+  List<String> tagsSelected = [];
   List<String> tags = [];
   var location;
   String description;
@@ -38,19 +38,18 @@ class NewPost extends ChangeNotifier {
       //FIREBASE PEOPLE FIX THE FREAKING BUG PLEASE
       if (tags.isEmpty || tags.last != ttag) {
         tags.add(ttag);
-        tagsSelected.add(false);
       }
     }
   }
 
   onTagSelect(int i) {
     print("Tag $i selected");
-    this.tagsSelected[i] = !this.tagsSelected[i];
+    this.tagsSelected.add(this.tags[i]);
   }
 
   List<String> getTags() => this.tags;
 
-  List<bool> getTagsSelected() => this.tagsSelected;
+  List<String> getTagsSelected() => this.tagsSelected;
 
   String getDescription() => this.description;
 

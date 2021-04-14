@@ -10,9 +10,11 @@ class PostModel {
   String username;
   String location_name;
   String region_name;
+  List<String> tags;
 
-  String getDescription() => this.description;
-  String getImageURL() => this.image_URL;
+  String get getDescription => this.description;
+  String get getImageURL => this.image_URL;
+  List<String> get getTags => this.tags;
 
   PostModel({
     this.description,
@@ -20,14 +22,17 @@ class PostModel {
     this.username,
     this.location_name,
     this.region_name,
+    this.tags,
   });
   factory PostModel.fromServerMap(Map data) {
+    print("${data['tags']}");
     return PostModel(
       description: data['description'],
       location_name: data['location_name'],
       region_name: data['region_name'],
       image_URL: data['image_URL'],
       username: data['username'],
+      tags: List<String>.from(data['tags']),
     );
   }
 }
@@ -41,7 +46,7 @@ class PostsModel {
   Future<QuerySnapshot> querySnapshot;
   String last_create_date;
   bool _isLoading;
-  int batchLength = 6;
+  int batchLength = 3;
   List<Map> _data;
   StreamController<List<Map>> _controller;
 
@@ -102,9 +107,11 @@ class PostsModel {
             'location_name': postdata['location_name'],
             'region_name': postdata['region_name'],
             'username': postdata['username'],
+            'tags': postdata['tags'],
           });
         });
         last_create_date = postsData.docs.last['create_date'];
+        // print("${_data.toString()}");
         _controller.add(_data);
       }
     });
