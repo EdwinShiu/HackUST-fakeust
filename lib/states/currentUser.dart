@@ -31,27 +31,22 @@ class CurrentUser extends ChangeNotifier {
 
   void updateLocationId(String locationId) {
     _locationId = locationId;
-    notifyListeners();
   }
 
   void updateRegionId(String regionId) {
     _regionId = regionId;
-    notifyListeners();
   }
 
   void updateLocation(LocationData newLocation) {
     _location = newLocation;
-    notifyListeners();
   }
 
   void updateLocationName(String name) {
     _locationName = name;
-    notifyListeners();
   }
 
   void updateRegionName(String name) {
     _regionName = name;
-    notifyListeners();
   }
 
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -80,7 +75,7 @@ class CurrentUser extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
       return false;
     }
   }
