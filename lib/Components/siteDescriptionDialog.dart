@@ -18,7 +18,7 @@ class SiteDescriptionDialog extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: Text(
               site ?? "Site",
-              style: TextStyle(fontSize: 40.0),
+              style: TextStyle(fontSize: 40.0, color: Colors.black),
             ),
           ),
           Expanded(

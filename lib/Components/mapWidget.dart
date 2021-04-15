@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hackust_fakeust/Components/permissionDialog.dart';
 import 'package:hackust_fakeust/models/mapDataProvider.dart';
 import 'package:hackust_fakeust/states/currentUser.dart';
 import 'package:location/location.dart';
@@ -183,8 +184,21 @@ class MapWidgetState extends State<MapWidget> {
         return;
       }
     }
+
     print(_permissionGranted);
-    var loc = await Geolocator.getCurrentPosition();
+
+    var loc;
+    try {
+      loc = await Geolocator.getCurrentPosition();
+    } catch (_) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return PermissionDialog();
+        },
+      );
+    }
+    print(loc);
     LocationData locationData = LocationData.fromMap(
         {"latitude": loc.latitude, "longitude": loc.longitude});
     currentUser.updateLocation(locationData);

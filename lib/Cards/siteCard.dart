@@ -90,7 +90,7 @@ class _SiteCardState extends State<SiteCard> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 15, left: 15),
+                      padding: const EdgeInsets.only(top: 15, left: 5),
                       child: Row(
                         children: [
                           Expanded(
@@ -114,22 +114,19 @@ class _SiteCardState extends State<SiteCard> {
                                     }
                                   },
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 5, right: 30),
-                                  child: Text(
-                                    likes.toString(),
-                                    style: TextStyle(fontSize: 15),
-                                  ),
+                                Text(
+                                  likes.toString(),
+                                  style: TextStyle(fontSize: 15),
                                 ),
                               ],
                             ),
                           ),
                           Container(
-                            alignment: Alignment.centerRight,
+                            alignment: Alignment.bottomRight,
                             padding: EdgeInsets.only(right: 10),
                             child: Text(
                               widget.date.substring(0, widget.date.length - 10),
-                              style: TextStyle(fontSize: 15),
+                              style: TextStyle(fontSize: 10),
                             ),
                           ),
                         ],

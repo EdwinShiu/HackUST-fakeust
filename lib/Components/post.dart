@@ -103,6 +103,7 @@ class Post extends StatelessWidget {
         // Location and Like
 
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               height: (tags.isNotEmpty)
@@ -134,9 +135,9 @@ class Post extends StatelessWidget {
                   Align(
                     alignment: Alignment.topRight,
                     child: Padding(
-                      padding: EdgeInsets.only(top: 15, right: 20),
+                      padding: EdgeInsets.only(top: 5, right: 20),
                       child: LikeButton(
-                        size: 40,
+                        size: (tags.isNotEmpty) ? 20 : 30,
                         // likeCount: widget.likeCount,
                         // onTap: onLikeButtonTapped,
                       ),

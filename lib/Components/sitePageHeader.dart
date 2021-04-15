@@ -60,42 +60,48 @@ class SitePageHeader extends SliverPersistentHeaderDelegate {
                         .get()
                         .then((snapshot) => snapshot.docs[0]["tags"]),
                     builder: (context, snapshot) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: List.generate(
-                            snapshot.data == null
-                                ? 0
-                                : snapshot.data.length > 3
-                                    ? 3
-                                    : snapshot.data.length,
-                            (int index) => CategoryButton(
-                                  text: snapshot.data[index],
-                                  enabled: false,
-                                ))
-                          ..add(
-                            RawMaterialButton(
-                              onPressed: () => showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AddTagDialog(
-                                    site: site,
-                                    list: snapshot.data,
-                                    parent: parent,
-                                  );
-                                },
+                      return Container(
+                        width: double.infinity,
+                        alignment: Alignment.centerRight,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: List.generate(
+                                snapshot.data == null
+                                    ? 0
+                                    : snapshot.data.length > 3
+                                        ? 3
+                                        : snapshot.data.length,
+                                (int index) => CategoryButton(
+                                      text: snapshot.data[index],
+                                      enabled: false,
+                                    ))
+                              ..add(
+                                RawMaterialButton(
+                                  onPressed: () => showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AddTagDialog(
+                                        site: site,
+                                        list: snapshot.data,
+                                        parent: parent,
+                                      );
+                                    },
+                                  ),
+                                  elevation: 2.0,
+                                  fillColor: Colors.blue[300],
+                                  child: Icon(
+                                    Icons.add,
+                                    size: 30.0,
+                                  ),
+                                  padding: EdgeInsets.all(5.0),
+                                  shape: CircleBorder(),
+                                  constraints: BoxConstraints.expand(
+                                      height: 40.0, width: 40.0),
+                                ),
                               ),
-                              elevation: 2.0,
-                              fillColor: Colors.blue[300],
-                              child: Icon(
-                                Icons.add,
-                                size: 30.0,
-                              ),
-                              padding: EdgeInsets.all(5.0),
-                              shape: CircleBorder(),
-                              constraints: BoxConstraints.expand(
-                                  height: 40.0, width: 40.0),
-                            ),
                           ),
+                        ),
                       );
                     }),
                 Container(

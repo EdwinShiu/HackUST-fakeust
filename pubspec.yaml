@@ -32,6 +32,8 @@ dependencies:
   cached_network_image: ^3.0.0
   timeline_tile: ^2.0.0
   email_validator: ^2.0.1
+  camera:
+  permission_handler: ^6.1.3
 
 dev_dependencies:
   flutter_test:
@@ -41,7 +43,6 @@ dev_dependencies:
   cloud_firestore: ^1.0.3
   firebase_storage: ^8.0.2
   image_picker:
-  permission_handler: ^6.1.1  
   provider:
   network_to_file_image: ^3.0.0
   google_maps_flutter: ^2.0.2
