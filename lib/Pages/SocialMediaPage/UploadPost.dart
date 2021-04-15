@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hackust_fakeust/Cards/travellogCard.dart';
@@ -78,9 +77,6 @@ class _UploadPost extends State<UploadPost> {
     await Permission.photos.request();
 
     var permissionStatus = await Permission.photos.status;
-    if (await Permission.photos.isPermanentlyDenied) {
-      openAppSettings();
-    }
 
     if (permissionStatus.isGranted) {
       //Select Image
@@ -88,7 +84,8 @@ class _UploadPost extends State<UploadPost> {
         image = mode == 0
             ? await _picker.getImage(source: ImageSource.gallery)
             : await _picker.getImage(source: ImageSource.camera);
-      } catch (_) {
+      } catch (err) {
+        print(err.error);
         showDialog(
           context: context,
           builder: (context) {

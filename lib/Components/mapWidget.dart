@@ -42,50 +42,60 @@ class MapWidgetState extends State<MapWidget> {
     zoom: 10,
   );
 
-  void _setMarker() async {
-    await FirebaseFirestore.instance
-        .collection('locations')
-        .get()
-        .then((value) => value.docs.forEach((element) {
-              _markers.add(Marker(
-                  markerId: MarkerId(element.data()['lid']),
-                  position: LatLng(element.data()['latlng'].latitude,
-                      element.data()['latlng'].longitude),
-                  onTap: () {}));
-            }));
-  }
+  // void _setMarker() async {
+  //   await FirebaseFirestore.instance
+  //       .collection('locations')
+  //       .get()
+  //       .then((value) => value.docs.forEach((element) {
+  //             _markers.add(Marker(
+  //                 markerId: MarkerId(element.data()['lid']),
+  //                 position: LatLng(element.data()['latlng'].latitude,
+  //                     element.data()['latlng'].longitude),
+  //                 onTap: () {}));
+  //           }));
+  // }
 
   void _setCircle() async {
-    await FirebaseFirestore.instance
-        .collection('events')
-        .get()
-        .then((snapshot1) => snapshot1.docs.forEach((element) {
-              element.data()['lid'].forEach((lid) {
-                FirebaseFirestore.instance
-                    .collection('locations')
-                    .doc(lid)
-                    .get()
-                    .then((snapshot2) {
-                  LatLng _center = LatLng(snapshot2.data()['latlng'].latitude,
-                      snapshot2.data()['latlng'].longitude);
-                  Color color = element.data()['participants'] != null
-                      ? element
+    await FirebaseFirestore.instance.collection('locations').get().then(
+          (snapshot1) => snapshot1.docs.forEach(
+            (element1) {
+              bool _hasEvent = false;
+              Color _color;
+              FirebaseFirestore.instance.collection('events').get().then(
+                (snapshot2) {
+                  snapshot2.docs.forEach((element2) {
+                    if (element2
+                        .data()['lid']
+                        .contains(element1.data()['lid'])) {
+                      _hasEvent = true;
+                      if (element2.data()['participants'] != null &&
+                          element2
                               .data()['participants']
-                              .contains(currentUser.getUid)
-                          ? Color(int.parse(element.data()['color']))
-                          : Colors.grey
-                      : Colors.grey;
-                  _circleCenters[snapshot2.data()['location_name']] = _center;
+                              .contains(currentUser.getUid)) {
+                        _color = Color(int.parse(element2.data()['color']));
+                      }
+                    }
+                  });
+                  LatLng _center = LatLng(element1.data()['latlng'].latitude,
+                      element1.data()['latlng'].longitude);
+
+                  Color color =
+                      _hasEvent ? _color ?? Colors.grey : Colors.white;
+
+                  _circleCenters[element1.data()['location_name']] = _center;
                   _circle.add(Circle(
-                      circleId: CircleId(snapshot2.data()['lid']),
+                      circleId: CircleId(element1.data()['lid']),
                       center: _center,
                       radius: 100.0,
-                      fillColor: color.withOpacity(0.8),
+                      fillColor: color.withOpacity(0.6),
                       strokeWidth: 0,
                       onTap: () {}));
-                });
-              });
-            }));
+                  _color = null;
+                },
+              );
+            },
+          ),
+        );
 
     Provider.of<MapDataProvider>(context, listen: false)
         .addCircle(_circleCenters);
@@ -305,9 +315,9 @@ class MapWidgetState extends State<MapWidget> {
               )
             : Container(),
         // FloatingActionButton(
-        //   onPressed: () => print(
+        //   onPressed: () =>
         //       Provider.of<MapDataProvider>(context, listen: false)
-        //           .findLocation()),
+        //           .findLocation(),
         //   heroTag: "findlocation",
         // ),
         // Container(
