@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../Constants/constants.dart';
+import '../../Constants/constants.dart' as constants;
 import '../../states/currentUser.dart';
 
 class SigninPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
-    var screenWidth = MediaQuery.of(context).size.width;
+    // var screenWidth = MediaQuery.of(context).size.width;
     print('Sign in Page');
     return Container(
       child: Scaffold(
-        backgroundColor: Color.fromRGBO(239, 242, 200, 1),
+        // backgroundColor: Color.fromRGBO(239, 242, 200, 1),
+        backgroundColor: Color(constants.backgroundPrimaryColor),
         resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
           child: GestureDetector(
@@ -108,32 +108,33 @@ class _SignInForm extends State<SignInForm> {
         // email
         Padding(
           padding:
-              EdgeInsets.only(top: screenHeight * 0.1, left: 15, right: 15),
+              EdgeInsets.only(top: screenHeight * 0.1, left: 30, right: 30),
           child: TextFormField(
             autocorrect: false,
             controller: _emailController,
             // style: new TextStyle(fontSize: 30),
             decoration: InputDecoration(
-                contentPadding:
-                    new EdgeInsets.symmetric(vertical: 30.0, horizontal: 10.0),
-                fillColor: Color.fromRGBO(211, 241, 206, 1),
-                filled: true, // <- this is required.
-                border: OutlineInputBorder(
-                  borderRadius: new BorderRadius.circular(60.0),
-                  // borderSide: new BorderSide(),
-                ),
-                labelText: '     Email',
-                labelStyle: TextStyle(
-                  color: Color.fromRGBO(8, 47, 69, 1),
-                  fontSize: 20,
-                ),
-                hintText: 'Enter valid email id as abc@gmail.com'),
+              contentPadding:
+                  new EdgeInsets.symmetric(vertical: 25.0, horizontal: 30.0),
+              // fillColor: Color.fromRGBO(211, 241, 206, 1),
+              fillColor: Color(constants.textFormColor),
+              filled: true, // <- this is required.
+              border: OutlineInputBorder(
+                borderRadius: new BorderRadius.circular(60.0),
+                // borderSide: new BorderSide(),
+              ),
+              labelText: 'Email',
+              labelStyle: TextStyle(
+                color: Color.fromRGBO(8, 47, 69, 1),
+                fontSize: 20,
+              ),
+              hintText: 'abc@gmail.com',
+            ),
           ),
         ),
         // password
         Padding(
-          padding: const EdgeInsets.only(
-              left: 15.0, right: 15.0, top: 15, bottom: 0),
+          padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 15),
           //padding: EdgeInsets.symmetric(horizontal: 15),
           child: TextFormField(
             autocorrect: false,
@@ -141,14 +142,15 @@ class _SignInForm extends State<SignInForm> {
             obscureText: true,
             decoration: InputDecoration(
                 contentPadding:
-                    new EdgeInsets.symmetric(vertical: 30.0, horizontal: 10.0),
-                fillColor: Color.fromRGBO(211, 241, 206, 1),
+                    new EdgeInsets.symmetric(vertical: 25.0, horizontal: 30.0),
+                // fillColor: Color.fromRGBO(211, 241, 206, 1),
+                fillColor: Color(constants.textFormColor),
                 filled: true, // <- this is required.
                 border: OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(60.0),
                   // borderSide: new BorderSide(),
                 ),
-                labelText: '     Password',
+                labelText: 'Password',
                 labelStyle: TextStyle(
                   color: Color.fromRGBO(8, 47, 69, 1),
                   fontSize: 20,
@@ -167,12 +169,14 @@ class _SignInForm extends State<SignInForm> {
           child: TextButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(
-                  Color.fromRGBO(161, 246, 170, 1)),
+                // Color.fromRGBO(161, 246, 170, 1)),
+                Colors.teal[50],
+              ),
               minimumSize:
                   MaterialStateProperty.all<Size>(Size(screenWidth * 0.65, 50)),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(10),
                   // side: BorderSide(color: Colors.black, width: 2)
                 ),
               ),
@@ -184,8 +188,8 @@ class _SignInForm extends State<SignInForm> {
             },
             child: Text(
               'LOGIN',
-              style:
-                  TextStyle(color: const Color(textPrimaryColor), fontSize: 25),
+              style: TextStyle(
+                  color: const Color(constants.textPrimaryColor), fontSize: 25),
             ),
           ),
         ),
@@ -198,28 +202,27 @@ class _SignInForm extends State<SignInForm> {
           // decoration: BoxDecoration(
           //     color: Colors.white, borderRadius: BorderRadius.circular(20)),
           child: TextButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(
-                  Color.fromRGBO(236, 238, 217, 1)),
-              minimumSize:
-                  MaterialStateProperty.all<Size>(Size(screenWidth * 0.65, 50)),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(2),
-                  // side: BorderSide(color: Colors.black, width: 2)
-                  // color : Color.fromRGBO(236, 238, 217, 1)
-                ),
-              ),
-              // shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
-            ),
+            // style: ButtonStyle(
+            //   backgroundColor: MaterialStateProperty.all<Color>(
+            //       Color.fromRGBO(236, 238, 217, 1)),
+            //   minimumSize:
+            //       MaterialStateProperty.all<Size>(Size(screenWidth * 0.65, 50)),
+            //   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            //     RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(2),
+            //       // side: BorderSide(color: Colors.black, width: 2)
+            //       // color : Color.fromRGBO(236, 238, 217, 1)
+            //     ),
+            //   ),
+            //   // shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
+            // ),
             onPressed: () {
               print('Go to sign up page');
               Navigator.of(context).pushNamed('/signup');
             },
             child: Text(
               'SIGN UP FOR FREE',
-              style:
-                  TextStyle(color: const Color(textPrimaryColor), fontSize: 25),
+              style: TextStyle(color: Colors.blue, fontSize: 15),
             ),
           ),
         ),

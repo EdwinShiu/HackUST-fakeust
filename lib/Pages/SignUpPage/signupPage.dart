@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../Constants/constants.dart';
+import 'package:provider/provider.dart';
+import '../../Constants/constants.dart' as constants;
 import '../../states/currentUser.dart';
+import 'package:email_validator/email_validator.dart';
 
 class SignupPage extends StatelessWidget {
   @override
@@ -11,7 +11,8 @@ class SignupPage extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
     print('Sign Up Page');
     return Scaffold(
-      backgroundColor: Color.fromRGBO(239, 242, 200, 1),
+      backgroundColor: Color(constants.backgroundPrimaryColor),
+      // backgroundColor: Color.fromRGBO(239, 242, 200, 1),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: GestureDetector(
@@ -19,7 +20,8 @@ class SignupPage extends StatelessWidget {
             FocusScope.of(context).unfocus();
           },
           child: Container(
-            color: Color.fromRGBO(239, 242, 200, 1),
+            color: Color(constants.backgroundPrimaryColor),
+            // color: Color.fromRGBO(239, 242, 200, 1),
             width: screenWidth,
             child: Column(
               children: [
@@ -88,13 +90,14 @@ class _SignUpForm extends State<SignUpForm> {
   TextEditingController _pwController = TextEditingController();
   TextEditingController _pw2Controller = TextEditingController();
   TextEditingController _usernameController = TextEditingController();
-  final CurrentUser _auth = CurrentUser();
+
   var _formKey = GlobalKey<FormState>();
   //String error = '';
 
   // ignore: non_constant_identifier_names
   UsernamePopUp(BuildContext context, TextEditingController email,
       TextEditingController username, TextEditingController password) {
+    CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
     return showDialog(
         context: context,
         barrierDismissible: false,
@@ -105,14 +108,15 @@ class _SignUpForm extends State<SignUpForm> {
               //  side: BorderSide(color: Colors.black, width: 2)
             )),
             contentPadding: EdgeInsets.fromLTRB(50.0, 50.0, 50.0, 50.0),
-            backgroundColor: Color.fromRGBO(239, 242, 200, 1),
+            backgroundColor: Color(constants.textFormColor),
+            // backgroundColor: Color.fromRGBO(239, 242, 200, 1),
             title: Text("Enter your username:"),
             content: TextField(
               autocorrect: false,
               controller: username,
               decoration: InputDecoration(
                   contentPadding: new EdgeInsets.symmetric(
-                      vertical: 30.0, horizontal: 40.0),
+                      vertical: constants.textformVertPad, horizontal: 40.0),
                   border: OutlineInputBorder(
                     borderRadius: new BorderRadius.circular(60.0),
                   ),
@@ -142,22 +146,12 @@ class _SignUpForm extends State<SignUpForm> {
                 elevation: 0,
                 child: Text('SUBMIT'),
                 onPressed: () async {
-                  dynamic result = await _auth.RegisterWithEmailAndPW(
+                  bool isRegistered = await _currentUser.RegisterWithEmailAndPW(
                       email.text, password.text, username.text);
-                  String uid = result.getUid;
-                  FirebaseFirestore.instance
-                      .collection("users")
-                      .doc("$uid")
-                      .set({
-                    "email": result.getEmail,
-                    "event_participated": 0,
-                    "score": 0,
-                    "point": 0,
-                    "username": result.getUsername,
-                    "uid": uid,
-                  });
-                  print("Created account and Logged In!");
-                  Navigator.popAndPushNamed(context, '/landing');
+                  if (isRegistered) {
+                    print("Created account and Logged In!");
+                    Navigator.popAndPushNamed(context, '/landing');
+                  }
                 },
               ),
             ],
@@ -179,7 +173,7 @@ class _SignUpForm extends State<SignUpForm> {
         print('Cannot Sign up, please try again');
         // }
       } else {
-        print("Incorrect or different email or password");
+        print("Incorrect email or password");
       }
     } catch (e) {}
   }
@@ -188,6 +182,8 @@ class _SignUpForm extends State<SignUpForm> {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
+    CurrentUser _currentUser = Provider.of<CurrentUser>(context, listen: false);
+
     return SingleChildScrollView(
       child: Form(
         key: _formKey,
@@ -196,22 +192,24 @@ class _SignUpForm extends State<SignUpForm> {
             // email
             Padding(
               padding: EdgeInsets.only(
-                  top: screenHeight * 0.25, left: 15, right: 15),
+                  top: screenHeight * 0.25, left: 30, right: 30),
               child: TextFormField(
                 autocorrect: false,
                 controller: _emailController,
-                validator: (String value) =>
-                    value.isEmpty ? 'Enter an email' : null,
+                validator: (String value) => (value.isNotEmpty &&
+                        EmailValidator.validate(_emailController.text))
+                    ? null
+                    : 'Enter a valid email',
                 decoration: InputDecoration(
                     contentPadding: new EdgeInsets.symmetric(
-                        vertical: 30.0, horizontal: 10.0),
-                    fillColor: Color.fromRGBO(211, 241, 206, 1),
+                        vertical: constants.textformVertPad, horizontal: 30.0),
+                    fillColor: Color(constants.textFormColor),
                     filled: true, // <- this is required.
                     border: OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(60.0),
                       // borderSide: new BorderSide(),
                     ),
-                    labelText: '     Email',
+                    labelText: 'Email',
                     labelStyle: TextStyle(
                       color: Color.fromRGBO(8, 47, 69, 1),
                       fontSize: 20,
@@ -222,7 +220,7 @@ class _SignUpForm extends State<SignUpForm> {
             // Confirm Email
             Padding(
               padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 15, bottom: 0),
+                  left: 30.0, right: 30.0, top: 15, bottom: 0),
               //padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextFormField(
                 autocorrect: false,
@@ -233,14 +231,14 @@ class _SignUpForm extends State<SignUpForm> {
                         : 'Enter the same email',
                 decoration: InputDecoration(
                     contentPadding: new EdgeInsets.symmetric(
-                        vertical: 30.0, horizontal: 10.0),
-                    fillColor: Color.fromRGBO(211, 241, 206, 1),
+                        vertical: constants.textformVertPad, horizontal: 30.0),
+                    fillColor: Color(constants.textFormColor),
                     filled: true, // <- this is required.
                     border: OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(60.0),
                       // borderSide: new BorderSide(),
                     ),
-                    labelText: '   Confirm Email',
+                    labelText: 'Confirm Email',
                     labelStyle: TextStyle(
                       color: Color.fromRGBO(8, 47, 69, 1),
                       fontSize: 20,
@@ -251,7 +249,7 @@ class _SignUpForm extends State<SignUpForm> {
             // password
             Padding(
               padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 15, bottom: 0),
+                  left: 30.0, right: 30.0, top: 15, bottom: 0),
               //padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextFormField(
                 autocorrect: false,
@@ -261,14 +259,14 @@ class _SignUpForm extends State<SignUpForm> {
                 obscureText: true,
                 decoration: InputDecoration(
                     contentPadding: new EdgeInsets.symmetric(
-                        vertical: 30.0, horizontal: 10.0),
-                    fillColor: Color.fromRGBO(211, 241, 206, 1),
+                        vertical: constants.textformVertPad, horizontal: 30.0),
+                    fillColor: Color(constants.textFormColor),
                     filled: true, // <- this is required.
                     border: OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(60.0),
                       // borderSide: new BorderSide(),
                     ),
-                    labelText: '   Password',
+                    labelText: 'Password',
                     labelStyle: TextStyle(
                       color: Color.fromRGBO(8, 47, 69, 1),
                       fontSize: 20,
@@ -279,7 +277,7 @@ class _SignUpForm extends State<SignUpForm> {
             // Confirm password
             Padding(
               padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 15, bottom: 0),
+                  left: 30.0, right: 30.0, top: 15, bottom: 0),
               //padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextFormField(
                 autocorrect: false,
@@ -291,14 +289,14 @@ class _SignUpForm extends State<SignUpForm> {
                 obscureText: true,
                 decoration: InputDecoration(
                     contentPadding: new EdgeInsets.symmetric(
-                        vertical: 30.0, horizontal: 10.0),
-                    fillColor: Color.fromRGBO(211, 241, 206, 1),
+                        vertical: constants.textformVertPad, horizontal: 30.0),
+                    fillColor: Color(constants.textFormColor),
                     filled: true, // <- this is required.
                     border: OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(60.0),
                       // borderSide: new BorderSide(),
                     ),
-                    labelText: '   Confirm Password',
+                    labelText: 'Confirm Password',
                     labelStyle: TextStyle(
                       color: Color.fromRGBO(8, 47, 69, 1),
                       fontSize: 20,
@@ -312,18 +310,18 @@ class _SignUpForm extends State<SignUpForm> {
             Container(
               height: 50,
               width: 250,
-              decoration: BoxDecoration(
-                  color: Colors.greenAccent,
-                  borderRadius: BorderRadius.circular(20)),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(20)),
               child: TextButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      Color.fromRGBO(161, 246, 170, 1)),
+                    Colors.teal[50],
+                  ),
                   minimumSize: MaterialStateProperty.all<Size>(
                       Size(screenWidth * 0.65, 50)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(2),
+                      borderRadius: BorderRadius.circular(10),
                       //  side: BorderSide(color: Colors.black, width: 2)
                     ),
                   ),
@@ -341,11 +339,12 @@ class _SignUpForm extends State<SignUpForm> {
                 child: Text(
                   'SIGN UP',
                   style: TextStyle(
-                      color: const Color(textPrimaryColor), fontSize: 25),
+                      color: const Color(constants.textPrimaryColor),
+                      fontSize: 25),
                 ),
               ),
             ),
-            SizedBox(height: 60.0),
+            SizedBox(height: screenHeight * 0.05),
 
             Container(
               height: 50,
@@ -354,27 +353,26 @@ class _SignUpForm extends State<SignUpForm> {
               // decoration: BoxDecoration(
               //     color: Colors.white, borderRadius: BorderRadius.circular(20)),
               child: TextButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      Color.fromRGBO(236, 238, 217, 1)),
-                  minimumSize: MaterialStateProperty.all<Size>(
-                      Size(screenWidth * 0.65, 50)),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(2),
-                      //  side: BorderSide(color: Colors.black, width: 2)
-                    ),
-                  ),
-                  // shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
-                ),
+                // style: ButtonStyle(
+                //   backgroundColor: MaterialStateProperty.all<Color>(
+                //       Color.fromRGBO(236, 238, 217, 1)),
+                //   minimumSize: MaterialStateProperty.all<Size>(
+                //       Size(screenWidth * 0.65, 50)),
+                //   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                //     RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(2),
+                //       //  side: BorderSide(color: Colors.black, width: 2)
+                //     ),
+                //   ),
+                //   // shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
+                // ),
                 onPressed: () {
                   print('Go to sign up page');
                   Navigator.pop(context);
                 },
                 child: Text(
-                  'GO BACK',
-                  style: TextStyle(
-                      color: const Color(textPrimaryColor), fontSize: 25),
+                  'Already have an account?',
+                  style: TextStyle(color: Colors.blue, fontSize: 18),
                 ),
               ),
             ),

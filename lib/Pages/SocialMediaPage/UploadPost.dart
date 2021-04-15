@@ -518,9 +518,11 @@ class _PreviewPost extends State<PreviewPost> {
                     ),
                     TravelLogCard(
                       locationName: user.getLocationName,
+                      regionName: user.getRegionName,
                       description: _newPost.getDescription(),
                       imagePath: _newPost.getimagePath(),
                       imageUrl: _newPost.getimageUrl(),
+                      date: DateTime.now().toString(),
                     ),
                   ],
                 ),

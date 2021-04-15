@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:location/location.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CurrentUser extends ChangeNotifier {
   String _uid = 'B5aoQJ4bykgbdQ3THbvta2DXdWm2';
@@ -30,52 +31,57 @@ class CurrentUser extends ChangeNotifier {
 
   void updateLocationId(String locationId) {
     _locationId = locationId;
+    notifyListeners();
   }
 
   void updateRegionId(String regionId) {
     _regionId = regionId;
+    notifyListeners();
   }
 
   void updateLocation(LocationData newLocation) {
     _location = newLocation;
+    notifyListeners();
   }
 
   void updateLocationName(String name) {
     _locationName = name;
+    notifyListeners();
   }
 
   void updateRegionName(String name) {
     _regionName = name;
-  }
-
-  CurrentUser();
-
-  // ignore: non_constant_identifier_names
-  CurrentUser.reg(User user, String username) {
-    _uid = user.uid;
-    _username = username;
-    _email = user.email;
+    notifyListeners();
   }
 
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // ignore: non_constant_identifier_names
-  CurrentUser _UserFromFirebaseUser(User user, String username) {
-    return user != null ? CurrentUser.reg(user, username) : null;
-  }
-
   // Register with new account
   // ignore: non_constant_identifier_names
-  Future RegisterWithEmailAndPW(
+  Future<bool> RegisterWithEmailAndPW(
       String email, String password, String username) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      User user = result.user;
-      return _UserFromFirebaseUser(user, username);
+
+      _uid = result.user.uid;
+      _email = email;
+      _username = username;
+
+      FirebaseFirestore.instance.collection("users").doc("$_uid").set({
+        "email": _email,
+        "event_participated": 0,
+        "score": 0,
+        "point": 0,
+        "travelled_regions": [],
+        "username": _username,
+        "uid": _uid,
+      });
+      notifyListeners();
+      return true;
     } catch (e) {
       print(e.toString());
-      return null;
+      return false;
     }
   }
 

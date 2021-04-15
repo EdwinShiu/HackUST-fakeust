@@ -8,6 +8,7 @@ import '../Components/LeaderBoard.dart';
 class TravelLogCard extends StatelessWidget {
   final String description;
   final String locationName;
+  final String regionName;
   final String date;
   final imagePath;
   final imageUrl;
@@ -15,7 +16,8 @@ class TravelLogCard extends StatelessWidget {
       IconData(0xe5f8, fontFamily: 'MaterialIcons');
 
   TravelLogCard({
-    this.locationName = 'DEFAULT TITLE',
+    this.locationName = 'DEFAULT location',
+    this.regionName = 'DEFAULT region',
     this.description = 'Default caption aaaaaa aaaaaaaaa aaa aaaaaaa aaaaaaaa',
     this.date,
     this.imagePath = "",
@@ -86,7 +88,9 @@ class TravelLogCard extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(top: 15, left: 10),
                       child: Text(
-                        this.locationName,
+                        (this.locationName == "other")
+                            ? this.regionName
+                            : this.locationName,
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
