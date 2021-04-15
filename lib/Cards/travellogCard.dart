@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:hackust_fakeust/states/currentUser.dart';
-import 'package:provider/provider.dart';
-import '../Components/LeaderBoard.dart';
 
 class TravelLogCard extends StatelessWidget {
   final String description;
@@ -28,8 +25,6 @@ class TravelLogCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-    // return ClipRRect(
-    // borderRadius: BorderRadius.circular(20.0),
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.0),

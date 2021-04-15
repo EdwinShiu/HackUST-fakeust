@@ -82,7 +82,7 @@ class _SiteCardState extends State<SiteCard> {
                     // caption
                     Container(
                       width: double.infinity,
-                      height: screenHeight * 0.2 * 0.4,
+                      height: screenHeight * 0.2 * 0.35,
                       padding: EdgeInsets.only(top: 10, bottom: 10, left: 20),
                       child: Text(
                         widget.caption,

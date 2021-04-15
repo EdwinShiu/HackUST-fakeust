@@ -34,6 +34,7 @@ class MapWidgetState extends State<MapWidget> {
   Set<Polygon> _polygons = HashSet<Polygon>();
   Set<Circle> _circle = HashSet<Circle>();
   Set<Marker> _markers = HashSet<Marker>();
+  CurrentUser currentUser;
 
   static final CameraPosition initPosition = CameraPosition(
     target: LatLng(22.349051751000047, 114.17942283900004),
@@ -55,20 +56,36 @@ class MapWidgetState extends State<MapWidget> {
 
   void _setCircle() async {
     await FirebaseFirestore.instance
-        .collection('locations')
+        .collection('events')
         .get()
-        .then((value) => value.docs.forEach((element) {
-              LatLng _center = LatLng(element.data()['latlng'].latitude,
-                  element.data()['latlng'].longitude);
-              _circleCenters[element.data()['location_name']] = _center;
-              _circle.add(Circle(
-                  circleId: CircleId(element.data()['lid']),
-                  center: _center,
-                  radius: 100.0,
-                  fillColor: Colors.redAccent.withOpacity(0.5),
-                  strokeWidth: 0,
-                  onTap: () {}));
+        .then((snapshot1) => snapshot1.docs.forEach((element) {
+              element.data()['lid'].forEach((lid) {
+                FirebaseFirestore.instance
+                    .collection('locations')
+                    .doc(lid)
+                    .get()
+                    .then((snapshot2) {
+                  LatLng _center = LatLng(snapshot2.data()['latlng'].latitude,
+                      snapshot2.data()['latlng'].longitude);
+                  Color color = element.data()['participants'] != null
+                      ? element
+                              .data()['participants']
+                              .contains(currentUser.getUid)
+                          ? Color(int.parse(element.data()['color']))
+                          : Colors.grey
+                      : Colors.grey;
+                  _circleCenters[snapshot2.data()['location_name']] = _center;
+                  _circle.add(Circle(
+                      circleId: CircleId(snapshot2.data()['lid']),
+                      center: _center,
+                      radius: 100.0,
+                      fillColor: color.withOpacity(0.8),
+                      strokeWidth: 0,
+                      onTap: () {}));
+                });
+              });
             }));
+
     Provider.of<MapDataProvider>(context, listen: false)
         .addCircle(_circleCenters);
   }
@@ -76,16 +93,24 @@ class MapWidgetState extends State<MapWidget> {
   void _setPolygons() async {
     Map<String, dynamic> travelledRegion = await FirebaseFirestore.instance
         .collection('users')
-        .doc(Provider.of<CurrentUser>(context, listen: false).getUid)
+        .doc(currentUser.getUid)
         .get()
         .then((value) => value.data()['travelled_regions']);
     for (var i = 0; i < data.areas.length; i++) {
-      Color color = travelledRegion.containsKey(i.toString()) &&
-              travelledRegion[i.toString()] > 0
-          ? Colors.blue
-              .withOpacity(0.5)
-              .withAlpha(255 * travelledRegion[i.toString()] ~/ 10)
-          : Colors.grey[800].withOpacity(0.5);
+      Color color;
+      // int eventCount = await FirebaseFirestore.instance
+      //     .collection('regions')
+      //     .doc(i.toString())
+      //     .get()
+      //     .then((value) => value.data()['event_count']);
+      travelledRegion != null
+          ? color = travelledRegion.containsKey(i.toString()) &&
+                  travelledRegion[i.toString()] > 0
+              ? Colors.blue
+                  .withOpacity(0.5)
+                  .withAlpha(255 * travelledRegion[i.toString()] ~/ 10)
+              : Colors.grey[800].withOpacity(0.5)
+          : color = Colors.grey[800].withOpacity(0.5);
       for (var j = 0; j < data.areas[i].latlng.length; j++) {
         List<LatLng> polygonLatLngs = [];
         for (var k = 0; k < data.areas[i].latlng[j].length; k++) {
@@ -112,6 +137,7 @@ class MapWidgetState extends State<MapWidget> {
                       builder: (context) => SitePage(
                             country: "Hong Kong",
                             region: data.areas[i].location,
+                            rid: i.toString(),
                             description:
                                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse lacinia tortor ut erat interdum, vitae efficitur mi molestie. Phasellus viverra nibh sit amet dui facilisis, pellentesque varius eros lacinia. In nec rhoncus tortor. Nullam id est quis ex interdum maximus. Cras semper porta sollicitudin. Nam a tincidunt dolor, non lobortis velit. Nulla malesuada elit ac mauris efficitur viverra. Duis quam libero, pulvinar sit amet vulputate nec, aliquam vitae dui. Mauris porta ante a nisl feugiat rutrum. Donec commodo tincidunt accumsan.",
                           )));
@@ -138,7 +164,7 @@ class MapWidgetState extends State<MapWidget> {
 
   void asyncMethod() async {
     await loadJsonData();
-    _setMarker();
+    // _setMarker();
     _setCircle();
     _setPolygons();
 
@@ -161,14 +187,11 @@ class MapWidgetState extends State<MapWidget> {
     var loc = await Geolocator.getCurrentPosition();
     LocationData locationData = LocationData.fromMap(
         {"latitude": loc.latitude, "longitude": loc.longitude});
-    Provider.of<CurrentUser>(context, listen: false)
-        .updateLocation(locationData);
+    currentUser.updateLocation(locationData);
     Provider.of<MapDataProvider>(context, listen: false)
         .setLocation(locationData);
 
     _locationData = locationData;
-
-    CurrentUser currentUser = Provider.of<CurrentUser>(context, listen: false);
 
     String locationName =
         Provider.of<MapDataProvider>(context, listen: false).findLocation();
@@ -202,17 +225,22 @@ class MapWidgetState extends State<MapWidget> {
   }
 
   _handleTap(LatLng tappedPoint) {
+    _markers.clear();
     setState(() {
-      _markers.add(Marker(
+      _markers.add(
+        Marker(
           markerId: MarkerId(tappedPoint.toString()),
           position: tappedPoint,
-          onTap: () {}));
+          onTap: () {},
+        ),
+      );
     });
   }
 
   @override
   void initState() {
     super.initState();
+    currentUser = Provider.of<CurrentUser>(context, listen: false);
     asyncMethod();
   }
 
@@ -227,13 +255,12 @@ class MapWidgetState extends State<MapWidget> {
             _controller.complete(controller);
             location.onLocationChanged.listen((l) {
               _locationData = l;
-              Provider.of<CurrentUser>(context, listen: false)
-                  .updateLocation(_locationData);
+              currentUser.updateLocation(_locationData);
               Provider.of<MapDataProvider>(context, listen: false)
                   .setLocation(_locationData);
             });
           },
-          // markers: _markers,
+          markers: _markers,
           circles: _circle,
           polygons: _polygons,
           buildingsEnabled: false,
@@ -251,7 +278,7 @@ class MapWidgetState extends State<MapWidget> {
                 cleared = false;
               });
           },
-          // onTap: _handleTap,
+          onTap: _handleTap,
         ),
         loading
             ? Container(
