@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         // home: SigninPage(),
-        home: SignupPage(),
+        home: SigninPage(),
         routes: {
           '/signin': (context) => SigninPage(),
           '/signup': (context) => SignupPage(),

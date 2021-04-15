@@ -193,7 +193,8 @@ class _SignInForm extends State<SignInForm> {
             ),
             onPressed: () {
               print('Go to sign up page');
-              Navigator.of(context).pushNamed('/signup');
+              Navigator.pushNamed(context, '/signup');
+              // Navigator.of(context).popAndPushNamed('/signup');
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),

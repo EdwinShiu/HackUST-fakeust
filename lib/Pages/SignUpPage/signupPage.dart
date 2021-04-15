@@ -238,18 +238,17 @@ class _SignUpForm extends State<SignUpForm> {
                 ),
               ),
               onPressed: () {
-                // if (_formKey.currentState.validate())
-
-                showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (context) {
-                    return CreateUsername(
-                      email: _emailController.text,
-                      password: _pwController.text,
-                    );
-                  },
-                );
+                if (_formKey.currentState.validate())
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return CreateUsername(
+                        email: _emailController.text,
+                        password: _pwController.text,
+                      );
+                    },
+                  );
 
                 print('submit username');
               },
@@ -281,7 +280,7 @@ class _SignUpForm extends State<SignUpForm> {
                 // shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
               ),
               onPressed: () {
-                print('Go to sign up page');
+                print('Go to sign in');
                 Navigator.pop(context);
               },
               child: Padding(
@@ -406,20 +405,22 @@ class _CreateUsername extends State<CreateUsername> {
                       print("Created account and Logged In!");
                       Navigator.popAndPushNamed(context, '/landing');
                       // add welcome message
-                    } else {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Dialog(
-                              child: Container(
-                                height: screenHeight * 0.1,
-                                child: Center(
-                                  child: Text("Please try againt"),
-                                ),
-                              ),
-                            );
-                          });
                     }
+                    // else {
+                    //   showDialog(
+                    //     context: context,
+                    //     builder: (context) {
+                    //       return Dialog(
+                    //         child: Container(
+                    //           height: screenHeight * 0.1,
+                    //           child: Center(
+                    //             child: Text("Please try againt"),
+                    //           ),
+                    //         ),
+                    //       );
+                    //     },
+                    //   );
+                    // }
                   },
                 ),
               ),
