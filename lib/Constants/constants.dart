@@ -54,3 +54,7 @@ Map<String, int> tagColor = {
 };
 
 double textformVertPad = 25;
+TextStyle textformErrorStyle = TextStyle(
+  fontSize: 11.0,
+  fontWeight: FontWeight.bold,
+);

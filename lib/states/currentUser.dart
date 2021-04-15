@@ -68,7 +68,7 @@ class CurrentUser extends ChangeNotifier {
         "event_participated": 0,
         "score": 0,
         "point": 0,
-        "travelled_regions": [],
+        "travelled_regions": {},
         "username": _username,
         "uid": _uid,
       });

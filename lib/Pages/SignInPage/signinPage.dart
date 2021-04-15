@@ -9,16 +9,26 @@ class SigninPage extends StatelessWidget {
     var screenHeight = MediaQuery.of(context).size.height;
     // var screenWidth = MediaQuery.of(context).size.width;
     print('Sign in Page');
-    return Container(
-      child: Scaffold(
-        // backgroundColor: Color.fromRGBO(239, 242, 200, 1),
-        backgroundColor: Color(constants.backgroundPrimaryColor),
-        resizeToAvoidBottomInset: true,
-        body: SingleChildScrollView(
-          child: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
+    return Scaffold(
+      // backgroundColor: Color.fromRGBO(239, 242, 200, 1),
+      // backgroundColor: Color(constants.backgroundPrimaryColor),
+      resizeToAvoidBottomInset: true,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Container(
+            height: screenHeight,
+            decoration: BoxDecoration(
+              // color: const Color(0xff000000),
+              image: DecorationImage(
+                image: AssetImage("assets/images/backgroundMap1.png"),
+                fit: BoxFit.cover,
+                colorFilter: new ColorFilter.mode(
+                    Colors.black.withOpacity(0.25), BlendMode.colorBurn),
+              ),
+            ),
             child: Column(
               children: [
                 //logo
@@ -33,37 +43,6 @@ class SigninPage extends StatelessWidget {
                   ),
                 ),
                 SignInForm(),
-
-                /*    SizedBox(
-                height: 50,
-              ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: TextButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        const Color(colorWhite)),
-                    minimumSize: MaterialStateProperty.all<Size>(
-                        Size(screenWidth * 0.15, 30)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    print("Return to startupPage");
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    "Return",
-                    style: TextStyle(
-                      color: const Color(textPrimaryColor),
-                    ),
-                  ),
-                ),
-              ),
-              */
               ],
             ),
           ),
@@ -128,7 +107,7 @@ class _SignInForm extends State<SignInForm> {
                 color: Color.fromRGBO(8, 47, 69, 1),
                 fontSize: 20,
               ),
-              hintText: 'abc@gmail.com',
+              hintText: 'E.g. abc@gmail.com',
             ),
           ),
         ),
@@ -187,42 +166,41 @@ class _SignInForm extends State<SignInForm> {
               _signinUser(_emailController.text, _pwController.text, context);
             },
             child: Text(
-              'LOGIN',
+              'LOG IN',
               style: TextStyle(
                   color: const Color(constants.textPrimaryColor), fontSize: 25),
             ),
           ),
         ),
-        SizedBox(height: 60.0),
+        SizedBox(height: 30.0),
 
-        Container(
-          height: 50,
-          width: 250,
-
+        FittedBox(
           // decoration: BoxDecoration(
           //     color: Colors.white, borderRadius: BorderRadius.circular(20)),
           child: TextButton(
-            // style: ButtonStyle(
-            //   backgroundColor: MaterialStateProperty.all<Color>(
-            //       Color.fromRGBO(236, 238, 217, 1)),
-            //   minimumSize:
-            //       MaterialStateProperty.all<Size>(Size(screenWidth * 0.65, 50)),
-            //   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            //     RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(2),
-            //       // side: BorderSide(color: Colors.black, width: 2)
-            //       // color : Color.fromRGBO(236, 238, 217, 1)
-            //     ),
-            //   ),
-            //   // shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
-            // ),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              // minimumSize:
+              //     MaterialStateProperty.all<Size>(Size(screenWidth * 0.65, 50)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  // side: BorderSide(color: Colors.black, width: 2)
+                  // color : Color.fromRGBO(236, 238, 217, 1)
+                ),
+              ),
+              // shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
+            ),
             onPressed: () {
               print('Go to sign up page');
               Navigator.of(context).pushNamed('/signup');
             },
-            child: Text(
-              'SIGN UP FOR FREE',
-              style: TextStyle(color: Colors.blue, fontSize: 15),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                'SIGN UP FOR FREE',
+                style: TextStyle(color: Colors.blue, fontSize: 13),
+              ),
             ),
           ),
         ),

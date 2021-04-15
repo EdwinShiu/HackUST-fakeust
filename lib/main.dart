@@ -40,9 +40,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
         // home: SigninPage(),
-        home: LandingPage(),
+        home: SignupPage(),
         routes: {
           '/signin': (context) => SigninPage(),
+          '/signup': (context) => SignupPage(),
           '/landing': (context) => LandingPage(),
         },
       ),
