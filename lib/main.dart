@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import './Constants/constants.dart';
-import './Pages/StartUpPage/startupPage.dart';
 import './Pages/LandingPage/landingPage.dart';
 import './Pages/SignInPage/signinPage.dart';
 import './states/currentUser.dart';
