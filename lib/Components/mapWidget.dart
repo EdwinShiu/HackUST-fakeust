@@ -31,7 +31,6 @@ class MapWidgetState extends State<MapWidget> {
   bool cleared = false;
   bool loading = true;
   Completer<GoogleMapController> _controller = Completer();
-  Map<String, LatLng> _circleCenters = Map<String, LatLng>();
   Set<Polygon> _polygons = HashSet<Polygon>();
   Set<Circle> _circle = HashSet<Circle>();
   Set<Marker> _markers = HashSet<Marker>();
@@ -81,24 +80,31 @@ class MapWidgetState extends State<MapWidget> {
 
                   Color color =
                       _hasEvent ? _color ?? Colors.grey : Colors.white;
-
-                  _circleCenters[element1.data()['location_name']] = _center;
+                  Provider.of<MapDataProvider>(context, listen: false)
+                      .addCircle(element1.data()['location_name'], _center);
                   _circle.add(Circle(
                       circleId: CircleId(element1.data()['lid']),
                       center: _center,
                       radius: 100.0,
                       fillColor: color.withOpacity(0.6),
                       strokeWidth: 0,
-                      onTap: () {}));
+                      consumeTapEvents: true,
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SitePage(
+                                      country: "Hong Kong",
+                                      site: "location",
+                                      id: element1.data()['lid'],
+                                    )));
+                      }));
                   _color = null;
                 },
               );
             },
           ),
         );
-
-    Provider.of<MapDataProvider>(context, listen: false)
-        .addCircle(_circleCenters);
   }
 
   void _setPolygons() async {
@@ -147,10 +153,8 @@ class MapWidgetState extends State<MapWidget> {
                   MaterialPageRoute(
                       builder: (context) => SitePage(
                             country: "Hong Kong",
-                            region: data.areas[i].location,
-                            rid: i.toString(),
-                            description:
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse lacinia tortor ut erat interdum, vitae efficitur mi molestie. Phasellus viverra nibh sit amet dui facilisis, pellentesque varius eros lacinia. In nec rhoncus tortor. Nullam id est quis ex interdum maximus. Cras semper porta sollicitudin. Nam a tincidunt dolor, non lobortis velit. Nulla malesuada elit ac mauris efficitur viverra. Duis quam libero, pulvinar sit amet vulputate nec, aliquam vitae dui. Mauris porta ante a nisl feugiat rutrum. Donec commodo tincidunt accumsan.",
+                            site: "region",
+                            id: i.toString(),
                           )));
             },
           ),
@@ -248,18 +252,18 @@ class MapWidgetState extends State<MapWidget> {
     });
   }
 
-  _handleTap(LatLng tappedPoint) {
-    _markers.clear();
-    setState(() {
-      _markers.add(
-        Marker(
-          markerId: MarkerId(tappedPoint.toString()),
-          position: tappedPoint,
-          onTap: () {},
-        ),
-      );
-    });
-  }
+  // _handleTap(LatLng tappedPoint) {
+  //   _markers.clear();
+  //   setState(() {
+  //     _markers.add(
+  //       Marker(
+  //         markerId: MarkerId(tappedPoint.toString()),
+  //         position: tappedPoint,
+  //         onTap: () {},
+  //       ),
+  //     );
+  //   });
+  // }
 
   @override
   void initState() {
@@ -302,7 +306,7 @@ class MapWidgetState extends State<MapWidget> {
                 cleared = false;
               });
           },
-          onTap: _handleTap,
+          // onTap: _handleTap,
         ),
         loading
             ? Container(
@@ -315,9 +319,9 @@ class MapWidgetState extends State<MapWidget> {
               )
             : Container(),
         // FloatingActionButton(
-        //   onPressed: () =>
+        //   onPressed: () => print(
         //       Provider.of<MapDataProvider>(context, listen: false)
-        //           .findLocation(),
+        //           .findLocation()),
         //   heroTag: "findlocation",
         // ),
         // Container(

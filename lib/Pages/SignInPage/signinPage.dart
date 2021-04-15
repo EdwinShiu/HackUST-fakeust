@@ -21,10 +21,12 @@ class SigninPage extends StatelessWidget {
             decoration: BoxDecoration(
               // color: const Color(0xff000000),
               image: DecorationImage(
-                image: AssetImage("assets/images/backgroundMap1.png"),
+                image: AssetImage("assets/images/backgroundMap3.jpg"),
                 fit: BoxFit.cover,
                 colorFilter: new ColorFilter.mode(
-                    Colors.black.withOpacity(0.35), BlendMode.colorBurn),
+                  Colors.black.withOpacity(0.1),
+                  BlendMode.colorBurn,
+                ),
               ),
             ),
             child: Column(

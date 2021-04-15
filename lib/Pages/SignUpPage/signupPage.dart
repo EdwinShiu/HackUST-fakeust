@@ -25,10 +25,10 @@ class SignupPage extends StatelessWidget {
                 height: screenHeight,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("assets/images/backgroundMap2.png"),
+                    image: AssetImage("assets/images/backgroundMap4.jpg"),
                     fit: BoxFit.cover,
                     colorFilter: new ColorFilter.mode(
-                      Colors.black.withOpacity(0.35),
+                      Colors.black.withOpacity(0.1),
                       BlendMode.colorBurn,
                     ),
                   ),
