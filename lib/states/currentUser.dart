@@ -116,17 +116,24 @@ class CurrentUser extends ChangeNotifier {
     try {
       UserCredential _authResult = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-
       if (_authResult.user != null) {
-        _uid = _authResult.user.uid;
-        _email = _authResult.user.email;
-        returnVal = true;
-        notifyListeners();
+        String uid = _authResult.user.uid;
+        print("uid $uid");
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .get()
+            .then((snapshot) {
+          _username = snapshot.data()['username'];
+          _uid = uid;
+          _email = email;
+          returnVal = true;
+        });
       }
     } catch (e) {
       print(e);
     }
-
+    notifyListeners();
     return returnVal;
   }
 
