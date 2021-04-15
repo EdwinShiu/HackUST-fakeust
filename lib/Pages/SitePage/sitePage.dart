@@ -30,67 +30,75 @@ class _SitePageState extends State<SitePage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
-          body: FutureBuilder(
-              future: FirebaseFirestore.instance
-                  .collection("posts")
-                  .where('region_id', isEqualTo: widget.rid)
-                  .get(),
-              builder: (context, snapshot) {
-                return snapshot.connectionState == ConnectionState.done
-                    ? CustomScrollView(slivers: [
-                        SliverPersistentHeader(
-                          pinned: true,
-                          floating: false,
-                          delegate: SitePageHeader(
-                            minExtent: screenHeight * 0.21,
-                            maxExtent: screenHeight * 0.4,
-                            country: widget.country,
-                            site: widget.region,
-                            description: widget.description,
-                            parent: this,
+          body: GestureDetector(
+            onHorizontalDragUpdate: (details) {
+              int sensitivity = 8;
+              if (details.delta.dx > sensitivity) {
+                Navigator.pop(context);
+              }
+            },
+            child: FutureBuilder(
+                future: FirebaseFirestore.instance
+                    .collection("posts")
+                    .where('region_id', isEqualTo: widget.rid)
+                    .get(),
+                builder: (context, snapshot) {
+                  return snapshot.connectionState == ConnectionState.done
+                      ? CustomScrollView(slivers: [
+                          SliverPersistentHeader(
+                            pinned: true,
+                            floating: false,
+                            delegate: SitePageHeader(
+                              minExtent: screenHeight * 0.21,
+                              maxExtent: screenHeight * 0.4,
+                              country: widget.country,
+                              site: widget.region,
+                              description: widget.description,
+                              parent: this,
+                            ),
                           ),
-                        ),
-                        SliverPadding(
-                          padding: EdgeInsets.only(top: 20),
-                        ),
-                        snapshot.data.docs.length > 0
-                            ? SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                  (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: SiteCard(
-                                        username: snapshot.data.docs[index]
-                                            ['username'],
-                                        caption: snapshot.data.docs[index]
-                                            ['description'],
-                                        date: snapshot.data.docs[index]
-                                            ['create_date'],
-                                        imageUrl: snapshot.data.docs[index]
-                                            ['image_URL'],
+                          SliverPadding(
+                            padding: EdgeInsets.only(top: 20),
+                          ),
+                          snapshot.data.docs.length > 0
+                              ? SliverList(
+                                  delegate: SliverChildBuilderDelegate(
+                                    (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SiteCard(
+                                          username: snapshot.data.docs[index]
+                                              ['username'],
+                                          caption: snapshot.data.docs[index]
+                                              ['description'],
+                                          date: snapshot.data.docs[index]
+                                              ['create_date'],
+                                          imageUrl: snapshot.data.docs[index]
+                                              ['image_URL'],
+                                        ),
+                                      );
+                                    },
+                                    childCount: snapshot.data.docs.length,
+                                  ),
+                                )
+                              : SliverToBoxAdapter(
+                                  child: Center(
+                                    child: Text(
+                                      "No Post Yet",
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.black,
                                       ),
-                                    );
-                                  },
-                                  childCount: snapshot.data.docs.length,
-                                ),
-                              )
-                            : SliverToBoxAdapter(
-                                child: Center(
-                                  child: Text(
-                                    "No Post Yet",
-                                    style: TextStyle(
-                                      fontSize: 20.0,
-                                      color: Colors.black,
                                     ),
                                   ),
                                 ),
-                              ),
-                        SliverPadding(
-                          padding: EdgeInsets.only(top: 50),
-                        ),
-                      ])
-                    : Container();
-              }),
+                          SliverPadding(
+                            padding: EdgeInsets.only(top: 50),
+                          ),
+                        ])
+                      : Container();
+                }),
+          ),
         ),
       ),
     );

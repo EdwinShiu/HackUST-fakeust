@@ -44,7 +44,9 @@ class NewPost extends ChangeNotifier {
 
   onTagSelect(int i) {
     print("Tag $i selected");
-    this.tagsSelected.add(this.tags[i]);
+    tagsSelected.contains(this.tags[i])
+        ? this.tagsSelected.remove(this.tags[i])
+        : this.tagsSelected.add(this.tags[i]);
   }
 
   List<String> getTags() => this.tags;

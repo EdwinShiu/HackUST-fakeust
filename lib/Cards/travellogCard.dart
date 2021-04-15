@@ -104,7 +104,7 @@ class TravelLogCard extends StatelessWidget {
                       padding: EdgeInsets.only(right: 10),
                       child: Text(
                         this.date.substring(0, this.date.length - 10),
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(fontSize: 10),
                       ),
                     ),
                   ],

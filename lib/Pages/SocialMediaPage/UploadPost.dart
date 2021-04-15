@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hackust_fakeust/Cards/travellogCard.dart';
+import 'package:hackust_fakeust/Components/permissionDialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -68,18 +69,33 @@ class _UploadPost extends State<UploadPost> {
   //   return loc;
   // }
 
-  selectImage() async {
+  selectImage(int mode) async {
     final _picker = ImagePicker();
     PickedFile image;
 
     //Check Permissions
+
     await Permission.photos.request();
 
     var permissionStatus = await Permission.photos.status;
+    if (await Permission.photos.isPermanentlyDenied) {
+      openAppSettings();
+    }
 
     if (permissionStatus.isGranted) {
       //Select Image
-      image = await _picker.getImage(source: ImageSource.gallery);
+      try {
+        image = mode == 0
+            ? await _picker.getImage(source: ImageSource.gallery)
+            : await _picker.getImage(source: ImageSource.camera);
+      } catch (_) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return PermissionDialog();
+          },
+        );
+      }
 
       if (image != null) {
         print("photos selected");
@@ -104,7 +120,6 @@ class _UploadPost extends State<UploadPost> {
     List<String> tagsSelected = _newPost.getTagsSelected();
 
     return Container(
-      color: Colors.teal[50],
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.teal[50],
@@ -114,29 +129,36 @@ class _UploadPost extends State<UploadPost> {
                 FocusScope.of(context).unfocus();
               },
               child: Container(
-                // height: screenHeight * 0.9,
-                // color: Colors.teal[50],
+                color: Colors.teal[50],
                 child: Column(
                   children: [
                     // top info bar
                     Container(
                       height: screenHeight * 0.05,
-                      child: Stack(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Select Photo",
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.black),
+                          Expanded(
+                            flex: 3,
+                            child: Container(),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Select Photo",
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                              ),
                             ),
                           ),
-                          (imagePath == null)
-                              ? Container()
-                              : Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 10.0),
+                          Expanded(
+                            flex: 3,
+                            child: (imagePath == null)
+                                ? Container()
+                                : Padding(
+                                    padding: const EdgeInsets.only(right: 5.0),
                                     child: TextButton(
                                       onPressed: () {
                                         // _description
@@ -157,7 +179,7 @@ class _UploadPost extends State<UploadPost> {
                                       ),
                                     ),
                                   ),
-                                ),
+                          ),
                         ],
                       ),
                     ),
@@ -167,138 +189,132 @@ class _UploadPost extends State<UploadPost> {
                             width: screenWidth,
                             color: Colors.grey[300],
                             // alignment: Alignment.center,
-                            child: Padding(
-                              padding: EdgeInsets.only(top: screenHeight * 0.2),
-                              child: Container(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "Upload Image from Gallery",
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.black),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 10.0),
-                                      child: FloatingActionButton(
-                                        heroTag: "addPost",
-                                        onPressed: () => selectImage(),
-                                        child: Icon(Icons.photo),
-                                      ),
-                                    ),
-                                  ],
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Upload Image from Gallery",
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.black),
                                 ),
-                              ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 10.0, bottom: 20.0),
+                                  child: FloatingActionButton(
+                                    heroTag: "selectAnotherImage",
+                                    onPressed: () => selectImage(0),
+                                    child: Icon(Icons.photo),
+                                  ),
+                                ),
+                                Text(
+                                  "Take a Photo",
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.black),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: FloatingActionButton(
+                                    heroTag: "takeAnotherImage",
+                                    onPressed: () => selectImage(1),
+                                    child: Icon(Icons.camera_alt_rounded),
+                                  ),
+                                ),
+                              ],
                             ),
                           )
                         : Container(
-                            height: screenHeight * imageArea,
-                            // image background
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: FileImage(imagePath),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-
-                    // chose image then display additional info
-                    (imagePath == null)
-                        ? Container()
-                        : Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Container(
-                              height: screenHeight * 0.07,
-                              color: Colors.teal[50],
-                              child: Stack(
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topRight,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5),
-                                      child: SizedBox(
-                                        height: screenHeight * 0.05,
-                                        child: FloatingActionButton(
-                                          heroTag: "selectAnotherImage",
-                                          onPressed: () => selectImage(),
-                                          child: Icon(Icons.photo,
-                                              size: screenHeight * 0.07 * 0.5),
-                                        ),
-                                      ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: screenHeight * imageArea,
+                                  // image background
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: FileImage(imagePath),
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                  // Align(
-                                  //   alignment: Alignment.centerRight,
-                                  //   child: Padding(
-                                  //     padding: const EdgeInsets.only(
-                                  //         top: 0.0, bottom: 0, right: 55),
-                                  //     child: Container(
-                                  //       height: 50,
-                                  //       width: 55,
-                                  //       child: Align(
-                                  //         alignment: Alignment.center,
-                                  //         child: Text(
-                                  //           "Another Photo",
-                                  //           textAlign: TextAlign.center,
-                                  //           style: TextStyle(
-                                  //               fontSize: 14,
-                                  //               color: Colors.black),
-                                  //         ),
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  Align(
+                                ),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  height: screenHeight * 0.07,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: Text(
+                                          "Description",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.black),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: screenHeight * 0.05,
+                                        child: Row(
+                                          children: [
+                                            FloatingActionButton(
+                                              heroTag: "selectAnotherImage",
+                                              onPressed: () => selectImage(0),
+                                              child: Icon(Icons.photo,
+                                                  size: screenHeight *
+                                                      0.07 *
+                                                      0.5),
+                                            ),
+                                            FloatingActionButton(
+                                              heroTag: "takeAnotherImage",
+                                              onPressed: () => selectImage(1),
+                                              child: Icon(
+                                                  Icons.camera_alt_rounded,
+                                                  size: screenHeight *
+                                                      0.07 *
+                                                      0.5),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 20, left: 10, right: 10),
+                                  child: TextFormField(
+                                    autocorrect: false,
+                                    controller: _description,
+                                    minLines: 2,
+                                    maxLines: 3,
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        labelText: 'Anything you want to say?',
+                                        hintText: 'This is beautiful!'),
+                                  ),
+                                ),
+                                Container(
+                                  height: screenHeight * 0.05,
+                                  child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Padding(
-                                      padding: const EdgeInsets.only(left: 10),
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
                                       child: Text(
-                                        "Description",
+                                        "Add some Tags!",
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.black),
                                       ),
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                    (imagePath == null)
-                        ? Container()
-                        : Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 20, left: 10, right: 10),
-                            child: TextFormField(
-                              autocorrect: false,
-                              controller: _description,
-                              minLines: 2,
-                              maxLines: 3,
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Anything you want to say?',
-                                  hintText: 'This is beautiful!'),
-                            ),
-                          ),
-                    (imagePath == null)
-                        ? Container()
-                        : Container(
-                            height: screenHeight * 0.05,
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: Text(
-                                  "Add some Tags!",
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.black),
+                                  ),
                                 ),
-                              ),
-                            )),
-                    (imagePath == null)
-                        ? Container()
-                        : Container(
-                            height: 40,
-                            child: TagsScrollView(),
+                                Container(
+                                  height: 40,
+                                  child: TagsScrollView(),
+                                )
+                              ],
+                            ),
                           ),
                   ],
                 ),
@@ -328,33 +344,36 @@ class _TagsScrollView extends State<TagsScrollView> {
     // var tags = _newPost.getTags();
 
     // print("TAGS BUILT");
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverList(
-          delegate:
-              SliverChildBuilderDelegate((BuildContext context, int index) {
-            // return Container();
-            return Padding(
-              padding: const EdgeInsets.only(left: 10.0, top: 5),
-              child: ElevatedButton(
-                onPressed: () => _newPost.onTagSelect(index),
-                child: Text(tags[index]),
-                style: ButtonStyle(
-                  shape:
-                      MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
-                  backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => tagsSelected.contains(tags[index])
-                        ? Color((Random().nextDouble() * 0xFFFFFFFF).toInt())
-                            .withOpacity(1)
-                        : Color((0x11111111).toInt()).withOpacity(0.3),
+    return Container(
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverList(
+            delegate:
+                SliverChildBuilderDelegate((BuildContext context, int index) {
+              // return Container();
+              return Container(
+                padding: const EdgeInsets.only(left: 10.0),
+                margin: EdgeInsets.symmetric(vertical: 4.0),
+                height: 20,
+                child: ElevatedButton(
+                  onPressed: () => _newPost.onTagSelect(index),
+                  child: Text(tags[index]),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<StadiumBorder>(
+                        StadiumBorder()),
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                      (states) => tagsSelected.contains(tags[index])
+                          ? Color(tagColor[tags[index]])
+                          : Color((0x11111111).toInt()).withOpacity(0.3),
+                    ),
                   ),
                 ),
-              ),
-            );
-          }, childCount: tags.length),
-        )
-      ],
-      scrollDirection: Axis.horizontal,
+              );
+            }, childCount: tags.length),
+          )
+        ],
+        scrollDirection: Axis.horizontal,
+      ),
     );
   }
 }
