@@ -112,14 +112,18 @@ class _UploadPost extends State<UploadPost> {
 
   @override
   Widget build(BuildContext context) {
-    print(Provider.of<MapDataProvider>(context).findLocation());
+    MapDataProvider mapData = Provider.of<MapDataProvider>(context);
+    // print(Provider.of<MapDataProvider>(context).findLocation());
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
+    CurrentUser user = Provider.of<CurrentUser>(context);
+
     String uid = Provider.of<CurrentUser>(context).getUid;
     NewPost _newPost = Provider.of<NewPost>(context, listen: false);
     List<String> tagsSelected = _newPost.getTagsSelected();
 
     return Container(
+      color: Colors.teal[50],
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.teal[50],
@@ -165,6 +169,10 @@ class _UploadPost extends State<UploadPost> {
                                         _newPost
                                             .setDescription(_description.text);
                                         _newPost.setImagePath(this.imagePath);
+                                        user.updateLocationInfo(
+                                            mapData.findLocation(),
+                                            mapData.findRegion());
+
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -393,6 +401,7 @@ class _PreviewPost extends State<PreviewPost> {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     CurrentUser user = Provider.of<CurrentUser>(context);
+    MapDataProvider mapData = Provider.of<MapDataProvider>(context);
 
     sendPost() async {
       setState(() {
@@ -419,6 +428,10 @@ class _PreviewPost extends State<PreviewPost> {
             .then((query) => numPosts = query.docs.length);
 
         String timestamp = DateTime.now().toString();
+        print(user.getLocationName);
+        print(user.getLocationId);
+        print(user.getRegionName);
+        print(user.getRegionId);
 
         FirebaseFirestore.instance.collection("posts").doc("$numPosts").set({
           "create_date": timestamp,

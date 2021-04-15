@@ -19,24 +19,32 @@ class SignupPage extends StatelessWidget {
           FocusScope.of(context).unfocus();
         },
         child: SingleChildScrollView(
-          child: Container(
-            height: screenHeight,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/backgroundMap2.png"),
-                fit: BoxFit.cover,
-                colorFilter: new ColorFilter.mode(
-                  Colors.black.withOpacity(0.2),
-                  BlendMode.colorBurn,
+          child: Stack(
+            children: [
+              Container(
+                height: screenHeight,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/backgroundMap2.png"),
+                    fit: BoxFit.cover,
+                    colorFilter: new ColorFilter.mode(
+                      Colors.black.withOpacity(0.35),
+                      BlendMode.colorBurn,
+                    ),
+                  ),
                 ),
               ),
-            ),
-            width: screenWidth,
-            child: Column(
-              children: [
-                SignUpForm(),
-              ],
-            ),
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.only(top: screenHeight * 0.06),
+                  child: Image(
+                    height: screenHeight * 0.2,
+                    image: AssetImage('assets/images/logo.png'),
+                  ),
+                ),
+              ),
+              SignUpForm(),
+            ],
           ),
         ),
       ),
@@ -60,27 +68,6 @@ class _SignUpForm extends State<SignUpForm> {
   // TextEditingController _usernameController = TextEditingController();
 
   var _formKey = GlobalKey<FormState>();
-  //String error = '';
-
-  // void _signupUser(
-  //     TextEditingController _email,
-  //     TextEditingController _cemail,
-  //     TextEditingController _pw,
-  //     TextEditingController _cpw,
-  //     TextEditingController _username,
-  //     BuildContext context) async {
-  //   try {
-  //     // if (_formKey.currentState.validate()) {
-  //     if (true) {
-  //       // Navigator.pop(UsernamePopUp(context, _email, _username, _pw));
-  //       //if (result == null) {
-  //       print('Cannot Sign up, please try again');
-  //       // }
-  //     } else {
-  //       print("Incorrect email or password");
-  //     }
-  //   } catch (e) {}
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -94,8 +81,10 @@ class _SignUpForm extends State<SignUpForm> {
         children: [
           // email
           Padding(
-            padding:
-                EdgeInsets.only(top: screenHeight * 0.25, left: 30, right: 30),
+            padding: EdgeInsets.only(
+                top: screenHeight * 0.30,
+                left: constants.textformHorPad,
+                right: constants.textformHorPad),
             child: TextFormField(
               autocorrect: false,
               controller: _emailController,
@@ -109,23 +98,33 @@ class _SignUpForm extends State<SignUpForm> {
                     vertical: constants.textformVertPad, horizontal: 30.0),
                 fillColor: Color(constants.textFormColor),
                 filled: true, // <- this is required.
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(60.0),
+                  borderSide: BorderSide(width: constants.textformBorderWidth),
+                ),
                 border: OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(60.0),
-                  // borderSide: new BorderSide(),
                 ),
                 labelText: 'Email',
                 labelStyle: TextStyle(
-                  color: Color.fromRGBO(8, 47, 69, 1),
+                  color: Color(constants.textformFontColor),
                   fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
                 hintText: 'E.g. abc@gmail.com',
+                hintStyle: TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
           // Confirm Email
           Padding(
-            padding: const EdgeInsets.only(
-                left: 30.0, right: 30.0, top: 15, bottom: 0),
+            padding: EdgeInsets.only(
+                left: constants.textformHorPad,
+                right: constants.textformHorPad,
+                top: constants.textformSep,
+                bottom: 0),
             //padding: EdgeInsets.symmetric(horizontal: 15),
             child: TextFormField(
               autocorrect: false,
@@ -139,27 +138,39 @@ class _SignUpForm extends State<SignUpForm> {
                       : 'Enter the same email';
               },
               decoration: InputDecoration(
-                  errorStyle: constants.textformErrorStyle,
-                  contentPadding: new EdgeInsets.symmetric(
-                      vertical: constants.textformVertPad, horizontal: 30.0),
-                  fillColor: Color(constants.textFormColor),
-                  filled: true, // <- this is required.
-                  border: OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(60.0),
-                    // borderSide: new BorderSide(),
-                  ),
-                  labelText: 'Confirm Email',
-                  labelStyle: TextStyle(
-                    color: Color.fromRGBO(8, 47, 69, 1),
-                    fontSize: 20,
-                  ),
-                  hintText: 'Enter Email again'),
+                errorStyle: constants.textformErrorStyle,
+                contentPadding: new EdgeInsets.symmetric(
+                    vertical: constants.textformVertPad, horizontal: 30.0),
+                fillColor: Color(constants.textFormColor),
+                filled: true, // <- this is required.
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(60.0),
+                  borderSide: BorderSide(width: constants.textformBorderWidth),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(60.0),
+                  // borderSide: new BorderSide(),
+                ),
+                labelText: 'Confirm Email',
+                labelStyle: TextStyle(
+                  color: Color(constants.textformFontColor),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                hintText: 'Enter Email again',
+                hintStyle: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
           // password
           Padding(
-            padding: const EdgeInsets.only(
-                left: 30.0, right: 30.0, top: 15, bottom: 0),
+            padding: EdgeInsets.only(
+                left: constants.textformHorPad,
+                right: constants.textformHorPad,
+                top: constants.textformSep,
+                bottom: 0),
             //padding: EdgeInsets.symmetric(horizontal: 15),
             child: TextFormField(
               autocorrect: false,
@@ -168,27 +179,39 @@ class _SignUpForm extends State<SignUpForm> {
                   value.isEmpty ? 'Enter a password' : null,
               obscureText: true,
               decoration: InputDecoration(
-                  errorStyle: constants.textformErrorStyle,
-                  contentPadding: new EdgeInsets.symmetric(
-                      vertical: constants.textformVertPad, horizontal: 30.0),
-                  fillColor: Color(constants.textFormColor),
-                  filled: true, // <- this is required.
-                  border: OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(60.0),
-                    // borderSide: new BorderSide(),
-                  ),
-                  labelText: 'Password',
-                  labelStyle: TextStyle(
-                    color: Color.fromRGBO(8, 47, 69, 1),
-                    fontSize: 20,
-                  ),
-                  hintText: 'Enter password'),
+                errorStyle: constants.textformErrorStyle,
+                contentPadding: new EdgeInsets.symmetric(
+                    vertical: constants.textformVertPad, horizontal: 30.0),
+                fillColor: Color(constants.textFormColor),
+                filled: true, // <- this is required.
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(60.0),
+                  borderSide: BorderSide(width: constants.textformBorderWidth),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(60.0),
+                  // borderSide: new BorderSide(),
+                ),
+                labelText: 'Password',
+                labelStyle: TextStyle(
+                  color: Color(constants.textformFontColor),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                hintText: 'Enter password',
+                hintStyle: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
           // Confirm password
           Padding(
-            padding: const EdgeInsets.only(
-                left: 30.0, right: 30.0, top: 15, bottom: 0),
+            padding: EdgeInsets.only(
+                left: constants.textformHorPad,
+                right: constants.textformHorPad,
+                top: constants.textformSep,
+                bottom: 0),
             //padding: EdgeInsets.symmetric(horizontal: 15),
             child: TextFormField(
               autocorrect: false,
@@ -199,25 +222,34 @@ class _SignUpForm extends State<SignUpForm> {
                       : 'Enter the same password to confirm',
               obscureText: true,
               decoration: InputDecoration(
-                  errorStyle: constants.textformErrorStyle,
-                  contentPadding: new EdgeInsets.symmetric(
-                      vertical: constants.textformVertPad, horizontal: 30.0),
-                  fillColor: Color(constants.textFormColor),
-                  filled: true, // <- this is required.
-                  border: OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(60.0),
-                    // borderSide: new BorderSide(),
-                  ),
-                  labelText: 'Confirm Password',
-                  labelStyle: TextStyle(
-                    color: Color.fromRGBO(8, 47, 69, 1),
-                    fontSize: 20,
-                  ),
-                  hintText: 'Enter password again'),
+                errorStyle: constants.textformErrorStyle,
+                contentPadding: new EdgeInsets.symmetric(
+                    vertical: constants.textformVertPad, horizontal: 30.0),
+                fillColor: Color(constants.textFormColor),
+                filled: true, // <- this is required.
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(60.0),
+                  borderSide: BorderSide(width: constants.textformBorderWidth),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(60.0),
+                  // borderSide: new BorderSide(),
+                ),
+                labelText: 'Confirm Password',
+                labelStyle: TextStyle(
+                  color: Color(constants.textformFontColor),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                hintText: 'Enter password again',
+                hintStyle: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
           SizedBox(
-            height: 50,
+            height: screenHeight * 0.06,
           ),
           Container(
             height: 50,
@@ -260,7 +292,7 @@ class _SignUpForm extends State<SignUpForm> {
               ),
             ),
           ),
-          SizedBox(height: screenHeight * 0.05),
+          SizedBox(height: screenHeight * 0.03),
 
           FittedBox(
             // decoration: BoxDecoration(

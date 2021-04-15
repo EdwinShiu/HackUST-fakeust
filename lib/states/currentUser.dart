@@ -37,8 +37,38 @@ class CurrentUser extends ChangeNotifier {
     _regionId = regionId;
   }
 
+  void updateLocationInfo(String locationName, String regionName) {
+    this._locationName = locationName;
+    this._regionName = regionName;
+
+    FirebaseFirestore.instance
+        .collection('locations')
+        .where('location_name', isEqualTo: locationName)
+        .limit(1)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty)
+        this._locationId = snapshot.docs[0]['lid'];
+      else
+        this._locationId = "other";
+    });
+    print(this._locationName);
+    FirebaseFirestore.instance
+        .collection('regions')
+        .where('region_name', isEqualTo: regionName)
+        .limit(1)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.isNotEmpty) this._regionId = snapshot.docs[0]['rid'];
+    });
+    print(this._regionName);
+  }
+
   void updateLocation(LocationData newLocation) {
-    _location = newLocation;
+    LocationData locationData = LocationData.fromMap(
+        {"latitude": newLocation.latitude, "longitude": newLocation.longitude});
+
+    this._location = locationData;
   }
 
   void updateLocationName(String name) {

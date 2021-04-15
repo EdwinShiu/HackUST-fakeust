@@ -39,7 +39,6 @@ class MyApp extends StatelessWidget {
             bodyText2: body2TextTheme,
           ),
         ),
-        // home: SigninPage(),
         home: SigninPage(),
         routes: {
           '/signin': (context) => SigninPage(),

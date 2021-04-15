@@ -5,7 +5,17 @@ const String appTitle = 'HackUST';
 const int textPrimaryColor = 0xFF333333;
 const int colorWhite = 0xFFFFFFFF;
 const int backgroundPrimaryColor = colorWhite;
-const int textFormColor = colorWhite;
+const int textFormColor = 0xFFFFFF;
+double textformVertPad = 20;
+double textformHorPad = 35;
+double textformSep = 15;
+double textformBorderWidth = 2;
+int textformFontColor = colorWhite;
+
+TextStyle textformErrorStyle = TextStyle(
+  fontSize: 11.0,
+  fontWeight: FontWeight.bold,
+);
 
 final TextStyle header1TextTheme = GoogleFonts.comfortaa(
   fontSize: 32,
@@ -52,9 +62,3 @@ Map<String, int> tagColor = {
   "Exquisite": 0xFF66B6DE,
   "Splendid": 0xFFECE62B,
 };
-
-double textformVertPad = 25;
-TextStyle textformErrorStyle = TextStyle(
-  fontSize: 11.0,
-  fontWeight: FontWeight.bold,
-);

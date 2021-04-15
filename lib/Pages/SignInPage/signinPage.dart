@@ -10,8 +10,6 @@ class SigninPage extends StatelessWidget {
     // var screenWidth = MediaQuery.of(context).size.width;
     print('Sign in Page');
     return Scaffold(
-      // backgroundColor: Color.fromRGBO(239, 242, 200, 1),
-      // backgroundColor: Color(constants.backgroundPrimaryColor),
       resizeToAvoidBottomInset: true,
       body: GestureDetector(
         onTap: () {
@@ -26,7 +24,7 @@ class SigninPage extends StatelessWidget {
                 image: AssetImage("assets/images/backgroundMap1.png"),
                 fit: BoxFit.cover,
                 colorFilter: new ColorFilter.mode(
-                    Colors.black.withOpacity(0.25), BlendMode.colorBurn),
+                    Colors.black.withOpacity(0.35), BlendMode.colorBurn),
               ),
             ),
             child: Column(
@@ -34,12 +32,9 @@ class SigninPage extends StatelessWidget {
                 //logo
                 Padding(
                   padding: EdgeInsets.only(top: screenHeight * 0.15),
-                  child: Center(
-                    child: Container(
-                      width: 200,
-                      height: 150,
-                      child: Image.asset('assets/images/logo.png'),
-                    ),
+                  child: Image(
+                    height: screenHeight * 0.2,
+                    image: AssetImage('assets/images/logo.png'),
                   ),
                 ),
                 SignInForm(),
@@ -98,16 +93,25 @@ class _SignInForm extends State<SignInForm> {
               // fillColor: Color.fromRGBO(211, 241, 206, 1),
               fillColor: Color(constants.textFormColor),
               filled: true, // <- this is required.
+              enabledBorder: OutlineInputBorder(
+                borderRadius: new BorderRadius.circular(60.0),
+                borderSide: BorderSide(width: constants.textformBorderWidth),
+              ),
               border: OutlineInputBorder(
                 borderRadius: new BorderRadius.circular(60.0),
                 // borderSide: new BorderSide(),
               ),
               labelText: 'Email',
               labelStyle: TextStyle(
-                color: Color.fromRGBO(8, 47, 69, 1),
+                // color: Color.fromRGBO(8, 47, 69, 1),
+                color: Colors.white,
                 fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
               hintText: 'E.g. abc@gmail.com',
+              hintStyle: TextStyle(
+                color: Colors.white,
+              ),
             ),
           ),
         ),
@@ -120,21 +124,30 @@ class _SignInForm extends State<SignInForm> {
             controller: _pwController,
             obscureText: true,
             decoration: InputDecoration(
-                contentPadding:
-                    new EdgeInsets.symmetric(vertical: 25.0, horizontal: 30.0),
-                // fillColor: Color.fromRGBO(211, 241, 206, 1),
-                fillColor: Color(constants.textFormColor),
-                filled: true, // <- this is required.
-                border: OutlineInputBorder(
-                  borderRadius: new BorderRadius.circular(60.0),
-                  // borderSide: new BorderSide(),
-                ),
-                labelText: 'Password',
-                labelStyle: TextStyle(
-                  color: Color.fromRGBO(8, 47, 69, 1),
-                  fontSize: 20,
-                ),
-                hintText: 'Enter password'),
+              contentPadding:
+                  new EdgeInsets.symmetric(vertical: 25.0, horizontal: 30.0),
+              // fillColor: Color.fromRGBO(211, 241, 206, 1),
+              fillColor: Color(constants.textFormColor),
+              filled: true, // <- this is required.
+              enabledBorder: OutlineInputBorder(
+                borderRadius: new BorderRadius.circular(60.0),
+                borderSide: BorderSide(width: constants.textformBorderWidth),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: new BorderRadius.circular(60.0),
+                // borderSide: new BorderSide(),
+              ),
+              labelText: 'Password',
+              labelStyle: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              hintText: 'Enter password',
+              hintStyle: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
         SizedBox(
