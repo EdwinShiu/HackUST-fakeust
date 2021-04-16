@@ -59,7 +59,8 @@ class _SitePageState extends State<SitePage> {
                         .get(),
                     builder: (context, snapshot) {
                       return snapshot.connectionState == ConnectionState.done &&
-                              snapshot.data != null
+                              snapshot.data != null &&
+                              snapshot.data.docs.length > 0
                           ? Container(
                               height: screenHeight * 0.5,
                               child: ListView.builder(
