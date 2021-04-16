@@ -108,12 +108,12 @@ class _SignUpForm extends State<SignUpForm> {
                 labelText: 'Email',
                 labelStyle: TextStyle(
                   color: Color(constants.textformFontColor),
-                  fontSize: 20,
+                  fontSize: constants.textformlabelFontSize,
                   fontWeight: FontWeight.bold,
                 ),
                 hintText: 'E.g. abc@gmail.com',
                 hintStyle: TextStyle(
-                  color: Colors.white,
+                  color: Color(constants.textformFontColor),
                 ),
               ),
             ),
@@ -154,12 +154,12 @@ class _SignUpForm extends State<SignUpForm> {
                 labelText: 'Confirm Email',
                 labelStyle: TextStyle(
                   color: Color(constants.textformFontColor),
-                  fontSize: 20,
+                  fontSize: constants.textformlabelFontSize,
                   fontWeight: FontWeight.bold,
                 ),
                 hintText: 'Enter Email again',
                 hintStyle: TextStyle(
-                  color: Colors.white,
+                  color: Color(constants.textformFontColor),
                 ),
               ),
             ),
@@ -195,12 +195,12 @@ class _SignUpForm extends State<SignUpForm> {
                 labelText: 'Password',
                 labelStyle: TextStyle(
                   color: Color(constants.textformFontColor),
-                  fontSize: 20,
+                  fontSize: constants.textformlabelFontSize,
                   fontWeight: FontWeight.bold,
                 ),
                 hintText: 'Enter password',
                 hintStyle: TextStyle(
-                  color: Colors.white,
+                  color: Color(constants.textformFontColor),
                 ),
               ),
             ),
@@ -238,12 +238,12 @@ class _SignUpForm extends State<SignUpForm> {
                 labelText: 'Confirm Password',
                 labelStyle: TextStyle(
                   color: Color(constants.textformFontColor),
-                  fontSize: 20,
+                  fontSize: constants.textformlabelFontSize,
                   fontWeight: FontWeight.bold,
                 ),
                 hintText: 'Enter password again',
                 hintStyle: TextStyle(
-                  color: Colors.white,
+                  color: Color(constants.textformFontColor),
                 ),
               ),
             ),

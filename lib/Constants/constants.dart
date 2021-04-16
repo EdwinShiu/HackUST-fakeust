@@ -10,7 +10,8 @@ double textformVertPad = 20;
 double textformHorPad = 35;
 double textformSep = 15;
 double textformBorderWidth = 2;
-int textformFontColor = colorWhite;
+int textformFontColor = 0xFF000000;
+double textformlabelFontSize = 14;
 
 TextStyle textformErrorStyle = TextStyle(
   fontSize: 11.0,

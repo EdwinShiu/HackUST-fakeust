@@ -106,13 +106,13 @@ class _SignInForm extends State<SignInForm> {
               labelText: 'Email',
               labelStyle: TextStyle(
                 // color: Color.fromRGBO(8, 47, 69, 1),
-                color: Colors.white,
-                fontSize: 20,
+                color: Color(constants.textformFontColor),
+                fontSize: constants.textformlabelFontSize,
                 fontWeight: FontWeight.bold,
               ),
               hintText: 'E.g. abc@gmail.com',
               hintStyle: TextStyle(
-                color: Colors.white,
+                color: Color(constants.textformFontColor),
               ),
             ),
           ),
@@ -141,13 +141,13 @@ class _SignInForm extends State<SignInForm> {
               ),
               labelText: 'Password',
               labelStyle: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
+                color: Color(constants.textformFontColor),
+                fontSize: constants.textformlabelFontSize,
                 fontWeight: FontWeight.bold,
               ),
               hintText: 'Enter password',
               hintStyle: TextStyle(
-                color: Colors.white,
+                color: Color(constants.textformFontColor),
               ),
             ),
           ),
