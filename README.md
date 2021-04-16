@@ -1,5 +1,7 @@
 # HackUST-fakeust
 
+Phototrotter, a map-based social media platform that introduces a new travel experience to rekindle people’s interest in travelling by suggesting novel, fun locations and organizing events and competitions.
+
 ## Technical Stack
 
 Mobile App : Flutter </br>
