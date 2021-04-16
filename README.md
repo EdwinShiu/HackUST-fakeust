@@ -2,7 +2,7 @@
 
 ## Technical Stack
 
-Mobile App : Flutter
+Mobile App : Flutter </br>
 Backend and Database : Firebase
 
 
