@@ -85,7 +85,6 @@ class _UploadPost extends State<UploadPost> {
             ? await _picker.getImage(source: ImageSource.gallery)
             : await _picker.getImage(source: ImageSource.camera);
       } catch (err) {
-        print(err.error);
         showDialog(
           context: context,
           builder: (context) {

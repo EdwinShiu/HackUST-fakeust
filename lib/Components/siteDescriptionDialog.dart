@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class SiteDescriptionDialog extends StatelessWidget {
@@ -16,9 +17,10 @@ class SiteDescriptionDialog extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Text(
+            child: AutoSizeText(
               site ?? "Site",
               style: TextStyle(fontSize: 40.0, color: Colors.black),
+              maxLines: 1,
             ),
           ),
           Expanded(

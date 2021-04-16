@@ -5,9 +5,10 @@ import 'package:hackust_fakeust/Pages/SitePage/sitePage.dart';
 
 class AddTagDialog extends StatefulWidget {
   final List<dynamic> list;
+  final String id;
   final String site;
   final State<SitePage> parent;
-  AddTagDialog({this.list, this.site, this.parent});
+  AddTagDialog({this.list, this.id, this.site, this.parent});
 
   @override
   _AddTagDialogState createState() => _AddTagDialogState();
@@ -52,7 +53,11 @@ class _AddTagDialogState extends State<AddTagDialog> {
                           CategoryButton(
                             text: tag["tag"],
                             enabled: true,
-                            func: (String s) => suggestions.add(s),
+                            func: (String s) {
+                              suggestions.contains(s)
+                                  ? suggestions.remove(s)
+                                  : suggestions.add(s);
+                            },
                           ),
                     ],
                   ),
@@ -86,14 +91,16 @@ class _AddTagDialogState extends State<AddTagDialog> {
                               ),
                             );
                           });
-                      String docId = await FirebaseFirestore.instance
-                          .collection("regions")
-                          .where("region_name", isEqualTo: widget.site)
-                          .get()
-                          .then((value) => value.docs[0]['rid']);
+                      if (widget.list.contains(""))
+                        FirebaseFirestore.instance
+                            .collection("${widget.site}s")
+                            .doc(widget.id)
+                            .update({
+                          "tags": FieldValue.arrayRemove([""])
+                        });
                       FirebaseFirestore.instance
-                          .collection("regions")
-                          .doc(docId)
+                          .collection("${widget.site}s")
+                          .doc(widget.id)
                           .update({"tags": FieldValue.arrayUnion(suggestions)});
 
                       suggestions.clear();
