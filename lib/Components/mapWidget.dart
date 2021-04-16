@@ -245,8 +245,10 @@ class MapWidgetState extends State<MapWidget> {
             location.onLocationChanged.listen((l) {
               _locationData = l;
               currentUser.updateLocation(_locationData);
-              Provider.of<MapDataProvider>(context, listen: false)
-                  .setLocation(_locationData);
+              try {
+                Provider.of<MapDataProvider>(context, listen: false)
+                    .setLocation(_locationData);
+              } catch (_) {}
             });
           },
           markers: _markers,
