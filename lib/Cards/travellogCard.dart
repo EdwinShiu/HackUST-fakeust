@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class TravelLogCard extends StatelessWidget {
   final String description;
@@ -76,32 +77,44 @@ class TravelLogCard extends StatelessWidget {
               flex: 3,
               child: Container(
                 color: Colors.amber,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Stack(
+                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // title
-                    Padding(
-                      padding: EdgeInsets.only(top: 15, left: 10),
-                      child: Text(
-                        (this.locationName == "other")
-                            ? this.regionName
-                            : this.locationName,
-                        style: TextStyle(fontSize: 20),
-                      ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 15, left: 10, right: 5),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: AutoSizeText(
+                              (this.locationName == "other")
+                                  ? this.regionName
+                                  : this.locationName,
+                              style: TextStyle(
+                                  fontSize: 18.0, color: Colors.black),
+                              maxLines: 1,
+                            ),
+                          ),
+                        ),
+                        // caption
+                        Container(
+                          width: double.infinity,
+                          height: screenHeight * 0.2 * 0.6,
+                          padding: EdgeInsets.only(
+                              top: 10, bottom: 10, left: 15, right: 3),
+                          child: AutoSizeText(
+                            this.description,
+                            style:
+                                TextStyle(fontSize: 15.0, color: Colors.black),
+                            // maxLines: 6,
+                          ),
+                        ),
+                      ],
                     ),
-                    // caption
                     Container(
-                      width: double.infinity,
-                      height: screenHeight * 0.2 * 0.6,
-                      padding: EdgeInsets.only(top: 10, bottom: 10, left: 20),
-                      child: Text(
-                        this.description,
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.centerRight,
-                      padding: EdgeInsets.only(right: 10),
+                      alignment: Alignment.bottomRight,
+                      padding: EdgeInsets.only(right: 10, bottom: 5),
                       child: Text(
                         this.date.substring(0, this.date.length - 10),
                         style: TextStyle(fontSize: 10),
