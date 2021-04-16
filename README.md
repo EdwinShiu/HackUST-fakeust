@@ -12,6 +12,12 @@ Backend and Database : Firebase
 
 To run the code, you need to have flutter and an emulator installed.
 
+
+Here is the link to the apk: </br>
+https://drive.google.com/file/d/1gitgFenFg-ps9q3vclNV401QOSvWB_4n/view?usp=sharing
+
+However, UI overflow may exist in some device since we did not consider all mobile devices. The mobile phones we used in debugging are Google Pixel 4 XL and iPhone 11.
+
 Test Account:
 
 Username: aaron@gmail.com
