@@ -51,6 +51,7 @@ class _LandingPage extends State<LandingPage> {
     return Container(
       color: Colors.white,
       child: SafeArea(
+        bottom: false,
         child: Scaffold(
           body: IndexedStack(
             index: _currentIndex,
