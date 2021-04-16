@@ -14,9 +14,9 @@ class TravelLogCard extends StatelessWidget {
       IconData(0xe5f8, fontFamily: 'MaterialIcons');
 
   TravelLogCard({
-    this.locationName = 'DEFAULT location',
-    this.regionName = 'DEFAULT region',
-    this.description = 'Default caption aaaaaa aaaaaaaaa aaa aaaaaaa aaaaaaaa',
+    this.locationName = 'Location',
+    this.regionName = 'Region',
+    this.description = 'This is a beautiful place!',
     this.date,
     this.imagePath = "",
     this.imageUrl = "",
@@ -76,9 +76,8 @@ class TravelLogCard extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Container(
-                color: Colors.amber,
+                color: Color(0xCC40D9FF),
                 child: Stack(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // title
                     Column(
