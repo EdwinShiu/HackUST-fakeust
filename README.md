@@ -23,3 +23,8 @@ Test Account:
 Username: aaron@gmail.com
 
 Password: 123456
+
+
+## Troubleshoot
+
+If location permission is granted but location is not correct, please check the permission and restart the app.
