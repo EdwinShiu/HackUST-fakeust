@@ -76,7 +76,7 @@ class TravelLogCard extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Container(
-                color: Colors.amber,
+                color: Color(0xCC40D9FF),
                 child: Stack(
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

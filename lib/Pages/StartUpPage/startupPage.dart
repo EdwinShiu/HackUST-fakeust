@@ -11,8 +11,6 @@ class StartupPage extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
     var uid = Provider.of<CurrentUser>(context).getUid;
 
-    print('Height: ' + screenHeight.toString());
-
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -36,7 +34,6 @@ class StartupPage extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    print("Login");
                     Navigator.pushNamed(context, '/signin');
                   },
                   child: Text(
@@ -59,9 +56,7 @@ class StartupPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  onPressed: () {
-                    print("Sign Up");
-                  },
+                  onPressed: () {},
                   child: Text(
                     "Sign Up",
                     style: TextStyle(

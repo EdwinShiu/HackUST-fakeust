@@ -71,7 +71,6 @@ class _AddTagDialogState extends State<AddTagDialog> {
                       "Submit",
                     ),
                     onPressed: () async {
-                      print(suggestions);
                       showDialog(
                           context: context,
                           builder: (context) {

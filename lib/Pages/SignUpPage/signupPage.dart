@@ -8,11 +8,7 @@ class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
-    var screenWidth = MediaQuery.of(context).size.width;
-    print('Sign Up Page');
     return Scaffold(
-      // backgroundColor: Color(constants.backgroundPrimaryColor),
-      // backgroundColor: Color.fromRGBO(239, 242, 200, 1),
       resizeToAvoidBottomInset: true,
       body: GestureDetector(
         onTap: () {
@@ -54,7 +50,6 @@ class SignupPage extends StatelessWidget {
 
 class SignUpForm extends StatefulWidget {
   @override
-  // _SignInForm createState() => _SignInForm();
   State<StatefulWidget> createState() {
     return _SignUpForm();
   }
@@ -65,7 +60,6 @@ class _SignUpForm extends State<SignUpForm> {
   TextEditingController _email2Controller = TextEditingController();
   TextEditingController _pwController = TextEditingController();
   TextEditingController _pw2Controller = TextEditingController();
-  // TextEditingController _usernameController = TextEditingController();
 
   var _formKey = GlobalKey<FormState>();
 
@@ -97,7 +91,7 @@ class _SignUpForm extends State<SignUpForm> {
                 contentPadding: new EdgeInsets.symmetric(
                     vertical: constants.textformVertPad, horizontal: 30.0),
                 fillColor: Color(constants.textFormColor),
-                filled: true, // <- this is required.
+                filled: true,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(60.0),
                   borderSide: BorderSide(width: constants.textformBorderWidth),
@@ -125,7 +119,6 @@ class _SignUpForm extends State<SignUpForm> {
                 right: constants.textformHorPad,
                 top: constants.textformSep,
                 bottom: 0),
-            //padding: EdgeInsets.symmetric(horizontal: 15),
             child: TextFormField(
               autocorrect: false,
               controller: _email2Controller,
@@ -142,7 +135,7 @@ class _SignUpForm extends State<SignUpForm> {
                 contentPadding: new EdgeInsets.symmetric(
                     vertical: constants.textformVertPad, horizontal: 30.0),
                 fillColor: Color(constants.textFormColor),
-                filled: true, // <- this is required.
+                filled: true,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(60.0),
                   borderSide: BorderSide(width: constants.textformBorderWidth),
@@ -171,7 +164,6 @@ class _SignUpForm extends State<SignUpForm> {
                 right: constants.textformHorPad,
                 top: constants.textformSep,
                 bottom: 0),
-            //padding: EdgeInsets.symmetric(horizontal: 15),
             child: TextFormField(
               autocorrect: false,
               controller: _pwController,
@@ -183,14 +175,13 @@ class _SignUpForm extends State<SignUpForm> {
                 contentPadding: new EdgeInsets.symmetric(
                     vertical: constants.textformVertPad, horizontal: 30.0),
                 fillColor: Color(constants.textFormColor),
-                filled: true, // <- this is required.
+                filled: true,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(60.0),
                   borderSide: BorderSide(width: constants.textformBorderWidth),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(60.0),
-                  // borderSide: new BorderSide(),
                 ),
                 labelText: 'Password',
                 labelStyle: TextStyle(
@@ -212,7 +203,6 @@ class _SignUpForm extends State<SignUpForm> {
                 right: constants.textformHorPad,
                 top: constants.textformSep,
                 bottom: 0),
-            //padding: EdgeInsets.symmetric(horizontal: 15),
             child: TextFormField(
               autocorrect: false,
               controller: _pw2Controller,
@@ -226,14 +216,13 @@ class _SignUpForm extends State<SignUpForm> {
                 contentPadding: new EdgeInsets.symmetric(
                     vertical: constants.textformVertPad, horizontal: 30.0),
                 fillColor: Color(constants.textFormColor),
-                filled: true, // <- this is required.
+                filled: true,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(60.0),
                   borderSide: BorderSide(width: constants.textformBorderWidth),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(60.0),
-                  // borderSide: new BorderSide(),
                 ),
                 labelText: 'Confirm Password',
                 labelStyle: TextStyle(
@@ -265,7 +254,6 @@ class _SignUpForm extends State<SignUpForm> {
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
-                    //  side: BorderSide(color: Colors.black, width: 2)
                   ),
                 ),
               ),
@@ -281,8 +269,6 @@ class _SignUpForm extends State<SignUpForm> {
                       );
                     },
                   );
-
-                print('submit username');
               },
               child: Text(
                 'SIGN UP',
@@ -295,24 +281,16 @@ class _SignUpForm extends State<SignUpForm> {
           SizedBox(height: screenHeight * 0.03),
 
           FittedBox(
-            // decoration: BoxDecoration(
-            //     color: Colors.white, borderRadius: BorderRadius.circular(20)),
             child: TextButton(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                // minimumSize:
-                //     MaterialStateProperty.all<Size>(Size(screenWidth * 0.65, 50)),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
-                    // side: BorderSide(color: Colors.black, width: 2)
-                    // color : Color.fromRGBO(236, 238, 217, 1)
                   ),
                 ),
-                // shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
               ),
               onPressed: () {
-                print('Go to sign in');
                 Navigator.pop(context);
               },
               child: Padding(
@@ -330,7 +308,6 @@ class _SignUpForm extends State<SignUpForm> {
   }
 }
 
-// ignore: non_constant_identifier_names
 class CreateUsername extends StatefulWidget {
   final String email;
   final String password;
@@ -341,8 +318,6 @@ class CreateUsername extends StatefulWidget {
 
   @override
   _CreateUsername createState() => _CreateUsername();
-// (BuildContext context, TextEditingController email,
-//     TextEditingController username, TextEditingController password)
 }
 
 class _CreateUsername extends State<CreateUsername> {
@@ -431,28 +406,12 @@ class _CreateUsername extends State<CreateUsername> {
                   onPressed: () async {
                     //add loading animation here
                     bool isRegistered =
-                        await _currentUser.RegisterWithEmailAndPW(widget.email,
+                        await _currentUser.registerWithEmailAndPW(widget.email,
                             widget.password, widget._usernameController.text);
                     if (isRegistered) {
-                      print("Created account and Logged In!");
                       Navigator.popAndPushNamed(context, '/landing');
                       // add welcome message
                     }
-                    // else {
-                    //   showDialog(
-                    //     context: context,
-                    //     builder: (context) {
-                    //       return Dialog(
-                    //         child: Container(
-                    //           height: screenHeight * 0.1,
-                    //           child: Center(
-                    //             child: Text("Please try againt"),
-                    //           ),
-                    //         ),
-                    //       );
-                    //     },
-                    //   );
-                    // }
                   },
                 ),
               ),

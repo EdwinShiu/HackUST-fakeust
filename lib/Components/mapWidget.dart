@@ -41,19 +41,6 @@ class MapWidgetState extends State<MapWidget> {
     zoom: 10,
   );
 
-  // void _setMarker() async {
-  //   await FirebaseFirestore.instance
-  //       .collection('locations')
-  //       .get()
-  //       .then((value) => value.docs.forEach((element) {
-  //             _markers.add(Marker(
-  //                 markerId: MarkerId(element.data()['lid']),
-  //                 position: LatLng(element.data()['latlng'].latitude,
-  //                     element.data()['latlng'].longitude),
-  //                 onTap: () {}));
-  //           }));
-  // }
-
   void _setCircle() async {
     await FirebaseFirestore.instance.collection('locations').get().then(
           (snapshot1) => snapshot1.docs.forEach(
@@ -115,11 +102,6 @@ class MapWidgetState extends State<MapWidget> {
         .then((value) => value.data()['travelled_regions']);
     for (var i = 0; i < data.areas.length; i++) {
       Color color;
-      // int eventCount = await FirebaseFirestore.instance
-      //     .collection('regions')
-      //     .doc(i.toString())
-      //     .get()
-      //     .then((value) => value.data()['event_count']);
       travelledRegion != null
           ? color = travelledRegion.containsKey(i.toString()) &&
                   travelledRegion[i.toString()] > 0
@@ -144,10 +126,6 @@ class MapWidgetState extends State<MapWidget> {
             fillColor: color,
             consumeTapEvents: true,
             onTap: () {
-              print(data.areas[i].location + "-" + j.toString());
-              print(data.areas[i].latlng[j][0][0].toString() +
-                  " " +
-                  data.areas[i].latlng[j][0][1].toString());
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -179,7 +157,6 @@ class MapWidgetState extends State<MapWidget> {
 
   void asyncMethod() async {
     await loadJsonData();
-    // _setMarker();
     _setCircle();
     _setPolygons();
 
@@ -199,8 +176,6 @@ class MapWidgetState extends State<MapWidget> {
       }
     }
 
-    print(_permissionGranted);
-
     var loc;
     try {
       loc = await Geolocator.getCurrentPosition();
@@ -212,7 +187,6 @@ class MapWidgetState extends State<MapWidget> {
         },
       );
     }
-    print(loc);
     LocationData locationData = LocationData.fromMap(
         {"latitude": loc.latitude, "longitude": loc.longitude});
     currentUser.updateLocation(locationData);
@@ -251,19 +225,6 @@ class MapWidgetState extends State<MapWidget> {
         currentUser.updateRegionId(snapshot.docs[0]['rid']);
     });
   }
-
-  // _handleTap(LatLng tappedPoint) {
-  //   _markers.clear();
-  //   setState(() {
-  //     _markers.add(
-  //       Marker(
-  //         markerId: MarkerId(tappedPoint.toString()),
-  //         position: tappedPoint,
-  //         onTap: () {},
-  //       ),
-  //     );
-  //   });
-  // }
 
   @override
   void initState() {
@@ -306,7 +267,6 @@ class MapWidgetState extends State<MapWidget> {
                 cleared = false;
               });
           },
-          // onTap: _handleTap,
         ),
         loading
             ? Container(
@@ -318,21 +278,6 @@ class MapWidgetState extends State<MapWidget> {
                 ),
               )
             : Container(),
-        // FloatingActionButton(
-        //   onPressed: () => print(
-        //       Provider.of<MapDataProvider>(context, listen: false)
-        //           .findLocation()),
-        //   heroTag: "findlocation",
-        // ),
-        // Container(
-        //   margin: const EdgeInsets.only(top: 60.0),
-        //   child: FloatingActionButton(
-        //     onPressed: () => print(
-        //         Provider.of<MapDataProvider>(context, listen: false)
-        //             .findRegion()),
-        //     heroTag: "findregion",
-        //   ),
-        // ),
       ],
     );
   }

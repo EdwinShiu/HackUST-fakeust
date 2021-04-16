@@ -19,7 +19,6 @@ class Profile extends StatelessWidget {
 
     CurrentUser _currentUser = Provider.of<CurrentUser>(context);
     String uid = _currentUser.getUid;
-    print('uid' + uid);
     return Container(
       height: screenHeight,
       width: screenWidth,
@@ -109,10 +108,7 @@ class Profile extends StatelessWidget {
             width: screenWidth * 0.5,
             child: TextButton(
               onPressed: () async {
-                print('tomlam');
-                // _signOutUser(_currentUser);
                 await _currentUser.signOutUser();
-                print("Sign Out!");
                 Navigator.popAndPushNamed(context, '/signin');
               },
               style: ButtonStyle(

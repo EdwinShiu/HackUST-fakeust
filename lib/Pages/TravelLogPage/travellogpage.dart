@@ -69,7 +69,6 @@ class TravelLogPage extends StatelessWidget {
                     .where('uid', isEqualTo: uid)
                     .get(),
                 builder: (context, snapshot) {
-                  // for (var doc in snapshot.data.docs) print(doc['description']);
                   if (snapshot.connectionState != ConnectionState.done) {
                     return LoadingRotating.square(
                       duration: Duration(milliseconds: 500),

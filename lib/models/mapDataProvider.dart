@@ -21,7 +21,6 @@ class MapDataProvider with ChangeNotifier {
 
   void addCircle(String k, LatLng v) {
     _circleCenters[k] = v;
-    print(_circleCenters);
     notifyListeners();
   }
 

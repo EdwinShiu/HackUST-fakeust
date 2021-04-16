@@ -52,7 +52,7 @@ class CurrentUser extends ChangeNotifier {
       else
         this._locationId = "other";
     });
-    print(this._locationName);
+
     FirebaseFirestore.instance
         .collection('regions')
         .where('region_name', isEqualTo: regionName)
@@ -61,7 +61,6 @@ class CurrentUser extends ChangeNotifier {
         .then((snapshot) {
       if (snapshot.docs.isNotEmpty) this._regionId = snapshot.docs[0]['rid'];
     });
-    print(this._regionName);
   }
 
   void updateLocation(LocationData newLocation) {
@@ -81,9 +80,8 @@ class CurrentUser extends ChangeNotifier {
 
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Register with new account
-  // ignore: non_constant_identifier_names
-  Future<bool> RegisterWithEmailAndPW(
+
+  Future<bool> registerWithEmailAndPW(
       String email, String password, String username) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
@@ -105,7 +103,6 @@ class CurrentUser extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      // print(e.toString());
       return false;
     }
   }
@@ -118,7 +115,7 @@ class CurrentUser extends ChangeNotifier {
           email: email, password: password);
       if (_authResult.user != null) {
         String uid = _authResult.user.uid;
-        print("uid $uid");
+
         await FirebaseFirestore.instance
             .collection('users')
             .doc(uid)
@@ -130,9 +127,7 @@ class CurrentUser extends ChangeNotifier {
           returnVal = true;
         });
       }
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
     notifyListeners();
     return returnVal;
   }
@@ -140,10 +135,8 @@ class CurrentUser extends ChangeNotifier {
   Future<void> signOutUser() async {
     try {
       await _auth.signOut();
-      print('signout');
+
       notifyListeners();
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 }

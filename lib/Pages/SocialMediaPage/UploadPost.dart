@@ -29,44 +29,7 @@ class _UploadPost extends State<UploadPost> {
   @override
   void initState() {
     super.initState();
-    // setState(() {
-    //   location = _determinePosition();
-    // });
   }
-
-  // // get location
-  // Future<Position> _determinePosition() async {
-  //   bool serviceEnabled;
-  //   LocationPermission permission;
-
-  //   // Test if location services are enabled.
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     // Location services are not enabled don't continue
-  //     // accessing the position and request users of the
-  //     // App to enable the location services.
-  //     return Future.error('Location services are disabled.');
-  //   }
-
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.deniedForever) {
-  //       return Future.error(
-  //           'Location permissions are permanently denied, we cannot request permissions.');
-  //     }
-
-  //     if (permission == LocationPermission.denied) {
-  //       return Future.error('Location permissions are denied');
-  //     }
-  //   }
-
-  //   // When we reach here, permissions are granted and we can
-  //   // continue accessing the position of the device.
-  //   var loc = await Geolocator.getCurrentPosition();
-  //   print(loc.toString());
-  //   return loc;
-  // }
 
   selectImage(int mode) async {
     final _picker = ImagePicker();
@@ -94,22 +57,16 @@ class _UploadPost extends State<UploadPost> {
       }
 
       if (image != null) {
-        print("photos selected");
         setState(() {
           imagePath = File(image.path);
         });
-      } else {
-        print('No image Received');
       }
-    } else {
-      print('Grant Permissions and try again');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     MapDataProvider mapData = Provider.of<MapDataProvider>(context);
-    // print(Provider.of<MapDataProvider>(context).findLocation());
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     CurrentUser user = Provider.of<CurrentUser>(context);
@@ -192,7 +149,6 @@ class _UploadPost extends State<UploadPost> {
                             height: screenHeight * imageArea,
                             width: screenWidth,
                             color: Colors.grey[300],
-                            // alignment: Alignment.center,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -345,16 +301,13 @@ class _TagsScrollView extends State<TagsScrollView> {
         context.select<NewPost, List<String>>((post) => (post.getTags()));
     var tagsSelected = context
         .select<NewPost, List<String>>((post) => (post.getTagsSelected()));
-    // var tags = _newPost.getTags();
 
-    // print("TAGS BUILT");
     return Container(
       child: CustomScrollView(
         slivers: <Widget>[
           SliverList(
             delegate:
                 SliverChildBuilderDelegate((BuildContext context, int index) {
-              // return Container();
               return Container(
                 padding: const EdgeInsets.only(left: 10.0),
                 margin: EdgeInsets.symmetric(vertical: 4.0),
@@ -395,9 +348,7 @@ class _PreviewPost extends State<PreviewPost> {
   Widget build(BuildContext context) {
     NewPost _newPost = Provider.of<NewPost>(context, listen: false);
     var screenHeight = MediaQuery.of(context).size.height;
-    var screenWidth = MediaQuery.of(context).size.width;
     CurrentUser user = Provider.of<CurrentUser>(context);
-    MapDataProvider mapData = Provider.of<MapDataProvider>(context);
 
     sendPost() async {
       setState(() {
@@ -411,7 +362,6 @@ class _PreviewPost extends State<PreviewPost> {
 
       var downloadUrl = await snapshot.ref.getDownloadURL();
       if (downloadUrl != null) {
-        print("Image uploaded to cloud");
         _newPost.setImageUrl(downloadUrl);
 
         // upload to Firestore
@@ -424,10 +374,6 @@ class _PreviewPost extends State<PreviewPost> {
             .then((query) => numPosts = query.docs.length);
 
         String timestamp = DateTime.now().toString();
-        print(user.getLocationName);
-        print(user.getLocationId);
-        print(user.getRegionName);
-        print(user.getRegionId);
 
         FirebaseFirestore.instance.collection("posts").doc("$numPosts").set({
           "create_date": timestamp,
@@ -444,7 +390,6 @@ class _PreviewPost extends State<PreviewPost> {
           "username": user.getUsername,
           "post_id": numPosts.toString(),
         }).then((_) {
-          print("Post sent!");
           setState(() {
             sentPost = true;
           });
@@ -473,8 +418,6 @@ class _PreviewPost extends State<PreviewPost> {
             });
           });
         });
-      } else {
-        print("Cannot upload to cloud");
       }
     }
 

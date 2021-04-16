@@ -20,13 +20,11 @@ class _LandingPage extends State<LandingPage> {
   final List<Widget> stayAliveScreens = [
     MapPage(),
     SocialMediaPage(),
-    // Container(child: Text("s")),
     LeaderBoardPage(),
     MyPage(),
   ];
 
   void addPost(String uid) {
-    print("UPLOAD POST");
     NewPost _newPost = Provider.of<NewPost>(context, listen: false);
     _newPost.initTags();
     Navigator.push(
@@ -38,7 +36,6 @@ class _LandingPage extends State<LandingPage> {
   }
 
   void onTabTapped(int index) {
-    print("GO TO page $index");
     setState(() {
       _currentIndex = index;
     });

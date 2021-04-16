@@ -181,10 +181,8 @@ class EventMovingBlockState extends State<EventMovingBlock> {
               enlargeCenterPage: true,
               enlargeStrategy: CenterPageEnlargeStrategy.height,
               onPageChanged: (index, reason) {
-                print('event: ' + index.toString());
                 setState(() {
                   eventIndex = index;
-                  print(eventIndex);
                 });
               },
             ),
@@ -225,7 +223,6 @@ class EventMovingBlockState extends State<EventMovingBlock> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     String uid = Provider.of<CurrentUser>(context).getUid;
-    print('uid' + uid);
     return Column(
       children: [
         carouselSlider(screenHeight, screenWidth),
@@ -313,7 +310,6 @@ class EventMovingBlockState extends State<EventMovingBlock> {
                               var result = await _putUidToEvent(
                                   uid, eventIndex.toString());
                               if (result) {
-                                print('updated!');
                                 widget.setPage(eventIndex);
                               } else {
                                 _joinedDialog(context);

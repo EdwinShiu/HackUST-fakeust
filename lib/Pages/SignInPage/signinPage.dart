@@ -8,7 +8,6 @@ class SigninPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     // var screenWidth = MediaQuery.of(context).size.width;
-    print('Sign in Page');
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: GestureDetector(
@@ -66,11 +65,8 @@ class _SignInForm extends State<SignInForm> {
 
     try {
       if (await _currentUser.signinUser(email, pw)) {
-        print("Logged In!");
         Navigator.popAndPushNamed(context, '/landing');
-      } else {
-        print("Incorrect email or password!");
-      }
+      } else {}
     } catch (e) {}
   }
 
@@ -158,12 +154,9 @@ class _SignInForm extends State<SignInForm> {
         Container(
           height: 50,
           width: 250,
-          // decoration: BoxDecoration(
-          //     color: Colors.white, borderRadius: BorderRadius.circular(20)),
           child: TextButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(
-                // Color.fromRGBO(161, 246, 170, 1)),
                 Colors.teal[50],
               ),
               minimumSize:
@@ -171,13 +164,10 @@ class _SignInForm extends State<SignInForm> {
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
-                  // side: BorderSide(color: Colors.black, width: 2)
                 ),
               ),
-              // shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
             ),
             onPressed: () {
-              print('Submit log in');
               _signinUser(_emailController.text, _pwController.text, context);
             },
             child: Text(
@@ -190,26 +180,17 @@ class _SignInForm extends State<SignInForm> {
         SizedBox(height: 30.0),
 
         FittedBox(
-          // decoration: BoxDecoration(
-          //     color: Colors.white, borderRadius: BorderRadius.circular(20)),
           child: TextButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-              // minimumSize:
-              //     MaterialStateProperty.all<Size>(Size(screenWidth * 0.65, 50)),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
-                  // side: BorderSide(color: Colors.black, width: 2)
-                  // color : Color.fromRGBO(236, 238, 217, 1)
                 ),
               ),
-              // shape: MaterialStateProperty.all<StadiumBorder>(StadiumBorder()),
             ),
             onPressed: () {
-              print('Go to sign up page');
               Navigator.pushNamed(context, '/signup');
-              // Navigator.of(context).popAndPushNamed('/signup');
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),

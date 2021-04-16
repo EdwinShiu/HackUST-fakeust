@@ -68,7 +68,7 @@ class _SiteCardState extends State<SiteCard> {
             Expanded(
               flex: 3,
               child: Container(
-                color: Colors.amber,
+                color: Color(0xCC40D9FF),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
