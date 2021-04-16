@@ -56,13 +56,12 @@ class _SitePageState extends State<SitePage> {
                     future: FirebaseFirestore.instance
                         .collection("posts")
                         .where('${widget.site}_id', isEqualTo: widget.id)
-                        .orderBy('create_date', descending: true)
                         .get(),
                     builder: (context, snapshot) {
-                      return snapshot.connectionState != ConnectionState.done &&
+                      return snapshot.connectionState == ConnectionState.done &&
                               snapshot.data != null
                           ? Container(
-                              height: 100.0,
+                              height: screenHeight * 0.5,
                               child: ListView.builder(
                                 itemCount: snapshot.data.docs.length,
                                 itemBuilder: (context, index) {
